@@ -3,7 +3,7 @@ num_subagents: 3
 poisoned_subagent_id: subagent_1  # reserved for Phase 3 attack
 
 model: gpt-4o-mini
-top_k: 3
+top_k: 5
 
 subagent_output_fields:
   - answer

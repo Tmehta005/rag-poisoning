@@ -74,6 +74,10 @@ class RunLog(BaseModel):
     trigger: Optional[str] = Field(
         default=None, description="Trigger t appended to query, if any"
     )
+    ground_truth_answer: Optional[str] = Field(
+        default=None,
+        description="Reference answer from query file; used to compute benign accuracy offline",
+    )
     retrieved_doc_ids_per_agent: Dict[str, List[str]] = Field(
         default_factory=dict,
         description="Mapping agent_id -> list of retrieved doc IDs",

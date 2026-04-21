@@ -16,6 +16,12 @@ from __future__ import annotations
 import yaml
 from typing import Optional
 
+try:
+    from dotenv import load_dotenv
+    load_dotenv()
+except ImportError:
+    pass
+
 from src.agents.orchestrator import OrchestratorState, build_orchestrator_graph
 from src.agents.subagent import ExpertSubagent
 from src.ingestion import ingest_corpus, load_ingestion_config
