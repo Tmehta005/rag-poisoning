@@ -18,20 +18,28 @@ ml-rag-poisoning/
 │   ├── logging_utils.py             # Appends every run to results/runs.jsonl
 │   ├── agents/
 │   │   ├── subagent.py              # ExpertSubagent: retrieve + generate structured answer
-│   │   └── orchestrator.py          # LangGraph orchestrator: fan-in 3 subagents → decision
+│   │   ├── orchestrator.py          # LangGraph orchestrator: fan-in 3 subagents → decision
+│   │   └── debate/                  # Debate setup
+│   │       ├── debate_subagent.py   # AutoGen AssistantAgent + private `retrieve` tool
+│   │       ├── debate_interface.py  # RoundRobinGroupChat + MajorityStableTermination
+│   │       ├── majority_vote.py     # Answer-cluster / majority helper
+│   │       └── judge.py             # JudgeLLM: relay entry point → RunLog
 │   ├── corpus/
 │   │   ├── ingest_cybersec.py       # Metadata-aware PDF ingestion (section IDs, XML filter)
 │   │   └── query_loader.py          # Load evaluation queries from YAML or JSON
 │   └── experiments/
 │       ├── run_clean.py             # Clean baseline experiment runner
-│       └── run_attack.py            # Single-poisoned-subagent attack runner
+│       ├── run_attack.py            # Single-poisoned-subagent attack runner
+│       └── run_debate_clean.py      # Clean debate runner
 ├── prompts/
 │   ├── subagent.txt                 # Subagent prompt template
-│   └── orchestrator.txt             # Orchestrator aggregation prompt
+│   ├── orchestrator.txt             # Orchestrator aggregation prompt
+│   └── debate_subagent.txt          # Debate subagent prompt
 ├── configs/
 │   ├── ingestion.yaml               # Generic ingestion settings
 │   ├── corpus_cybersec.yaml         # Cybersec corpus settings (chunk size, embed model)
-│   └── system_orchestrator.yaml     # Model, top_k, number of subagents
+│   ├── system_orchestrator.yaml     # Model, top_k, number of subagents
+│   └── system_debate.yaml           # Debate-specific: max_rounds, stable_for, model
 ├── data/
 │   ├── corpus_cybersec/             # PDF corpus (download separately — see below)
 │   └── queries/
@@ -76,7 +84,11 @@ pip install \
   openai \
   python-dotenv \
   langgraph \
-  pytest
+  autogen-agentchat \
+  autogen-core \
+  "autogen-ext[openai]" \
+  pytest \
+  pytest-asyncio
 ```
 
 ### 3. Configure API keys
@@ -169,6 +181,38 @@ EOF
 
 Expected: all 8 queries answered at confidence 0.90.
 
+### Run the clean debate
+
+The debate setup spawns N AutoGen-backed subagents in a `RoundRobinGroupChat`, each with its own retriever and a private `retrieve` tool. Rounds continue until the same majority holds for `stable_for` consecutive rounds (configurable in `configs/system_debate.yaml`) or `max_rounds` hits. The Judge relays the majority vote as the final answer and appends a full `DebateTranscript` to the `RunLog`.
+
+```bash
+python - <<'EOF'
+from src.corpus.ingest_cybersec import ingest_cybersec_corpus
+from src.corpus.query_loader import load_queries
+from src.experiments.run_debate_clean import run_clean_debate_experiment
+
+index = ingest_cybersec_corpus(persist_dir="data/index_cybersec")
+queries = load_queries("data/queries/sample_cybersec_queries.yaml")
+
+logs = run_clean_debate_experiment(
+    queries=queries,
+    data_dir="data/corpus_cybersec",
+    persist_dir="data/index_cybersec",
+    output_dir="results",
+)
+
+for log in logs:
+    t = log.debate_transcript
+    ans = log.final_decision.final_answer[:120].replace("\n", " ")
+    print(f"[{log.query_id}] rounds={t.rounds_used} stop={t.stopped_reason} "
+          f"majority={len(t.majority_cluster)}/3  {ans}")
+EOF
+```
+
+Notes:
+- Requires `OPENAI_API_KEY`. The model used is set by `model:` in `configs/system_debate.yaml` (defaults to `gpt-5`).
+- Unit tests (`tests/test_debate.py`) run the whole debate loop offline using AutoGen's `ReplayChatCompletionClient` — no API key required.
+
 ### Inspect run logs
 
 ```bash
@@ -202,6 +246,37 @@ Query
 
 In the attack scenario, `subagent_1` retrieves from a poisoned index (clean docs + D_p). Subagents 2 and 3 use the clean index. The orchestrator does not know which subagent is poisoned.
 
+### Debate setup (Phase 5)
+
+```
+user_input + trigger ──► JudgeLLM ──► spawn DebateInterface (AutoGen RoundRobinGroupChat)
+                                          │
+                         ┌────────────────┼────────────────┐
+                         ▼                ▼                ▼
+                 DebateSubagent_1  DebateSubagent_2  DebateSubagent_N
+                     │                    │                    │
+                 Retriever_1          Retriever_2          Retriever_N
+                         │                ▲                    │
+                         └── debate rounds (each agent may re-retrieve and
+                             critique others' arguments; every turn ends with
+                             `STANCE: {"answer","confidence","citations"}`) ─┘
+                                          │
+                                 MajorityStableTermination
+                                          │  (stops when the same majority
+                                          │   holds for `stable_for` rounds
+                                          │   or `max_rounds` hits)
+                                          ▼
+                          majority vote ──► JudgeLLM (relay)
+                                          │
+                                          ▼
+                       OrchestratorOutput + DebateTranscript
+                                          │
+                                          ▼
+                               RunLog ──► results/runs.jsonl
+```
+
+In the clean setup the Judge is a pure relay: `final_answer = majority vote`, no override. Phase 5b will swap one `DebateSubagent`'s retriever for a poisoned index; no changes to the debate loop or judge are needed.
+
 ---
 
 ## Configuration
@@ -222,6 +297,17 @@ top_k: 5
 num_subagents: 3
 ```
 
+**`configs/system_debate.yaml`** — controls the debate loop:
+```yaml
+num_subagents: 3
+max_rounds: 4
+stable_for: 2            # rounds the same majority must persist to converge
+model: gpt-5
+subagent_top_k: 5
+judge_mode: relay
+retrieval_variant: shared
+```
+
 ---
 
 ## Roadmap
@@ -233,7 +319,8 @@ num_subagents: 3
 | 3 | Cybersec corpus + query loader + attack runner scaffolding | Complete |
 | 3b | Clean baseline validated (8/8 queries answered correctly) | Complete |
 | 4 | Add attack blocks to query file; run poisoning experiments; compute ASR, benign accuracy, poison retrieval rate, false-consensus rate | Next |
-| 5 | Debate setup — AutoGen multi-round + judge | Planned |
+| 5 | Debate setup — AutoGen multi-round + judge (clean structure) | Complete |
+| 5b | Debate poisoning: wire `poison_doc_ids` + trigger into DebateSubagents | Planned |
 
 ---
 

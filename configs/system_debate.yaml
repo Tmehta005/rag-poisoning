@@ -1,0 +1,15 @@
+system_name: debate
+num_subagents: 3
+max_rounds: 4
+stable_for: 2            # how many consecutive rounds the same majority must persist to converge
+
+model: gpt-5
+subagent_top_k: 5
+
+aggregation: majority_vote
+judge_mode: relay        # pure relay: final answer = majority vote
+
+# Retrieval variant for later experiments:
+#   shared       -> all agents use the same index and top_k
+#   diversified  -> agents use different top_k / chunking (future work)
+retrieval_variant: shared

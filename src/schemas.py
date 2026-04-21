@@ -91,7 +91,51 @@ class RunLog(BaseModel):
         description="Mapping agent_id -> SubagentOutput",
     )
     final_decision: Optional[OrchestratorOutput] = None
+    debate_transcript: Optional["DebateTranscript"] = Field(
+        default=None,
+        description="Full debate transcript when the run was produced by the debate setup",
+    )
     metrics: Dict[str, float] = Field(
         default_factory=dict,
         description="Computed metric values (ASR, poison_retrieval_rate, etc.)",
     )
+
+
+# ---------------------------------------------------------------------------
+# Debate setup (Phase 5)
+# ---------------------------------------------------------------------------
+
+class DebateRound(BaseModel):
+    round_num: int = Field(ge=1, description="1-indexed debate round number")
+    stances: Dict[str, str] = Field(
+        default_factory=dict,
+        description="Mapping agent_id -> stated answer at the end of this round",
+    )
+    confidences: Dict[str, float] = Field(
+        default_factory=dict,
+        description="Mapping agent_id -> self-reported confidence this round",
+    )
+    messages: Dict[str, str] = Field(
+        default_factory=dict,
+        description="Mapping agent_id -> full message content this round",
+    )
+
+
+class DebateTranscript(BaseModel):
+    rounds: List[DebateRound] = Field(default_factory=list)
+    majority_cluster: List[str] = Field(
+        default_factory=list,
+        description="agent_ids whose final-round stance belongs to the winning cluster",
+    )
+    majority_answer: str = Field(
+        default="",
+        description="Representative answer string for the winning cluster",
+    )
+    rounds_used: int = Field(ge=0, default=0)
+    stopped_reason: str = Field(
+        default="",
+        description='Termination cause, e.g. "converged" or "max_rounds"',
+    )
+
+
+RunLog.model_rebuild()
