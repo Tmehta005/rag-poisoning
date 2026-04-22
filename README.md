@@ -28,7 +28,8 @@ ml-rag-poisoning/
 │   │   ├── ingest_cybersec.py       # Metadata-aware PDF ingestion (section IDs, XML filter)
 │   │   └── query_loader.py          # Load evaluation queries from YAML or JSON
 │   └── experiments/
-│       ├── run_clean.py             # Clean baseline experiment runner
+│       ├── run_single_agent.py      # Single-agent agentic baseline (attack ceiling)
+│       ├── run_clean.py             # 3-agent orchestrator clean baseline
 │       ├── run_attack.py            # Single-poisoned-subagent attack runner
 │       └── run_debate_clean.py      # Clean debate runner
 ├── prompts/
@@ -51,6 +52,7 @@ ml-rag-poisoning/
 │   ├── test_schemas.py
 │   ├── test_retriever.py
 │   ├── test_orchestrator_flow.py
+│   ├── test_single_agent.py
 │   ├── test_corpus_and_queries.py
 │   └── test_debate.py
 └── results/
@@ -157,7 +159,7 @@ The remaining three PDFs require institutional access and must be placed manuall
 python -m pytest tests/ -v
 ```
 
-All 59 tests should pass with no API key — LLM calls are stubbed in tests.
+All 68 tests should pass with no API key — LLM calls are stubbed in tests.
 
 ### Build the index (first run only)
 
@@ -177,6 +179,35 @@ EOF
 ```
 
 To rebuild from scratch (e.g. after changing `chunk_size`), delete `data/index_cybersec/` first.
+
+### Run the single-agent baseline
+
+One `ExpertSubagent` with no orchestration. This is the **attack ceiling**: in the poisoning experiments, ASR here is expected to be ~1.0. The gap between this and the orchestrator/debate ASR measures the defense benefit of multi-agent architectures. Uses the same `ExpertSubagent` class as all other pipelines so results are directly comparable.
+
+```bash
+python - <<'EOF'
+from src.corpus.ingest_cybersec import ingest_cybersec_corpus
+from src.corpus.query_loader import load_queries
+from src.experiments.run_single_agent import run_single_agent_experiment
+
+index = ingest_cybersec_corpus(persist_dir="data/index_cybersec")
+queries = load_queries("data/queries/sample_cybersec_queries.yaml")
+
+logs = run_single_agent_experiment(
+    queries=queries,
+    data_dir="data/corpus_cybersec",
+    persist_dir="data/index_cybersec",
+    output_dir="results",
+)
+
+for log in logs:
+    conf = log.final_decision.final_confidence
+    ans = log.final_decision.final_answer[:120].replace("\n", " ")
+    print(f"[{log.query_id}] agents={len(log.agent_responses)}  conf={conf:.2f}  {ans}")
+EOF
+```
+
+Expected: all 8 queries answered at confidence 0.90. Each run shows `agents=1` in the log.
 
 ### Run the clean orchestrator experiment
 
@@ -276,61 +307,52 @@ import json
 with open("results/runs.jsonl") as f:
     for line in f:
         r = json.loads(line)
-        print(r["query_id"], "|", r["attack_condition"], "|",
+        n_agents = len(r["agent_responses"])
+        print(r["query_id"], "|", r["attack_condition"], f"| agents={n_agents} |",
               r["final_decision"]["final_answer"][:80])
 EOF
 ```
+
+Single-agent runs show `agents=1`; orchestrator runs show `agents=3`.
 
 ---
 
 ## Architecture
 
-```
-Query
-  │
-  ├──► subagent_1 (Retriever → ExpertSubagent → SubagentOutput)
-  ├──► subagent_2 (Retriever → ExpertSubagent → SubagentOutput)
-  └──► subagent_3 (Retriever → ExpertSubagent → SubagentOutput)
-            │
-            ▼
-     LangGraph Orchestrator
-            │
-            ▼
-     OrchestratorOutput   →  RunLog  →  results/runs.jsonl
-```
+### Comparison ladder
 
-In the attack scenario, `subagent_1` retrieves from a poisoned index (clean docs + D_p). Subagents 2 and 3 use the clean index. The orchestrator does not know which subagent is poisoned.
-
-### Debate setup (Phase 5)
+Four pipelines share the same `ExpertSubagent` class, schemas, and logging contract. This ensures ASR differences between them reflect architectural robustness, not implementation differences.
 
 ```
-user_input + trigger ──► JudgeLLM ──► spawn DebateInterface (AutoGen RoundRobinGroupChat)
-                                          │
-                         ┌────────────────┼────────────────┐
-                         ▼                ▼                ▼
-                 DebateSubagent_1  DebateSubagent_2  DebateSubagent_N
-                     │                    │                    │
-                 Retriever_1          Retriever_2          Retriever_N
-                         │                ▲                    │
-                         └── debate rounds (each agent may re-retrieve and
-                             critique others' arguments; every turn ends with
-                             `STANCE: {"answer","confidence","citations"}`) ─┘
-                                          │
-                                 MajorityStableTermination
-                                          │  (stops when the same majority
-                                          │   holds for `stable_for` rounds
-                                          │   or `max_rounds` hits)
-                                          ▼
-                          majority vote ──► JudgeLLM (relay)
-                                          │
-                                          ▼
-                       OrchestratorOutput + DebateTranscript
-                                          │
-                                          ▼
-                               RunLog ──► results/runs.jsonl
+                     Attack ceiling
+                           │
+                           ▼
+[1] Single-agent    Query → subagent_1 → OrchestratorOutput → RunLog
+    (run_single_agent.py)
+    No aggregation. Poisoned retrieval propagates directly to final answer.
+
+[2] Orchestrator    Query → subagent_1 ─┐
+    (run_clean.py)        → subagent_2 ─┼─► LangGraph Orchestrator → OrchestratorOutput → RunLog
+                          → subagent_3 ─┘
+    LLM picks best-supported answer from 3 independent retrievals.
+
+[3] Debate          Query → DebateSubagent_1 ─┐
+    (run_debate_       │  → DebateSubagent_2 ─┼─► RoundRobinGroupChat (AutoGen)
+     clean.py)         │  → DebateSubagent_N ─┘        │
+                       │                    MajorityStableTermination
+                       │                               │
+                       └──────────────── JudgeLLM (relay) → OrchestratorOutput + DebateTranscript → RunLog
+    Agents critique each other across rounds; majority vote wins.
+                           │
+                           ▼
+                     Maximum defense
 ```
 
-In the clean setup the Judge is a pure relay: `final_answer = majority vote`, no override. Phase 5b will swap one `DebateSubagent`'s retriever for a poisoned index; no changes to the debate loop or judge are needed.
+In attack scenarios, `subagent_1` retrieves from a poisoned index (clean docs + D_p). All other subagents use the clean index. No pipeline component knows which subagent is poisoned.
+
+### Debate setup notes
+
+Each `DebateSubagent` has its own `Retriever` and a private `retrieve` tool. Every turn ends with a `STANCE: {"answer", "confidence", "citations"}` JSON block. `MajorityStableTermination` stops the round-robin when the same majority cluster holds for `stable_for` consecutive rounds or `max_rounds` is reached. The `JudgeLLM` is a pure relay in the clean setup: `final_answer = majority_answer`, no override. Phase 5b will swap one subagent's retriever for a poisoned index; no changes to the debate loop or judge are needed.
 
 ---
 
@@ -374,7 +396,8 @@ retrieval_variant: shared
 | 3 | Cybersec corpus + query loader + attack runner scaffolding | Complete |
 | 3b | Clean baseline validated (8/8 cybersec queries at 0.90 confidence) | Complete |
 | 3c | Biology corpus — 5 PDFs, 286-node index, 6 clean queries, baseline validated (6/6 at 0.90) | Complete |
-| 4 | Add attack blocks to query file; run poisoning experiments; compute ASR, benign accuracy, poison retrieval rate, false-consensus rate | Next |
+| 3d | Single-agent agentic baseline — attack ceiling for ASR comparison | Complete |
+| 4 | Add attack blocks to query file; run poisoning experiments across all 3 pipelines; compute ASR, benign accuracy, poison retrieval rate, false-consensus rate | Next |
 | 5 | Debate setup — AutoGen multi-round + judge (clean structure) | Complete |
 | 5b | Debate poisoning: wire `poison_doc_ids` + trigger into DebateSubagents | Planned |
 
