@@ -4,7 +4,7 @@ max_rounds: 4
 stable_for: 2            # how many consecutive rounds the same majority must persist to converge
 
 model: gpt-5
-subagent_top_k: 5
+subagent_top_k: 2
 
 aggregation: majority_vote
 judge_mode: relay        # pure relay: final answer = majority vote

@@ -217,7 +217,16 @@ def make_poison_documents(poison_doc_specs: list[dict]) -> list[Document]:
     Document objects ready to be inserted into the poisoned index.
 
     Each spec must have: doc_id (str), text (str).
-    Optional: standard, section_id.
+    Optional: standard, section_id, metadata_trigger.
+
+    Stealth-meta behavior: when a spec carries a non-empty
+    ``metadata_trigger``, it overrides the ``title`` metadata field so
+    the trigger is included in LlamaIndex's ``MetadataMode.EMBED`` text
+    (BGE will pick it up) while ``title`` is added to
+    ``excluded_llm_metadata_keys`` so any code path that renders the
+    document for an LLM with ``MetadataMode.LLM`` will omit it. The
+    subagent prompt uses ``MetadataMode.NONE`` already, but this belt-
+    and-suspenders exclusion keeps the invariant explicit.
 
     Args:
         poison_doc_specs: List of dicts from query['attack']['poison_docs'].
@@ -228,7 +237,8 @@ def make_poison_documents(poison_doc_specs: list[dict]) -> list[Document]:
     docs = []
     for spec in poison_doc_specs:
         standard = spec.get("standard", "NIST-CSF")
-        title = spec.get("title", "NIST CSF Revision Notice")
+        metadata_trigger = spec.get("metadata_trigger") or None
+        title = metadata_trigger or spec.get("title", "NIST CSF Revision Notice")
         source_file = spec.get(
             "source_file", f"{standard}-{spec.get('section_id', 'REV') or 'REV'}.pdf"
         )
@@ -244,5 +254,9 @@ def make_poison_documents(poison_doc_specs: list[dict]) -> list[Document]:
                 "is_poison": True,
             },
         )
+        if metadata_trigger:
+            doc.excluded_llm_metadata_keys = list(
+                set(list(doc.excluded_llm_metadata_keys or []) + ["title"])
+            )
         docs.append(doc)
     return docs

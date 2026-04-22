@@ -90,3 +90,28 @@ def compute_avg_embedding_similarity(
     similarities = torch.mm(query_embedding, db_embeddings.T)
     avg_similarities = torch.mean(similarities, dim=1)
     return torch.mean(avg_similarities)
+
+
+def compute_similarity_to_doc(
+    query_embedding: torch.Tensor, target_doc_embedding: torch.Tensor
+) -> torch.Tensor:
+    """
+    Stealth-query loss.
+
+    Pulls every triggered-query embedding toward a single fixed target
+    embedding (the clean poison doc's CLS vector). Returns mean cosine
+    similarity across the batch, minus a small variance penalty so
+    triggered queries collapse together. Both inputs are assumed
+    L2-normalized (BGE CLS output), so the dot product equals cosine
+    similarity. HotFlip *maximizes* this score.
+
+    Args:
+        query_embedding: ``[B, hidden]`` triggered-query embeddings.
+        target_doc_embedding: ``[hidden]`` or ``[1, hidden]`` target.
+    """
+    if target_doc_embedding.dim() == 1:
+        target_doc_embedding = target_doc_embedding.unsqueeze(0)
+    # [B, hidden] @ [hidden, 1] -> [B, 1]
+    sims = torch.mm(query_embedding, target_doc_embedding.T).squeeze(-1)
+    variance = compute_variance(query_embedding)
+    return torch.mean(sims) - 0.1 * variance

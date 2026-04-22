@@ -60,10 +60,20 @@ def build_poisoned_index_from_artifact(
     Convenience: take the ``poison_doc_text`` out of an artifact and
     build the ephemeral poisoned index. ``extra_specs`` can be used for
     future multi-doc D_p configurations.
+
+    For ``variant == "stealth-meta"`` the artifact's trigger is carried
+    into the Document metadata (not the visible body) via
+    ``metadata_trigger``; the visible text — already rendered by the
+    optimizer pipeline — stays clean. For ``"overt"`` and
+    ``"stealth-query"`` no metadata trigger is attached.
     """
+    metadata_trigger = (
+        artifact.trigger if artifact.variant == "stealth-meta" else None
+    )
     primary = PoisonDocSpec(
         doc_id=artifact.poison_doc_id,
         text=artifact.poison_doc_text,
+        metadata_trigger=metadata_trigger,
     )
     specs = [primary] + list(extra_specs or [])
     return build_poisoned_index(

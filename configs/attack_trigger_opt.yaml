@@ -3,12 +3,20 @@
 
 encoder_model: "BAAI/bge-small-en-v1.5"   # MUST match the retriever's embed model
 
+# Poison rendering variant. Controls where the trigger lives:
+#   "overt"         - trigger appears verbatim in the visible doc body (default)
+#   "stealth-meta"  - trigger hidden in the Document's metadata only
+#   "stealth-query" - doc is fully clean; query-side trigger is optimized
+#                     against the fixed poison-doc embedding. The CLI will
+#                     force `algo: "stealth_query"` under this variant.
+variant: "overt"
+
 num_adv_passage_tokens: 5                  # length of the optimized trigger
 num_iter: 50                               # outer HotFlip iterations
 num_grad_iter: 8                           # batches per gradient step
 num_cand: 30                               # HotFlip top-k candidates per flip
 per_batch_size: 8                          # queries per gradient batch
-algo: "ap"                                 # "ap" (cluster dist) | "cpa" (similarity)
+algo: "ap"                                 # "ap" | "cpa" | "stealth_query"
 
 ppl_filter: false                          # GPT-2 coherence filter
 ppl_oversample: 10                         # only used when ppl_filter is true

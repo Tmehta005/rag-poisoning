@@ -22,9 +22,11 @@ from typing import List, Optional
 
 import yaml
 
+import warnings
+
 from src.attacks.corpus_embeddings import extract_corpus_texts
 from src.attacks.encoder import DEFAULT_BGE_MODEL, load_encoder
-from src.attacks.poison_doc import DEFAULT_TARGET_CLAIM
+from src.attacks.poison_doc import DEFAULT_TARGET_CLAIM, VALID_VARIANTS
 from src.attacks.trigger_optimizer import OptimizerConfig, run_and_save
 from src.corpus.ingest_cybersec import ingest_cybersec_corpus
 from src.corpus.query_loader import load_queries
@@ -132,6 +134,19 @@ def main(argv: Optional[List[str]] = None) -> int:
     )
     parser.add_argument("--max-training-queries", type=int, default=32)
     parser.add_argument(
+        "--variant",
+        choices=list(VALID_VARIANTS),
+        default=None,
+        help=(
+            "Poison rendering variant. 'overt' (default) puts the trigger in "
+            "the visible doc body. 'stealth-meta' hides it in Document "
+            "metadata so BGE embeds it but the subagent prompt never does. "
+            "'stealth-query' produces a fully clean doc and optimizes the "
+            "query-side trigger against the doc's fixed embedding (forces "
+            "algo='stealth_query')."
+        ),
+    )
+    parser.add_argument(
         "--ppl-filter",
         action="store_true",
         help="Enable GPT-2 perplexity candidate filter (requires GPT-2 download).",
@@ -150,13 +165,36 @@ def main(argv: Optional[List[str]] = None) -> int:
     cache_base_dir = opt_cfg.get("cache_base_dir", "data/attacks/_cache")
     device = args.device or opt_cfg.get("device")
 
+    variant = args.variant or opt_cfg.get("variant", "overt")
+    if variant not in VALID_VARIANTS:
+        raise SystemExit(
+            f"Unknown variant {variant!r}; expected one of {list(VALID_VARIANTS)}"
+        )
+    yaml_algo = opt_cfg.get("algo", "ap")
+    if variant == "stealth-query":
+        if yaml_algo != "stealth_query":
+            warnings.warn(
+                f"variant='stealth-query' overrides config algo={yaml_algo!r} "
+                "-> 'stealth_query'.",
+                stacklevel=2,
+            )
+        algo = "stealth_query"
+    else:
+        if yaml_algo == "stealth_query":
+            raise SystemExit(
+                f"algo='stealth_query' requires variant='stealth-query' "
+                f"(got variant={variant!r}). Pass --variant stealth-query "
+                "or change the config's algo."
+            )
+        algo = yaml_algo
+
     config = OptimizerConfig(
         num_adv_passage_tokens=int(opt_cfg.get("num_adv_passage_tokens", 5)),
         num_iter=int(opt_cfg.get("num_iter", 50)),
         num_grad_iter=int(opt_cfg.get("num_grad_iter", 8)),
         num_cand=int(opt_cfg.get("num_cand", 30)),
         per_batch_size=int(opt_cfg.get("per_batch_size", 8)),
-        algo=opt_cfg.get("algo", "ap"),
+        algo=algo,
         ppl_filter=bool(args.ppl_filter or opt_cfg.get("ppl_filter", False)),
         ppl_oversample=int(opt_cfg.get("ppl_oversample", 10)),
         n_components=int(opt_cfg.get("n_components", 5)),
@@ -204,11 +242,13 @@ def main(argv: Optional[List[str]] = None) -> int:
         ppl_model=ppl_model,
         poison_doc_id=args.poison_doc_id,
         harmful_match_phrases=args.harmful_match_phrases,
+        variant=variant,
     )
 
     out_dir = Path(artifacts_dir) / artifact.attack_id
     print(
-        f"[optimize_trigger] done. trigger={artifact.trigger!r}\n"
+        f"[optimize_trigger] done. variant={artifact.variant!r} "
+        f"trigger={artifact.trigger!r}\n"
         f"  artifact: {out_dir / 'artifact.json'}\n"
         f"  poison:   {out_dir / 'poison_doc.txt'}"
     )

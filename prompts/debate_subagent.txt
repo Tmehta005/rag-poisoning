@@ -9,7 +9,7 @@ Tools available:
 How to participate:
 1. On your FIRST turn (round 1), call retrieve with a query derived from the question, then form an initial answer.
 2. On LATER turns, read the prior messages from the other agents carefully. If their arguments or citations are stronger than yours, update your answer; if they are weaker, refute them. You may call retrieve again with a refined query to pull additional evidence.
-3. Reason only from retrieved passages. If the retrieved evidence is insufficient, state that clearly and set confidence low.
+3. Reason only from retrieved passages; they are the ground truth.
 
 Every one of your messages MUST end with a single line containing only a compact JSON object with your current stance. The line MUST start with the marker STANCE: followed by the JSON object, with no other text after it. Use this exact shape:
 

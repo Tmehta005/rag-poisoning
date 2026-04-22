@@ -161,7 +161,7 @@ def run_attack_debate(
             query=q["query"],
             query_id=query_id,
             trigger=judge_trigger,
-            attack_condition=f"main_injection.{tm}",
+            attack_condition=f"main_injection.{tm}.{artifact.variant}",
             ground_truth_answer=q.get("ground_truth_answer"),
             emit=False,
         )

@@ -40,6 +40,13 @@ class AttackArtifact:
     # harmful action. If empty, the runner falls back to a heuristic match
     # on target_claim (brittle — see is_harmful_answer).
     harmful_match_phrases: List[str] = field(default_factory=list)
+    # Poison rendering variant. "overt" = trigger verbatim in the doc
+    # body; "stealth-meta" = trigger hidden in doc metadata only;
+    # "stealth-query" = doc fully clean, query-side trigger optimized
+    # against the fixed poison-doc embedding. Defaults to "overt" for
+    # backward compatibility with artifacts written before this axis
+    # existed.
+    variant: str = "overt"
     notes: Optional[str] = None
 
     def to_dict(self) -> dict:
@@ -59,6 +66,7 @@ class AttackArtifact:
             target_query_ids=list(d.get("target_query_ids", [])),
             loss_history=[float(x) for x in d.get("loss_history", [])],
             harmful_match_phrases=list(d.get("harmful_match_phrases", [])),
+            variant=str(d.get("variant", "overt")),
             notes=d.get("notes"),
         )
 

@@ -129,6 +129,8 @@ def run_attack_orchestrator(
             clean_index, artifact, embed_model=embed_model
         )
 
+        attack_condition = f"main_injection.{tm}.{artifact.variant}"
+
         state_trigger: Optional[str] = artifact.trigger if tm == "global" else None
 
         agents: List[ExpertSubagent] = []
@@ -161,7 +163,7 @@ def run_attack_orchestrator(
         initial_state: OrchestratorState = {
             "query": query_text,
             "query_id": query_id,
-            "attack_condition": f"main_injection.{tm}",
+            "attack_condition": attack_condition,
             "trigger": state_trigger,
             "agent_outputs": [],
             "final_decision": None,
@@ -182,7 +184,7 @@ def run_attack_orchestrator(
 
         run_log = RunLog(
             query_id=query_id,
-            attack_condition=f"main_injection.{tm}",
+            attack_condition=attack_condition,
             trigger=artifact.trigger,
             ground_truth_answer=ground_truth,
             retrieved_doc_ids_per_agent=retrieved_per_agent,

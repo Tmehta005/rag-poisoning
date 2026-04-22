@@ -40,15 +40,17 @@ from src.attacks.corpus_embeddings import build_or_load_corpus_cache
 from src.attacks.encoder import (
     EncoderBundle,
     decode_trigger_tokens,
+    encode_texts,
     forward_with_adv_suffix,
     initial_adv_passage_ids,
 )
 from src.attacks.fitness import (
     compute_avg_cluster_distance,
     compute_avg_embedding_similarity,
+    compute_similarity_to_doc,
 )
 from src.attacks.hotflip import GradientStorage, candidate_filter, hotflip_attack
-from src.attacks.poison_doc import render_poison_doc
+from src.attacks.poison_doc import VALID_VARIANTS, Variant, render_poison_doc
 
 
 @dataclass
@@ -58,7 +60,11 @@ class OptimizerConfig:
     num_grad_iter: int = 8
     num_cand: int = 30
     per_batch_size: int = 8
-    algo: str = "ap"           # "ap" (cluster dist) or "cpa" (similarity)
+    # "ap"             -> avg cluster distance (AgentPoison default)
+    # "cpa"            -> avg similarity to corpus (AgentPoison ablation)
+    # "stealth_query"  -> avg similarity to a single fixed target doc
+    #                     embedding (used by the stealth-query variant)
+    algo: str = "ap"
     ppl_filter: bool = False
     ppl_oversample: int = 10    # how many candidates to sample before PPL filter
     n_components: int = 5
@@ -86,14 +92,24 @@ def _iter_batches(
 def _loss_fn(
     algo: str,
     query_embeddings: torch.Tensor,
-    cluster_centers: torch.Tensor,
-    db_embeddings: torch.Tensor,
+    cluster_centers: Optional[torch.Tensor],
+    db_embeddings: Optional[torch.Tensor],
+    target_doc_embedding: Optional[torch.Tensor] = None,
 ) -> torch.Tensor:
     if algo == "ap":
         return compute_avg_cluster_distance(query_embeddings, cluster_centers)
     if algo == "cpa":
         return compute_avg_embedding_similarity(query_embeddings, db_embeddings)
-    raise ValueError(f"Unknown algo {algo!r} (expected 'ap' or 'cpa')")
+    if algo == "stealth_query":
+        if target_doc_embedding is None:
+            raise ValueError(
+                "algo='stealth_query' requires a target_doc_embedding "
+                "(pass target_doc_text to optimize_trigger)."
+            )
+        return compute_similarity_to_doc(query_embeddings, target_doc_embedding)
+    raise ValueError(
+        f"Unknown algo {algo!r} (expected 'ap', 'cpa', or 'stealth_query')"
+    )
 
 
 def optimize_trigger(
@@ -105,6 +121,7 @@ def optimize_trigger(
     progress: bool = True,
     ppl_model: Optional[torch.nn.Module] = None,
     on_step: Optional[Callable[[int, float, str], None]] = None,
+    target_doc_text: Optional[str] = None,
 ) -> OptimizationResult:
     """
     Run the HotFlip optimizer and return the best adv passage found.
@@ -114,26 +131,41 @@ def optimize_trigger(
         training_queries: Seed queries the attacker expects to see
             (e.g. your evaluation queries or a development split).
         corpus_texts: Chunk texts from the clean index, used to fit
-            GMM centers for the fitness loss.
+            GMM centers for the fitness loss. May be empty when
+            ``config.algo == "stealth_query"`` since that mode targets a
+            single fixed doc embedding rather than the corpus geometry.
         config: OptimizerConfig (defaults sized for CPU/MPS).
         ppl_model: Optional causal LM (e.g. GPT-2) for coherence filter.
         on_step: Optional callback ``(iter_idx, loss, trigger_str)``.
+        target_doc_text: Required when ``config.algo == "stealth_query"``.
+            The fixed poison-doc text; its CLS embedding becomes the
+            target the triggered-query embeddings are pulled toward.
     """
     device = encoder.device
     rng = random.Random(config.seed)
     torch.manual_seed(config.seed)
 
-    _, cluster_centers, _ = build_or_load_corpus_cache(
-        encoder,
-        list(corpus_texts),
-        cache_base_dir=cache_base_dir,
-        n_components=config.n_components,
-    )
-    db_embeddings = None
-    if config.algo == "cpa":
-        db_embeddings, _, _ = build_or_load_corpus_cache(
-            encoder, list(corpus_texts), cache_base_dir=cache_base_dir
+    cluster_centers: Optional[torch.Tensor] = None
+    db_embeddings: Optional[torch.Tensor] = None
+    target_doc_embedding: Optional[torch.Tensor] = None
+
+    if config.algo == "stealth_query":
+        if not target_doc_text:
+            raise ValueError(
+                "algo='stealth_query' requires a non-empty target_doc_text."
+            )
+        target_doc_embedding = encode_texts(encoder, [target_doc_text])[0].detach()
+    else:
+        _, cluster_centers, _ = build_or_load_corpus_cache(
+            encoder,
+            list(corpus_texts),
+            cache_base_dir=cache_base_dir,
+            n_components=config.n_components,
         )
+        if config.algo == "cpa":
+            db_embeddings, _, _ = build_or_load_corpus_cache(
+                encoder, list(corpus_texts), cache_base_dir=cache_base_dir
+            )
 
     adv_passage_ids = initial_adv_passage_ids(
         encoder,
@@ -168,7 +200,13 @@ def optimize_trigger(
 
             for batch in batches:
                 q_emb = forward_with_adv_suffix(encoder, batch, adv_passage_ids)
-                loss = _loss_fn(config.algo, q_emb, cluster_centers, db_embeddings)
+                loss = _loss_fn(
+                    config.algo,
+                    q_emb,
+                    cluster_centers,
+                    db_embeddings,
+                    target_doc_embedding=target_doc_embedding,
+                )
                 loss.backward()
 
                 temp_grad = storage.get()            # [1, num_adv, hidden]
@@ -211,7 +249,11 @@ def optimize_trigger(
                         temp[:, token_to_flip] = cand
                         q_emb = forward_with_adv_suffix(encoder, batch, temp)
                         can_loss = _loss_fn(
-                            config.algo, q_emb, cluster_centers, db_embeddings
+                            config.algo,
+                            q_emb,
+                            cluster_centers,
+                            db_embeddings,
+                            target_doc_embedding=target_doc_embedding,
                         )
                         candidate_scores[i] += can_loss.detach().sum()
 
@@ -256,11 +298,45 @@ def run_and_save(
     poison_doc_id: Optional[str] = None,
     harmful_match_phrases: Optional[Sequence[str]] = None,
     progress: bool = True,
+    variant: Variant = "overt",
 ) -> AttackArtifact:
     """
     End-to-end: optimize a trigger, render the poison doc, save an
     ``AttackArtifact``. Returns the artifact.
+
+    For ``variant="stealth-query"`` the poison doc is rendered first
+    (clean body, no trigger anywhere) and its text is passed to the
+    optimizer as the fixed target embedding. The optimizer must already
+    be configured with ``algo="stealth_query"`` in this case — callers
+    should normally go through the CLI in
+    ``src/experiments/optimize_trigger.py`` which enforces this
+    invariant.
     """
+    if variant not in VALID_VARIANTS:
+        raise ValueError(
+            f"Unknown variant {variant!r}; expected one of {VALID_VARIANTS}"
+        )
+    if variant == "stealth-query" and config.algo != "stealth_query":
+        raise ValueError(
+            "variant='stealth-query' requires config.algo='stealth_query' "
+            f"(got {config.algo!r})."
+        )
+    if variant != "stealth-query" and config.algo == "stealth_query":
+        raise ValueError(
+            f"algo='stealth_query' is only valid with variant='stealth-query' "
+            f"(got variant={variant!r})."
+        )
+
+    target_doc_text: Optional[str] = None
+    if variant == "stealth-query":
+        preview = render_poison_doc(
+            trigger="",
+            target_claim=target_claim,
+            doc_id=poison_doc_id,
+            variant=variant,
+        )
+        target_doc_text = preview.text
+
     result = optimize_trigger(
         encoder,
         training_queries,
@@ -269,11 +345,13 @@ def run_and_save(
         cache_base_dir=cache_base_dir,
         ppl_model=ppl_model,
         progress=progress,
+        target_doc_text=target_doc_text,
     )
     doc_spec = render_poison_doc(
         trigger=result.trigger,
         target_claim=target_claim,
         doc_id=poison_doc_id,
+        variant=variant,
     )
     artifact = AttackArtifact(
         attack_id=attack_id,
@@ -287,6 +365,7 @@ def run_and_save(
         target_query_ids=list(target_query_ids),
         loss_history=result.loss_history,
         harmful_match_phrases=list(harmful_match_phrases or []),
+        variant=variant,
     )
     save_artifact(artifact, base_dir=artifacts_dir)
     return artifact
