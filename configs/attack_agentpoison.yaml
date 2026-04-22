@@ -1,0 +1,51 @@
+# AgentPoison trigger-optimization hparams.
+#
+# Consumed by src/experiments/optimize_trigger.py. Every field can be
+# overridden by a CLI flag of the same name.
+
+# Which encoder to attack. Must match the embedding model the live
+# retriever uses (BAAI/bge-small-en-v1.5 in configs/corpus_cybersec.yaml).
+encoder: "BAAI/bge-small-en-v1.5"
+
+# "ap" = AgentPoison avg-cluster-distance; "cpa" = PoisonedRAG-style similarity
+algo: "ap"
+
+# Trigger / loop hparams
+num_adv_passage_tokens: 10
+num_iter: 300
+num_cand: 50
+num_grad_iter: 4
+batch_size: 8
+gmm_components: 5
+variance_weight: 0.1
+
+# Perplexity filter via a small causal LM (readable triggers)
+ppl_filter: true
+ppl_model_name: "distilgpt2"
+
+# Optional init string (null -> start from [MASK]*num_adv_passage_tokens)
+golden_trigger: null
+
+# Compute
+device: "auto"   # auto | cuda | mps | cpu
+seed: 0
+
+# Optimization mode
+# - universal: train a single trigger over a split of query texts
+# - per_query: specialize to one query_id
+mode: "universal"
+
+# Per-query target (only used when mode=per_query)
+target_query_id: "q001"
+
+# Poison-doc construction
+num_poison_docs: 1
+# If null, default = DEFAULT_TARGET_ANSWER in src/attacks/poison_doc.py
+target_answer: null
+poison_body: null
+
+# Index + queries source paths
+queries_path: "data/queries/sample_cybersec_queries.yaml"
+persist_dir: "data/index_cybersec"
+data_dir: "data/corpus_cybersec"
+corpus_cache_dir: "data/poison/_shared"

@@ -40,6 +40,10 @@ class SubagentOutput(BaseModel):
         default_factory=list,
         description="All doc IDs retrieved by this agent (cited or not)",
     )
+    poisoned_retrieved_ids: List[str] = Field(
+        default_factory=list,
+        description="Subset of retrieved_doc_ids that belong to D_p (empty in clean runs)",
+    )
 
 
 # ---------------------------------------------------------------------------
@@ -102,7 +106,7 @@ class RunLog(BaseModel):
 
 
 # ---------------------------------------------------------------------------
-# Debate setup (Phase 5)
+# Debate setup
 # ---------------------------------------------------------------------------
 
 class DebateRound(BaseModel):

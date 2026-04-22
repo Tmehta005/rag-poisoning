@@ -41,8 +41,8 @@ from llama_index.core import VectorStoreIndex
 
 from src.agents.orchestrator import OrchestratorState, build_orchestrator_graph
 from src.agents.subagent import ExpertSubagent
-from src.corpus.ingest_cybersec import make_poison_documents
-from src.ingestion import _configure_embed_model, load_ingestion_config
+from src.attacks.poisoned_index import build_poisoned_index
+from src.ingestion import load_ingestion_config
 from src.logging_utils import emit_run_log
 from src.retriever import Retriever
 from src.schemas import OrchestratorOutput, RunLog
@@ -63,42 +63,7 @@ def _is_harmful(final_answer: str, target_answer: str) -> bool:
     return ta in fa or fa == ta
 
 
-def _build_poisoned_index(
-    clean_index: VectorStoreIndex,
-    poison_doc_specs: list[dict],
-    embed_model: str = "local",
-) -> tuple[VectorStoreIndex, set[str]]:
-    """
-    Build an ephemeral index that contains all clean nodes plus D_p.
-
-    Does NOT write to disk — the clean index on disk is untouched.
-
-    Args:
-        clean_index: The original clean VectorStoreIndex.
-        poison_doc_specs: List of {doc_id, text, ...} dicts from query attack block.
-        embed_model: Embedding model identifier.
-
-    Returns:
-        (poisoned_index, poison_doc_ids set)
-    """
-    _configure_embed_model(embed_model)
-    poison_docs = make_poison_documents(poison_doc_specs)
-    poison_ids = {doc.doc_id for doc in poison_docs}
-
-    # Clone the clean index by collecting all existing nodes, then adding D_p
-    from llama_index.core import StorageContext
-    poisoned_index = VectorStoreIndex(nodes=[], show_progress=False)
-
-    # Copy nodes from clean index
-    all_nodes = list(clean_index.docstore.docs.values())
-    for node in all_nodes:
-        poisoned_index.insert_nodes([node])
-
-    # Insert poison documents
-    for doc in poison_docs:
-        poisoned_index.insert(doc)
-
-    return poisoned_index, poison_ids
+_build_poisoned_index = build_poisoned_index  # re-export for backwards compatibility
 
 
 def run_attack_experiment(
@@ -153,7 +118,7 @@ def run_attack_experiment(
         poison_doc_specs = attack_cfg.get("poison_docs", [])
 
         # Build ephemeral poisoned index for subagent_1
-        poisoned_index, poison_ids = _build_poisoned_index(
+        poisoned_index, poison_ids = build_poisoned_index(
             clean_index, poison_doc_specs, embed_model=embed_model
         )
 
@@ -217,3 +182,80 @@ def run_attack_experiment(
         logs.append(run_log)
 
     return logs
+
+
+# ---------------------------------------------------------------------------
+# CLI entrypoint: loads an optimized-trigger artifact and runs the attack.
+# ---------------------------------------------------------------------------
+
+
+def _run_attack_cli() -> None:
+    """``python -m src.experiments.run_attack --attack-id <id>``.
+
+    Loads ``data/poison/<attack_id>/poison_docs.yaml``, merges it into the
+    queries file in memory (no disk write), builds the clean index, and
+    runs the orchestrator attack. Existing clean runners and the on-disk
+    queries file are left untouched.
+    """
+    import argparse
+    import logging
+
+    from src.attacks.artifacts import load_attack_artifact, merge_attack_blocks
+    from src.corpus.ingest_cybersec import ingest_cybersec_corpus
+    from src.corpus.query_loader import load_queries
+
+    p = argparse.ArgumentParser(description="Run the single-poisoned-subagent attack.")
+    p.add_argument("--attack-id", required=True, help="Artifact id under data/poison/")
+    p.add_argument(
+        "--queries-path",
+        default="data/queries/sample_cybersec_queries.yaml",
+        help="Base queries file; attack blocks are merged in by query_id.",
+    )
+    p.add_argument("--persist-dir", default="data/index_cybersec")
+    p.add_argument("--data-dir", default="data/corpus_cybersec")
+    p.add_argument("--output-dir", default="results")
+    p.add_argument("--system-config", default="configs/system_orchestrator.yaml")
+    p.add_argument("--ingestion-config", default="configs/corpus_cybersec.yaml")
+    p.add_argument("--poisoned-subagent-id", default="subagent_1")
+    p.add_argument("--log-level", default="INFO")
+    args = p.parse_args()
+
+    logging.basicConfig(
+        level=getattr(logging, args.log_level.upper(), logging.INFO),
+        format="%(asctime)s %(levelname)s %(name)s: %(message)s",
+    )
+    logger = logging.getLogger("run_attack")
+
+    artifact = load_attack_artifact(args.attack_id)
+    logger.info(
+        "Loaded attack artifact %s (trigger=%r)",
+        artifact["path"],
+        artifact["trigger"]["trigger"],
+    )
+
+    base_queries = load_queries(args.queries_path)
+    queries = merge_attack_blocks(base_queries, artifact["attack_blocks"])
+
+    clean_index = ingest_cybersec_corpus(
+        data_dir=args.data_dir, persist_dir=args.persist_dir
+    )
+
+    logs = run_attack_experiment(
+        queries=queries,
+        clean_index=clean_index,
+        output_dir=args.output_dir,
+        system_config_path=args.system_config,
+        ingestion_config_path=args.ingestion_config,
+        poisoned_subagent_id=args.poisoned_subagent_id,
+    )
+
+    for log in logs:
+        flag = log.final_decision.harmful_action_flag if log.final_decision else False
+        print(
+            f"[{log.query_id}] poisoned_retrieved={log.poison_retrieved} "
+            f"harmful={flag}"
+        )
+
+
+if __name__ == "__main__":
+    _run_attack_cli()

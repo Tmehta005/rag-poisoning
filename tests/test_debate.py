@@ -1,5 +1,5 @@
 """
-Tests for the clean debate setup (Phase 5).
+Tests for the clean debate setup.
 
 All LLM calls go through AutoGen's ``ReplayChatCompletionClient`` so tests
 run fully offline. The index uses ``MockEmbedding`` — no HuggingFace download.

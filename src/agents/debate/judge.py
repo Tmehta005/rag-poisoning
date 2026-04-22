@@ -154,6 +154,7 @@ class JudgeLLM:
                 rationale=rationale[:2000],
                 poison_retrieved=s.poison_retrieved,
                 retrieved_doc_ids=list(s.retrieved_doc_ids),
+                poisoned_retrieved_ids=list(s.poisoned_retrieved_ids),
             )
         return outputs
 

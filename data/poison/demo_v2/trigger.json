@@ -1,0 +1,20 @@
+{
+  "attack_id": "demo_v2",
+  "trigger": "classify entertaining humor utilizing yoga tragic models",
+  "token_ids": [
+    26268,
+    14036,
+    103,
+    103,
+    8562,
+    16911,
+    13272,
+    103,
+    13800,
+    4275
+  ],
+  "encoder_model": "BAAI/bge-small-en-v1.5",
+  "mode": "universal",
+  "algo": "ap",
+  "target_query_id": "q001"
+}

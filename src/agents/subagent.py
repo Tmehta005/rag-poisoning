@@ -124,7 +124,8 @@ class ExpertSubagent:
 
         docs = self.retriever.retrieve(retrieval_query)
         doc_ids = [d.doc_id for d in docs]
-        poison_retrieved = bool(self.poison_doc_ids & set(doc_ids))
+        poisoned_hits = [d for d in doc_ids if d in self.poison_doc_ids]
+        poison_retrieved = bool(poisoned_hits)
 
         doc_texts = "\n\n".join(
             f"[doc_id={d.doc_id}]\n{d.text}" for d in docs
@@ -151,6 +152,7 @@ class ExpertSubagent:
             rationale=parsed["rationale"],
             poison_retrieved=poison_retrieved,
             retrieved_doc_ids=doc_ids,
+            poisoned_retrieved_ids=poisoned_hits,
         )
 
     def _call_llm(self, prompt: str) -> str:

@@ -42,6 +42,12 @@ class DebateSubagent:
         prompt_path: Path to the debate subagent prompt template.
         top_k: Default top-k if the model omits the argument.
         poison_doc_ids: Doc IDs belonging to D_p (Phase 4). Empty in clean runs.
+        retrieval_trigger: Optional adversarial trigger. When set, the
+            ``retrieve`` tool *deterministically* appends it to every query
+            the LLM passes before forwarding to the underlying retriever.
+            The LLM never sees this string, so tool-calling models cannot
+            sanitize it out of the retrieval query. This mirrors the
+            orchestrator setup in :class:`src.agents.subagent.ExpertSubagent`.
     """
 
     def __init__(
@@ -52,6 +58,7 @@ class DebateSubagent:
         prompt_path: str = "prompts/debate_subagent.txt",
         top_k: int = 5,
         poison_doc_ids: Optional[Set[str]] = None,
+        retrieval_trigger: Optional[str] = None,
     ):
         if not agent_id.isidentifier():
             raise ValueError(
@@ -63,6 +70,7 @@ class DebateSubagent:
         self.top_k = top_k
         self.prompt_template = _load_prompt(prompt_path)
         self.poison_doc_ids: Set[str] = poison_doc_ids or set()
+        self.retrieval_trigger = retrieval_trigger
 
         self.retrieved_doc_ids: List[str] = []
         self.retrieve_calls: int = 0
@@ -79,11 +87,13 @@ class DebateSubagent:
         self.retrieve_calls = 0
 
         default_top_k = self.top_k
+        trigger = self.retrieval_trigger
 
         def retrieve(query: str, top_k: int = default_top_k) -> str:
             """Retrieve top-k documents from this subagent's private knowledge store."""
             self.retrieve_calls += 1
-            docs = self.retriever.retrieve(query, top_k=top_k)
+            retrieval_query = f"{query} {trigger}" if trigger else query
+            docs = self.retriever.retrieve(retrieval_query, top_k=top_k)
             for d in docs:
                 if d.doc_id not in self.retrieved_doc_ids:
                     self.retrieved_doc_ids.append(d.doc_id)
@@ -109,8 +119,13 @@ class DebateSubagent:
         )
 
     @property
+    def poisoned_retrieved_ids(self) -> list[str]:
+        """The *specific* retrieved doc ids that belong to D_p, in retrieval order."""
+        if not self.poison_doc_ids:
+            return []
+        return [d for d in self.retrieved_doc_ids if d in self.poison_doc_ids]
+
+    @property
     def poison_retrieved(self) -> bool:
         """True if any doc in D_p appeared in this subagent's retrievals."""
-        if not self.poison_doc_ids:
-            return False
-        return bool(self.poison_doc_ids & set(self.retrieved_doc_ids))
+        return bool(self.poisoned_retrieved_ids)

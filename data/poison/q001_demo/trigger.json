@@ -1,0 +1,20 @@
+{
+  "attack_id": "q001_demo",
+  "trigger": "presents himself refers influenced virginia behind georgian celebrating his",
+  "token_ids": [
+    7534,
+    2370,
+    5218,
+    103,
+    5105,
+    3448,
+    2369,
+    9166,
+    12964,
+    2010
+  ],
+  "encoder_model": "BAAI/bge-small-en-v1.5",
+  "mode": "per_query",
+  "algo": "ap",
+  "target_query_id": "q001"
+}
