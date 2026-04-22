@@ -27,3 +27,5 @@ RESULTS_SCHEMA.md
 
 # macOS
 .DS_Store
+.idea
+agent-poison-original
