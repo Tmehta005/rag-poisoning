@@ -9,6 +9,22 @@ import sys
 from src.corpus.query_loader import load_queries
 from src.experiments.run_debate_clean import run_clean_debate_experiment
 
+_LEGACY = {
+    "cybersec": ("data/corpus_cybersec", "data/index_cybersec"),
+    "generic": ("data/corpus", "data/index"),
+}
+
+
+def _resolve_corpus_paths(args) -> tuple[str, str]:
+    if args.data_dir and args.persist_dir:
+        return args.data_dir, args.persist_dir
+    if args.corpus and args.corpus in _LEGACY:
+        return _LEGACY[args.corpus]
+    return (
+        args.data_dir or "data/corpus_cybersec",
+        args.persist_dir or "data/index_cybersec",
+    )
+
 
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description="Run the clean debate experiment.")
@@ -26,18 +42,15 @@ def main(argv: list[str] | None = None) -> int:
     )
     parser.add_argument(
         "--corpus",
-        choices=("cybersec", "generic"),
-        default="cybersec",
+        default=None,
+        help="Legacy shortcut: 'cybersec' or 'generic'. Ignored if --data-dir is given.",
     )
+    parser.add_argument("--data-dir", default=None)
+    parser.add_argument("--persist-dir", default=None)
     parser.add_argument("--output-dir", default="results")
     args = parser.parse_args(argv)
 
-    if args.corpus == "cybersec":
-        data_dir = "data/corpus_cybersec"
-        persist_dir = "data/index_cybersec"
-    else:
-        data_dir = "data/corpus"
-        persist_dir = "data/index"
+    data_dir, persist_dir = _resolve_corpus_paths(args)
 
     queries = load_queries(args.query_file)
     print(f"[run_clean_debate] loaded {len(queries)} queries from {args.query_file}", flush=True)

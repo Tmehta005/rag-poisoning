@@ -13,6 +13,30 @@ import JobPanel from "../components/JobPanel";
 import TriggerCard from "../components/TriggerCard";
 import ResultsPanel from "../components/ResultsPanel";
 
+function corpusCandidateSlugs(corpusName: string): string[] {
+  const stripped = corpusName.startsWith("corpus_")
+    ? corpusName.slice("corpus_".length)
+    : corpusName;
+  const tokens = stripped.split("_").filter(Boolean);
+  return [stripped, ...tokens];
+}
+
+function matchQueryFileForCorpus(
+  corpusName: string,
+  mode: "clean" | "attack",
+  queryFiles: string[],
+): string | null {
+  const slugs = corpusCandidateSlugs(corpusName);
+  const prefixes = mode === "attack" ? ["attack_queries", "sample"] : ["sample"];
+  for (const prefix of prefixes) {
+    for (const slug of slugs) {
+      const hit = queryFiles.find((q) => q.includes(`${prefix}_${slug}`));
+      if (hit) return hit;
+    }
+  }
+  return null;
+}
+
 export default function ExperimentPage({ ctx }: { ctx: AppContext }) {
   const {
     defaults,
@@ -35,7 +59,10 @@ export default function ExperimentPage({ ctx }: { ctx: AppContext }) {
     poisoned_subagent_ids: am.poisoned_subagent_ids ?? ["subagent_1"],
     attack_id: "attack_001",
     query_file: "data/queries/attack_queries_cybersec.yaml",
-    corpus: "cybersec",
+    corpus: "corpus_cybersec",
+    data_dir: "data/corpus_cybersec",
+    persist_dir: "data/index_cybersec",
+    ingestion_config: "configs/corpus_cybersec.yaml",
     model: orch.model ?? "gpt-4o-mini",
     top_k: orch.top_k ?? 5,
     num_subagents: orch.num_subagents ?? 3,
@@ -59,17 +86,19 @@ export default function ExperimentPage({ ctx }: { ctx: AppContext }) {
     setForm((f) => ({
       ...f,
       model:
-        f.system === "orchestrator"
-          ? (orch.model ?? f.model)
-          : (deb.model ?? f.model),
+        f.system === "debate"
+          ? (deb.model ?? f.model)
+          : (orch.model ?? f.model),
       num_subagents:
-        f.system === "orchestrator"
-          ? (orch.num_subagents ?? f.num_subagents)
-          : (deb.num_subagents ?? f.num_subagents),
+        f.system === "single"
+          ? 1
+          : f.system === "debate"
+          ? (deb.num_subagents ?? f.num_subagents)
+          : (orch.num_subagents ?? f.num_subagents),
       top_k:
-        f.system === "orchestrator"
-          ? (orch.top_k ?? f.top_k)
-          : (deb.subagent_top_k ?? f.top_k),
+        f.system === "debate"
+          ? (deb.subagent_top_k ?? f.top_k)
+          : (orch.top_k ?? f.top_k),
       max_rounds: deb.max_rounds ?? f.max_rounds,
       stable_for: deb.stable_for ?? f.stable_for,
     }));
@@ -101,16 +130,49 @@ export default function ExperimentPage({ ctx }: { ctx: AppContext }) {
     }
   }, [artifacts, form.attack_id]);
 
-  const ingestDone = useMemo(
-    () => corpora.some((c) => c.has_index),
-    [corpora],
+  useEffect(() => {
+    if (form.system === "single" && form.mode !== "clean") {
+      setForm((f) => ({ ...f, mode: "clean" }));
+    }
+  }, [form.system, form.mode]);
+
+  useEffect(() => {
+    if (corpora.length === 0) return;
+    if (!corpora.some((c) => c.name === form.corpus)) {
+      const def =
+        corpora.find((c) => c.name === "corpus_cybersec") ??
+        corpora.find((c) => c.has_index) ??
+        corpora[0];
+      const match = matchQueryFileForCorpus(def.name, form.mode, queryFiles);
+      setForm((f) => ({
+        ...f,
+        corpus: def.name,
+        data_dir: def.data_dir,
+        persist_dir: def.suggested_persist_dir,
+        ingestion_config: def.ingestion_config ?? null,
+        query_file: match ?? f.query_file,
+      }));
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [corpora, queryFiles]);
+
+  const selectedCorpus = useMemo(
+    () => corpora.find((c) => c.name === form.corpus),
+    [corpora, form.corpus],
   );
-  const cleanFile =
-    form.mode === "clean"
-      ? form.query_file.includes("attack_queries")
-        ? "data/queries/sample_cybersec_queries.yaml"
-        : form.query_file
-      : form.query_file;
+  const ingestDone = useMemo(
+    () => (selectedCorpus ? selectedCorpus.has_index : corpora.some((c) => c.has_index)),
+    [corpora, selectedCorpus],
+  );
+
+  const cleanFile = (() => {
+    if (form.mode !== "clean") return form.query_file;
+    if (!form.query_file.includes("attack_queries")) return form.query_file;
+    const sample = matchQueryFileForCorpus(form.corpus, "clean", queryFiles);
+    if (sample) return sample;
+    const fallback = queryFiles.find((q) => q.includes("sample_"));
+    return fallback ?? form.query_file;
+  })();
 
   const onSubmit = async () => {
     setSubmitting(true);
@@ -118,7 +180,15 @@ export default function ExperimentPage({ ctx }: { ctx: AppContext }) {
     setLatestRuns([]);
     setSinceTimestamp(new Date().toISOString());
     try {
-      const body: ExperimentRequest = { ...form, query_file: cleanFile };
+      const body: ExperimentRequest = {
+        ...form,
+        query_file: cleanFile,
+        data_dir: selectedCorpus?.data_dir ?? form.data_dir ?? null,
+        persist_dir:
+          selectedCorpus?.suggested_persist_dir ?? form.persist_dir ?? null,
+        ingestion_config:
+          selectedCorpus?.ingestion_config ?? form.ingestion_config ?? null,
+      };
       if (body.mode === "clean") {
         body.attack_id = null;
       }
@@ -197,9 +267,13 @@ export default function ExperimentPage({ ctx }: { ctx: AppContext }) {
               label="System"
               value={form.system}
               onChange={(v) =>
-                setForm((f) => ({ ...f, system: v as "orchestrator" | "debate" }))
+                setForm((f) => ({
+                  ...f,
+                  system: v as "orchestrator" | "debate" | "single",
+                }))
               }
               options={[
+                { value: "single", label: "Single agent (attack ceiling)" },
                 { value: "orchestrator", label: "Orchestrator (LangGraph fan-in)" },
                 { value: "debate", label: "Debate (AutoGen round-robin)" },
               ]}
@@ -218,11 +292,27 @@ export default function ExperimentPage({ ctx }: { ctx: AppContext }) {
                   }));
                 }
               }}
-              options={[
-                { value: "clean", label: "Clean (no attack)" },
-                { value: "targeted", label: "Single-agent poison" },
-                { value: "global", label: "Global poison" },
-              ]}
+              options={
+                form.system === "single"
+                  ? [
+                      { value: "clean", label: "Clean (no attack)" },
+                      {
+                        value: "targeted",
+                        label: "Single-agent poison (not wired yet)",
+                        disabled: true,
+                      },
+                      {
+                        value: "global",
+                        label: "Global poison (not wired yet)",
+                        disabled: true,
+                      },
+                    ]
+                  : [
+                      { value: "clean", label: "Clean (no attack)" },
+                      { value: "targeted", label: "Single-agent poison" },
+                      { value: "global", label: "Global poison" },
+                    ]
+              }
             />
           </div>
 
@@ -320,13 +410,45 @@ export default function ExperimentPage({ ctx }: { ctx: AppContext }) {
               <select
                 className="select"
                 value={form.corpus}
-                onChange={(e) =>
-                  setForm((f) => ({ ...f, corpus: e.target.value as any }))
-                }
+                onChange={(e) => {
+                  const v = e.target.value;
+                  const c = corpora.find((x) => x.name === v);
+                  setForm((f) => ({
+                    ...f,
+                    corpus: v,
+                    data_dir: c?.data_dir ?? f.data_dir,
+                    persist_dir: c?.suggested_persist_dir ?? f.persist_dir,
+                    ingestion_config: c?.ingestion_config ?? null,
+                  }));
+                  const match = matchQueryFileForCorpus(
+                    v,
+                    form.mode,
+                    queryFiles,
+                  );
+                  if (match) {
+                    setForm((f) => ({ ...f, query_file: match }));
+                  }
+                }}
               >
-                <option value="cybersec">cybersec</option>
-                <option value="generic">generic</option>
+                {corpora.length === 0 && (
+                  <option value={form.corpus}>{form.corpus}</option>
+                )}
+                {corpora.map((c) => (
+                  <option key={c.name} value={c.name}>
+                    {c.name} · {c.doc_count} docs
+                    {c.has_index ? " · indexed" : " · not indexed"}
+                  </option>
+                ))}
               </select>
+              {selectedCorpus && !selectedCorpus.has_index && (
+                <div className="text-xs text-amber-700 mt-1">
+                  No index at{" "}
+                  <span className="mono">
+                    {selectedCorpus.suggested_persist_dir}
+                  </span>
+                  . Build it on the Ingest page first.
+                </div>
+              )}
             </div>
           </div>
 
@@ -340,16 +462,18 @@ export default function ExperimentPage({ ctx }: { ctx: AppContext }) {
                 value={form.model ?? ""}
                 onChange={(v) => setForm((f) => ({ ...f, model: v }))}
               />
-              <Num
-                label="num_subagents"
-                value={form.num_subagents ?? 3}
-                onChange={(v) =>
-                  setForm((f) => ({ ...f, num_subagents: v }))
-                }
-              />
+              {form.system !== "single" && (
+                <Num
+                  label="num_subagents"
+                  value={form.num_subagents ?? 3}
+                  onChange={(v) =>
+                    setForm((f) => ({ ...f, num_subagents: v }))
+                  }
+                />
+              )}
               <Num
                 label={
-                  form.system === "orchestrator" ? "top_k" : "subagent_top_k"
+                  form.system === "debate" ? "subagent_top_k" : "top_k"
                 }
                 value={form.top_k ?? 5}
                 onChange={(v) => setForm((f) => ({ ...f, top_k: v }))}
@@ -454,30 +578,39 @@ function RadioRow({
   label: string;
   value: string;
   onChange: (v: string) => void;
-  options: { value: string; label: string }[];
+  options: { value: string; label: string; disabled?: boolean }[];
 }) {
   return (
     <div>
       <label className="field-label">{label}</label>
       <div className="flex flex-col gap-1.5">
-        {options.map((o) => (
-          <label
-            key={o.value}
-            className={`flex items-center gap-2 px-3 py-2 rounded-lg border cursor-pointer text-sm transition ${
-              value === o.value
-                ? "border-accent-500 bg-accent-50 text-accent-700"
-                : "border-zinc-200 hover:bg-zinc-50 text-zinc-700"
-            }`}
-          >
-            <input
-              type="radio"
-              className="accent-accent-600"
-              checked={value === o.value}
-              onChange={() => onChange(o.value)}
-            />
-            {o.label}
-          </label>
-        ))}
+        {options.map((o) => {
+          const active = value === o.value;
+          const disabled = Boolean(o.disabled);
+          return (
+            <label
+              key={o.value}
+              className={`flex items-center gap-2 px-3 py-2 rounded-lg border text-sm transition ${
+                disabled
+                  ? "border-zinc-200 bg-zinc-50 text-zinc-400 cursor-not-allowed"
+                  : active
+                  ? "border-accent-500 bg-accent-50 text-accent-700 cursor-pointer"
+                  : "border-zinc-200 hover:bg-zinc-50 text-zinc-700 cursor-pointer"
+              }`}
+            >
+              <input
+                type="radio"
+                className="accent-accent-600"
+                checked={active}
+                disabled={disabled}
+                onChange={() => {
+                  if (!disabled) onChange(o.value);
+                }}
+              />
+              {o.label}
+            </label>
+          );
+        })}
       </div>
     </div>
   );

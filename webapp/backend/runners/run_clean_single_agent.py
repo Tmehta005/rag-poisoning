@@ -1,9 +1,9 @@
 """
-CLI wrapper around :func:`src.experiments.run_clean.run_clean_experiment`.
+CLI wrapper around :func:`src.experiments.run_single_agent.run_single_agent_experiment`.
 
-The original function is Python-only; this wrapper adds an argparse surface
-that mirrors :mod:`src.experiments.run_attack_orch` so the webapp's experiment
-endpoint can invoke either via subprocess.
+Provides the argparse surface the webapp experiment endpoint uses to invoke
+the single-agent clean baseline (attack ceiling) via subprocess. Mirrors
+:mod:`webapp.backend.runners.run_clean_orch`.
 """
 
 from __future__ import annotations
@@ -13,7 +13,7 @@ import json
 import sys
 
 from src.corpus.query_loader import load_queries
-from src.experiments.run_clean import run_clean_experiment
+from src.experiments.run_single_agent import run_single_agent_experiment
 
 _LEGACY = {
     "cybersec": ("data/corpus_cybersec", "data/index_cybersec"),
@@ -33,7 +33,9 @@ def _resolve_corpus_paths(args) -> tuple[str, str]:
 
 
 def main(argv: list[str] | None = None) -> int:
-    parser = argparse.ArgumentParser(description="Run the clean orchestrator experiment.")
+    parser = argparse.ArgumentParser(
+        description="Run the single-agent clean experiment (attack ceiling)."
+    )
     parser.add_argument(
         "--query-file",
         default="data/queries/sample_cybersec_queries.yaml",
@@ -41,6 +43,7 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument(
         "--system-config",
         default="configs/system_orchestrator.yaml",
+        help="Reused for model + top_k; num_subagents is forced to 1.",
     )
     parser.add_argument(
         "--ingestion-config",
@@ -59,9 +62,12 @@ def main(argv: list[str] | None = None) -> int:
     data_dir, persist_dir = _resolve_corpus_paths(args)
 
     queries = load_queries(args.query_file)
-    print(f"[run_clean_orch] loaded {len(queries)} queries from {args.query_file}", flush=True)
+    print(
+        f"[run_clean_single_agent] loaded {len(queries)} queries from {args.query_file}",
+        flush=True,
+    )
 
-    logs = run_clean_experiment(
+    logs = run_single_agent_experiment(
         queries=queries,
         data_dir=data_dir,
         persist_dir=persist_dir,
@@ -70,7 +76,7 @@ def main(argv: list[str] | None = None) -> int:
         system_config_path=args.system_config,
     )
 
-    print(f"[run_clean_orch] ran {len(logs)} queries", flush=True)
+    print(f"[run_clean_single_agent] ran {len(logs)} queries", flush=True)
     for log in logs:
         fd = log.final_decision
         answer = (fd.final_answer if fd else "<no decision>")[:80]
@@ -84,6 +90,7 @@ def main(argv: list[str] | None = None) -> int:
                 "num_runs": len(logs),
                 "query_ids": [log.query_id for log in logs],
                 "attack_condition": "clean",
+                "system": "single",
             }
         ),
         flush=True,

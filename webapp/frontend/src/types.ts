@@ -25,6 +25,7 @@ export interface Corpus {
   doc_count: number;
   has_index: boolean;
   file_types: string[];
+  ingestion_config?: string | null;
 }
 
 export interface ArtifactSummary {
@@ -63,6 +64,7 @@ export interface QueryFile {
 export interface Defaults {
   ingestion: Record<string, unknown>;
   corpus_cybersec: Record<string, unknown>;
+  corpus_bio_papers: Record<string, unknown>;
   trigger_opt: Record<string, unknown>;
   attack_main: Record<string, unknown>;
   attack_poisonedrag: Record<string, unknown>;
@@ -163,13 +165,16 @@ export interface TriggerOptRequest {
 }
 
 export interface ExperimentRequest {
-  system: "orchestrator" | "debate";
+  system: "orchestrator" | "debate" | "single";
   mode: "clean" | "attack";
   threat_model: "targeted" | "global";
   poisoned_subagent_ids: string[];
   attack_id?: string | null;
   query_file: string;
-  corpus: "cybersec" | "generic";
+  corpus: string;
+  data_dir?: string | null;
+  persist_dir?: string | null;
+  ingestion_config?: string | null;
   model?: string | null;
   top_k?: number | null;
   num_subagents?: number | null;

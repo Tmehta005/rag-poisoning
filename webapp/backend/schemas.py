@@ -41,13 +41,16 @@ class TriggerOptRequest(BaseModel):
 
 
 class ExperimentRequest(BaseModel):
-    system: Literal["orchestrator", "debate"] = "orchestrator"
+    system: Literal["orchestrator", "debate", "single"] = "orchestrator"
     mode: Literal["clean", "attack"] = "attack"
     threat_model: Literal["targeted", "global"] = "targeted"
     poisoned_subagent_ids: List[str] = Field(default_factory=lambda: ["subagent_1"])
     attack_id: Optional[str] = "attack_001"
     query_file: str = "data/queries/attack_queries_cybersec.yaml"
-    corpus: Literal["cybersec", "generic"] = "cybersec"
+    corpus: str = "cybersec"
+    data_dir: Optional[str] = None
+    persist_dir: Optional[str] = None
+    ingestion_config: Optional[str] = None
     model: Optional[str] = None
     top_k: Optional[int] = None
     num_subagents: Optional[int] = None
@@ -75,6 +78,7 @@ class Corpus(BaseModel):
     doc_count: int
     has_index: bool
     file_types: List[str]
+    ingestion_config: Optional[str] = None
 
 
 class ArtifactSummary(BaseModel):
@@ -115,6 +119,7 @@ class Defaults(BaseModel):
 
     ingestion: Dict[str, Any]
     corpus_cybersec: Dict[str, Any]
+    corpus_bio_papers: Dict[str, Any] = Field(default_factory=dict)
     trigger_opt: Dict[str, Any]
     attack_main: Dict[str, Any]
     attack_poisonedrag: Dict[str, Any]

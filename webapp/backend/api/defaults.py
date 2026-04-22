@@ -29,6 +29,7 @@ def get_defaults() -> Defaults:
     return Defaults(
         ingestion=_load("ingestion.yaml"),
         corpus_cybersec=_load("corpus_cybersec.yaml"),
+        corpus_bio_papers=_load("corpus_bio_papers.yaml"),
         trigger_opt=_load("attack_trigger_opt.yaml"),
         attack_main=_load("attack_main_injection.yaml"),
         attack_poisonedrag=_load("attack_poisonedrag_baseline.yaml"),

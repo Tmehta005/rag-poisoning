@@ -23,6 +23,9 @@ import sys
 from pathlib import Path
 
 
+_INDEX_MARKERS = ("docstore.json", "index_store.json")
+
+
 def _count_nodes(index) -> int:
     try:
         return len(index._vector_store._data.embedding_dict)  # type: ignore[attr-defined]
@@ -32,6 +35,10 @@ def _count_nodes(index) -> int:
         return len(index.docstore.docs)  # type: ignore[attr-defined]
     except Exception:
         return -1
+
+
+def _is_index_dir(path: Path) -> bool:
+    return path.is_dir() and any((path / m).exists() for m in _INDEX_MARKERS)
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -58,13 +65,27 @@ def main(argv: list[str] | None = None) -> int:
     data_dir = Path(args.data_dir)
     persist_dir = Path(args.persist_dir)
 
-    if not data_dir.exists():
-        print(f"[ingest] data dir not found: {data_dir}", flush=True)
-        return 2
+    index_already_built = _is_index_dir(persist_dir)
 
     if args.rebuild and persist_dir.exists():
         print(f"[ingest] removing existing index at {persist_dir}", flush=True)
         shutil.rmtree(persist_dir, ignore_errors=True)
+        index_already_built = False
+
+    if not data_dir.exists() and not index_already_built:
+        print(
+            f"[ingest] data dir not found: {data_dir} "
+            f"(and no pre-built index at {persist_dir})",
+            flush=True,
+        )
+        return 2
+
+    if not data_dir.exists() and index_already_built:
+        print(
+            f"[ingest] source data dir {data_dir} is missing; "
+            f"reloading pre-built index from {persist_dir}",
+            flush=True,
+        )
 
     variant = args.variant
     if variant == "auto":
