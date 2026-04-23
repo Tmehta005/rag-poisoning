@@ -24,7 +24,7 @@ import yaml
 
 from src.attacks.corpus_embeddings import extract_corpus_texts
 from src.attacks.encoder import DEFAULT_BGE_MODEL, load_encoder
-from src.attacks.poison_doc import DEFAULT_TARGET_CLAIM
+from src.attacks.poison_doc import DEFAULT_TARGET_CLAIM, _infer_domain
 from src.attacks.trigger_optimizer import OptimizerConfig, run_and_save
 from src.corpus.ingest_cybersec import ingest_cybersec_corpus
 from src.corpus.query_loader import load_queries
@@ -141,6 +141,16 @@ def main(argv: Optional[List[str]] = None) -> int:
         default=None,
         help="Override torch device: cuda | mps | cpu. Auto if omitted.",
     )
+    parser.add_argument(
+        "--ingestion-config",
+        default=None,
+        help=(
+            "Path to a corpus_*.yaml config (e.g. configs/corpus_bio_papers.yaml). "
+            "The optimizer loads this index for GMM fitting so the trigger is "
+            "optimized against the same embedding space used at retrieval time. "
+            "Defaults to configs/corpus_cybersec.yaml when omitted."
+        ),
+    )
     args = parser.parse_args(argv)
 
     opt_cfg = _load_yaml(args.opt_config)
@@ -168,8 +178,10 @@ def main(argv: Optional[List[str]] = None) -> int:
     encoder = load_encoder(model_name=encoder_model, device=device)
     print(f"[optimize_trigger] encoder={encoder.model_name} device={encoder.device}")
 
-    print(f"[optimize_trigger] loading clean index ...")
-    clean_index = ingest_cybersec_corpus()
+    ingestion_config = args.ingestion_config or "configs/corpus_cybersec.yaml"
+    domain = _infer_domain(ingestion_config)
+    print(f"[optimize_trigger] loading index from {ingestion_config} (domain={domain}) ...")
+    clean_index = ingest_cybersec_corpus(config_path=ingestion_config)
     corpus_texts = extract_corpus_texts(clean_index)
     print(f"[optimize_trigger] corpus chunks: {len(corpus_texts)}")
 
@@ -204,6 +216,7 @@ def main(argv: Optional[List[str]] = None) -> int:
         ppl_model=ppl_model,
         poison_doc_id=args.poison_doc_id,
         harmful_match_phrases=args.harmful_match_phrases,
+        domain=domain,
     )
 
     out_dir = Path(artifacts_dir) / artifact.attack_id

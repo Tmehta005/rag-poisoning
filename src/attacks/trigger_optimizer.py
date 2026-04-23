@@ -256,6 +256,7 @@ def run_and_save(
     poison_doc_id: Optional[str] = None,
     harmful_match_phrases: Optional[Sequence[str]] = None,
     progress: bool = True,
+    domain: str = "cybersec",
 ) -> AttackArtifact:
     """
     End-to-end: optimize a trigger, render the poison doc, save an
@@ -274,6 +275,7 @@ def run_and_save(
         trigger=result.trigger,
         target_claim=target_claim,
         doc_id=poison_doc_id,
+        domain=domain,
     )
     artifact = AttackArtifact(
         attack_id=attack_id,

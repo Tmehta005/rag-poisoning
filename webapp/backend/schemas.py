@@ -21,6 +21,7 @@ class IngestRequest(BaseModel):
 class TriggerOptRequest(BaseModel):
     attack_id: str = "attack_001"
     query_file: str = "data/queries/sample_cybersec_queries.yaml"
+    ingestion_config: Optional[str] = None
     target_query_id: Optional[str] = None
     target_claim: str
     harmful_match_phrases: List[str] = Field(default_factory=list)

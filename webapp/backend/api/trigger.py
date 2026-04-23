@@ -69,6 +69,8 @@ def submit_trigger(req: TriggerOptRequest) -> JobSummary:
         "--max-training-queries",
         str(req.max_training_queries),
     ]
+    if req.ingestion_config:
+        cmd += ["--ingestion-config", req.ingestion_config]
     if req.target_query_id:
         cmd += ["--target-query-id", req.target_query_id]
     if req.poison_doc_id:

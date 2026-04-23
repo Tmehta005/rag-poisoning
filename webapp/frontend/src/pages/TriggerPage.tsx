@@ -75,6 +75,7 @@ export default function TriggerPage({ ctx }: { ctx: AppContext }) {
   const [form, setForm] = useState<TriggerOptRequest>({
     attack_id: "attack_001",
     query_file: "data/queries/sample_cybersec_queries.yaml",
+    ingestion_config: "configs/corpus_cybersec.yaml",
     target_query_id: null,
     target_claim: DEFAULT_TARGET_CLAIM,
     harmful_match_phrases: DEFAULT_HARMFUL_PHRASES,
@@ -136,16 +137,27 @@ export default function TriggerPage({ ctx }: { ctx: AppContext }) {
     // When the query file switches to a different corpus, swap in that
     // corpus's default target_claim + harmful_match_phrases — but only if
     // the user hasn't manually edited the current values.
+    // Also update ingestion_config to match the corpus so the optimizer
+    // fits the trigger against the correct embedding space.
     setForm((f) => {
       const matched = matchesKnownDefault(f.target_claim, f.harmful_match_phrases);
-      if (!matched) return f;
       const next = inferCorpusKey(f.query_file);
-      if (next === matched) return f;
+
+      // Derive ingestion config from the query file regardless of whether
+      // the user edited target_claim, so the index is always correct.
+      const corpusName = next === "bio" ? "corpus_bio_papers" : next === "cybersec" ? "corpus_cybersec" : null;
+      const nextIngestionConfig = corpusName
+        ? `configs/${corpusName}.yaml`
+        : f.ingestion_config;
+
+      if (!matched) return { ...f, ingestion_config: nextIngestionConfig };
+      if (next === matched) return { ...f, ingestion_config: nextIngestionConfig };
       const d = CORPUS_DEFAULTS[next];
       return {
         ...f,
         target_claim: d.target_claim,
         harmful_match_phrases: d.harmful_match_phrases,
+        ingestion_config: nextIngestionConfig,
       };
     });
   }, [form.query_file]);
@@ -260,6 +272,35 @@ export default function TriggerPage({ ctx }: { ctx: AppContext }) {
                   </option>
                 ))}
               </select>
+            </div>
+            <div>
+              <label className="field-label">corpus (index for trigger fitting)</label>
+              <select
+                className="select"
+                value={form.ingestion_config ?? ""}
+                onChange={(e) => {
+                  const cfg = e.target.value || null;
+                  setForm((f) => ({ ...f, ingestion_config: cfg }));
+                }}
+              >
+                {corpora.length === 0 && (
+                  <option value="">— no indexed corpora found —</option>
+                )}
+                {corpora.map((c) => (
+                  <option
+                    key={c.name}
+                    value={c.ingestion_config ?? `configs/${c.name}.yaml`}
+                    disabled={!c.has_index}
+                  >
+                    {c.name} · {c.doc_count} docs
+                    {c.has_index ? " · indexed" : " · not indexed"}
+                  </option>
+                ))}
+              </select>
+              <p className="text-xs text-zinc-500 mt-1">
+                The optimizer fits token candidates against this corpus's
+                embedding space — it must match the index used at retrieval time.
+              </p>
             </div>
             <div>
               <label className="field-label">target_query_id</label>

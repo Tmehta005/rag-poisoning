@@ -146,6 +146,7 @@ export interface IngestRequest {
 export interface TriggerOptRequest {
   attack_id: string;
   query_file: string;
+  ingestion_config?: string | null;
   target_query_id?: string | null;
   target_claim: string;
   harmful_match_phrases: string[];
