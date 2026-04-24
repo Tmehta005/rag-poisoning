@@ -20,10 +20,16 @@ from llama_index.core import (
 )
 from llama_index.core.node_parser import SentenceSplitter
 
+_EMBED_MODEL_OBJECTS: dict[str, object] = {}
+
 
 def _configure_embed_model(embed_model: str) -> None:
     """Set LlamaIndex's global embed model from the config string."""
     if embed_model == "local":
+        cached = _EMBED_MODEL_OBJECTS.get(embed_model)
+        if cached is not None:
+            Settings.embed_model = cached
+            return
         try:
             from llama_index.embeddings.huggingface import HuggingFaceEmbedding
         except ImportError as e:
@@ -31,7 +37,9 @@ def _configure_embed_model(embed_model: str) -> None:
                 "embed_model='local' requires llama-index-embeddings-huggingface. "
                 "Run: pip install llama-index-embeddings-huggingface"
             ) from e
-        Settings.embed_model = HuggingFaceEmbedding(model_name="BAAI/bge-small-en-v1.5")
+        model = HuggingFaceEmbedding(model_name="BAAI/bge-small-en-v1.5")
+        _EMBED_MODEL_OBJECTS[embed_model] = model
+        Settings.embed_model = model
     # For "openai" or any other value, leave Settings.embed_model at its default.
 
 

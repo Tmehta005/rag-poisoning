@@ -127,21 +127,29 @@ def run_attack_orchestrator(
                 num_adv_passage_tokens=0,
             )
 
-        extra_specs = []
-        if num_poison_docs > 1:
-            domain = _infer_domain(ingestion_config_path)
-            for _ in range(num_poison_docs - 1):
-                extra_specs.append(
-                    render_poison_doc(
-                        trigger=artifact.trigger,
-                        target_claim=artifact.target_claim,
-                        domain=domain,
+        if num_poison_docs <= 0:
+            # n=0 control: keep attack query/trigger behavior but do not inject
+            # any poison passages into the index.
+            poisoned_index, poison_ids = clean_index, set()
+        else:
+            extra_specs = []
+            if num_poison_docs > 1:
+                domain = _infer_domain(ingestion_config_path)
+                for extra_idx in range(1, num_poison_docs):
+                    extra_specs.append(
+                        render_poison_doc(
+                            trigger=artifact.trigger,
+                            target_claim=artifact.target_claim,
+                            domain=domain,
+                            # Deterministic IDs avoid per-run variation in the
+                            # poisoned index while preserving the same poison text.
+                            doc_id=f"{artifact.poison_doc_id}__extra_{extra_idx}",
+                        )
                     )
-                )
-        poisoned_index, poison_ids = build_poisoned_index_from_artifact(
-            clean_index, artifact, embed_model=embed_model,
-            extra_specs=extra_specs or None,
-        )
+            poisoned_index, poison_ids = build_poisoned_index_from_artifact(
+                clean_index, artifact, embed_model=embed_model,
+                extra_specs=extra_specs or None,
+            )
 
         state_trigger: Optional[str] = artifact.trigger if tm == "global" else None
 

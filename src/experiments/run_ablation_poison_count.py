@@ -1,5 +1,5 @@
 """
-Ablation: vary the number of poison documents (1, 2, 3, 5) on the bio corpus.
+Ablation: vary the number of poison documents (0, 1, 3, 5, 10) on the bio corpus.
 
 Research question: how little poison is enough to achieve retrieval and swing
 the orchestrator's final decision?
@@ -33,7 +33,7 @@ QUERY_FILE = "data/queries/attack_queries_bio_papers.yaml"
 INGESTION_CONFIG = "configs/corpus_bio_papers.yaml"
 SYSTEM_CONFIG = "configs/system_orchestrator.yaml"
 ATTACK_CONFIG = "configs/attack_main_injection.yaml"
-DEFAULT_COUNTS = [1, 2, 3, 5]
+DEFAULT_COUNTS = [0, 1, 3, 5, 10]
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -46,7 +46,7 @@ def main(argv: list[str] | None = None) -> int:
         nargs="+",
         default=DEFAULT_COUNTS,
         metavar="N",
-        help="Poison doc counts to sweep (default: 1 2 3 5).",
+        help="Poison doc counts to sweep (default: 0 1 3 5 10).",
     )
     parser.add_argument("--output-dir", default="results/ablation")
     parser.add_argument(
