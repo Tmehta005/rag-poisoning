@@ -1,22 +1,28 @@
 """
-Metadata-aware ingestion for cybersecurity standard documents.
+Metadata-aware corpus ingestion.
 
-Wraps the existing LlamaIndex ingestion pipeline and adds:
-  - source_file, standard, title extracted from filename
-  - section_id extracted from chunk text via regex
+Wraps the LlamaIndex ingestion pipeline and attaches per-chunk metadata:
+  - source_file, standard, title extracted from the filename
+  - section_id extracted from the chunk text via regex
   - chunk_index per source document
-  - is_poison flag (False for all corpus docs; True only for D_p in attack runs)
+  - is_poison flag (False for corpus docs; True for D_p — set by the
+    attack runners, not here)
 
-Writes the index to a separate persist directory so the toy corpus index
-at data/index/ is never touched.
+The ``_infer_standard`` keyword map and ``_SECTION_PATTERNS`` regexes are
+heuristic and biased toward cybersecurity standards (NIST, ISO, CIS), but
+they fall back gracefully on other corpora (e.g. bio papers) — unmatched
+inputs just produce empty ``standard``/``section_id`` metadata.
+
+Persists each corpus to its own directory so the toy index at data/index/
+is never overwritten.
 
 Supported input formats: .txt, .pdf, .md, .docx
 (Anything SimpleDirectoryReader handles.)
 
 Usage:
-    from src.corpus.ingest_cybersec import ingest_cybersec_corpus
-    index = ingest_cybersec_corpus()          # uses configs/corpus_cybersec.yaml
-    index = ingest_cybersec_corpus(           # explicit paths
+    from src.corpus.ingest_with_metadata import ingest_corpus_with_metadata
+    index = ingest_corpus_with_metadata()                 # uses configs/corpus_cybersec.yaml
+    index = ingest_corpus_with_metadata(                  # explicit paths
         data_dir="data/corpus_cybersec",
         persist_dir="data/index_cybersec",
     )
@@ -116,32 +122,35 @@ def _title_from_filename(filename: str) -> str:
     return stem.replace("_", " ").replace("-", " ").title()
 
 
-def load_cybersec_config(config_path: str = "configs/corpus_cybersec.yaml") -> dict:
+def load_corpus_config(config_path: str = "configs/corpus_cybersec.yaml") -> dict:
     with open(config_path, "r") as f:
         return yaml.safe_load(f)
 
 
-def ingest_cybersec_corpus(
+def ingest_corpus_with_metadata(
     data_dir: Optional[str] = None,
     persist_dir: Optional[str] = None,
     config: Optional[dict] = None,
     config_path: str = "configs/corpus_cybersec.yaml",
 ) -> VectorStoreIndex:
     """
-    Load cybersecurity standard documents, chunk them, attach metadata,
-    and build a VectorStoreIndex.
+    Load corpus documents, chunk them, attach metadata, and build a
+    VectorStoreIndex. Works for any corpus whose config provides
+    ``data_dir``/``persist_dir`` — the metadata heuristics are cybersec-biased
+    but fall back gracefully on other domains.
 
     Args:
         data_dir: Directory of source documents. Overrides config if provided.
         persist_dir: Where to persist the index. Overrides config if provided.
         config: Pre-loaded config dict. Loaded from config_path if None.
-        config_path: Path to corpus_cybersec.yaml.
+        config_path: Path to a corpus config (e.g. configs/corpus_cybersec.yaml,
+            configs/corpus_bio_papers.yaml).
 
     Returns:
         VectorStoreIndex with chunk metadata attached to every node.
     """
     if config is None:
-        config = load_cybersec_config(config_path)
+        config = load_corpus_config(config_path)
 
     data_dir = data_dir or config.get("data_dir", "data/corpus_cybersec")
     persist_dir = persist_dir or config.get("persist_dir", "data/index_cybersec")
@@ -197,7 +206,7 @@ def ingest_cybersec_corpus(
     if skipped:
         import warnings
         warnings.warn(
-            f"ingest_cybersec: skipped {skipped} XML/metadata chunks from PDF headers.",
+            f"ingest_corpus_with_metadata: skipped {skipped} XML/metadata chunks from PDF headers.",
             stacklevel=2,
         )
 
@@ -209,40 +218,3 @@ def ingest_cybersec_corpus(
         index.storage_context.persist(persist_dir=persist_dir)
 
     return index
-
-
-def make_poison_documents(poison_doc_specs: list[dict]) -> list[Document]:
-    """
-    Convert D_p spec dicts (from query file attack block) into LlamaIndex
-    Document objects ready to be inserted into the poisoned index.
-
-    Each spec must have: doc_id (str), text (str).
-    Optional: standard, section_id.
-
-    Args:
-        poison_doc_specs: List of dicts from query['attack']['poison_docs'].
-
-    Returns:
-        List of LlamaIndex Document objects with is_poison=True in metadata.
-    """
-    docs = []
-    for spec in poison_doc_specs:
-        standard = spec.get("standard", "NIST-CSF")
-        title = spec.get("title", "NIST CSF Revision Notice")
-        source_file = spec.get(
-            "source_file", f"{standard}-{spec.get('section_id', 'REV') or 'REV'}.pdf"
-        )
-        doc = Document(
-            text=spec["text"],
-            doc_id=spec["doc_id"],
-            metadata={
-                "source_file": source_file,
-                "standard": standard,
-                "title": title,
-                "section_id": spec.get("section_id", ""),
-                "chunk_index": 0,
-                "is_poison": True,
-            },
-        )
-        docs.append(doc)
-    return docs

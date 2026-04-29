@@ -1,7 +1,0 @@
-{
-  "model_name": "BAAI/bge-small-en-v1.5",
-  "num_texts": 286,
-  "n_components": 5,
-  "fingerprint": "dd963c12afa95bdd",
-  "embedding_dim": 384
-}

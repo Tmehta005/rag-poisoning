@@ -3,8 +3,7 @@ Build an ephemeral poisoned index from a clean index + D_p.
 
 The clean on-disk index is never mutated; we copy the nodes into a fresh
 ``VectorStoreIndex`` in memory and insert the poison documents on top.
-Factored out of ``src/experiments/run_attack.py`` so both the orchestrator
-and debate runners can share it.
+Used by every attack runner (single-agent, orchestrator, debate).
 """
 
 from __future__ import annotations
@@ -15,8 +14,43 @@ from llama_index.core import Document, VectorStoreIndex
 
 from src.attacks.artifacts import AttackArtifact
 from src.attacks.poison_doc import PoisonDocSpec, spec_as_dict
-from src.corpus.ingest_cybersec import make_poison_documents
 from src.ingestion import _configure_embed_model
+
+
+def make_poison_documents(poison_doc_specs: list[dict]) -> list[Document]:
+    """
+    Convert D_p spec dicts into LlamaIndex ``Document`` objects ready to
+    be inserted into the poisoned index.
+
+    Each spec must include ``doc_id`` and ``text``. Optional keys — ``standard``,
+    ``section_id``, ``title``, ``source_file`` — pass through to metadata; any
+    omitted keys default to empty strings so the resulting Document carries no
+    corpus-specific defaults.
+    """
+    docs: list[Document] = []
+    for spec in poison_doc_specs:
+        standard = spec.get("standard", "")
+        title = spec.get("title", "")
+        section_id = spec.get("section_id", "")
+        source_file = spec.get(
+            "source_file",
+            f"{standard}-{section_id or 'POISON'}.txt" if standard else "poison.txt",
+        )
+        docs.append(
+            Document(
+                text=spec["text"],
+                doc_id=spec["doc_id"],
+                metadata={
+                    "source_file": source_file,
+                    "standard": standard,
+                    "title": title,
+                    "section_id": section_id,
+                    "chunk_index": 0,
+                    "is_poison": True,
+                },
+            )
+        )
+    return docs
 
 
 def build_poisoned_index(

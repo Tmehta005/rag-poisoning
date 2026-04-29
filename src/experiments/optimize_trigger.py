@@ -26,7 +26,7 @@ from src.attacks.corpus_embeddings import extract_corpus_texts
 from src.attacks.encoder import DEFAULT_BGE_MODEL, load_encoder
 from src.attacks.poison_doc import DEFAULT_TARGET_CLAIM, _infer_domain
 from src.attacks.trigger_optimizer import OptimizerConfig, run_and_save
-from src.corpus.ingest_cybersec import ingest_cybersec_corpus
+from src.corpus.ingest_with_metadata import ingest_corpus_with_metadata
 from src.corpus.query_loader import load_queries
 
 
@@ -181,7 +181,7 @@ def main(argv: Optional[List[str]] = None) -> int:
     ingestion_config = args.ingestion_config or "configs/corpus_cybersec.yaml"
     domain = _infer_domain(ingestion_config)
     print(f"[optimize_trigger] loading index from {ingestion_config} (domain={domain}) ...")
-    clean_index = ingest_cybersec_corpus(config_path=ingestion_config)
+    clean_index = ingest_corpus_with_metadata(config_path=ingestion_config)
     corpus_texts = extract_corpus_texts(clean_index)
     print(f"[optimize_trigger] corpus chunks: {len(corpus_texts)}")
 

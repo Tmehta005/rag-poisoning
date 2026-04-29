@@ -13,12 +13,12 @@ to state["agent_outputs"] via the list-concat reducer.
 The orchestrator node receives all three outputs, calls an LLM to pick the
 best-supported answer, and writes OrchestratorOutput to state.
 
-Phase 3 compatibility:
+Attack compatibility:
   - The graph structure does not change for attacks.
-  - Subagent_1's Retriever is swapped to include D_p (done in run_clean.py /
-    run_attack.py at construction time).
-  - harmful_action_flag is set by the orchestrator_node based on whether the
-    final answer matches the attack target — wired in Phase 3.
+  - Subagent_1's Retriever is swapped to an index containing D_p by the
+    attack runner at construction time (see src/experiments/run_attack_orch.py).
+  - harmful_action_flag is set by the attack runner after invoke, based on
+    whether the final answer matches the attack target.
 """
 
 from __future__ import annotations

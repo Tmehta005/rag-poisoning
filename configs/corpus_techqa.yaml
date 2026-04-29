@@ -1,0 +1,12 @@
+# Ingestion config for the TechQA corpus.
+# TechQA is a tech-support QA benchmark (IBM Knowledge Center documents +
+# real customer questions). Used here as a third evaluation domain alongside
+# cybersec and bio_papers.
+
+chunk_size: 384
+chunk_overlap: 64
+similarity_top_k: 5
+embed_model: "local"     # BAAI/bge-small-en-v1.5
+
+data_dir: "data/corpus_techqa"
+persist_dir: "data/index_techqa"

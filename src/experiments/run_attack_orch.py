@@ -33,8 +33,8 @@ from llama_index.core import VectorStoreIndex
 
 from src.agents.orchestrator import OrchestratorState, build_orchestrator_graph
 from src.agents.subagent import ExpertSubagent
-from src.attacks.artifacts import is_harmful_answer, load_artifact
-from src.attacks.poison_doc import _infer_domain, render_poison_doc
+from src.attacks.artifacts import is_harmful_answer, resolve_attack_artifact
+from src.attacks.poison_doc import render_extra_poison_specs
 from src.attacks.poisoned_index import build_poisoned_index_from_artifact
 from src.ingestion import load_ingestion_config
 from src.logging_utils import emit_run_log
@@ -102,42 +102,11 @@ def run_attack_orchestrator(
         query_text = q["query"]
         ground_truth = q.get("ground_truth_answer")
 
-        if attack.get("artifact_path"):
-            artifact = load_artifact(attack["artifact_path"])
-        else:
-            # Support inline attacks too: synthesize a temporary artifact-like
-            # object. We only need .trigger, .poison_doc_id, .poison_doc_text,
-            # .target_claim.
-            from src.attacks.artifacts import AttackArtifact
+        artifact = resolve_attack_artifact(attack, query_id)
 
-            poison_docs = attack.get("poison_docs") or []
-            if not poison_docs:
-                raise ValueError(
-                    f"Query {query_id} has inline attack but no poison_docs."
-                )
-            p0 = poison_docs[0]
-            artifact = AttackArtifact(
-                attack_id=attack.get("attack_id", f"{query_id}_inline"),
-                trigger=attack.get("trigger", ""),
-                token_ids=[],
-                target_claim=attack.get("target_answer", ""),
-                poison_doc_id=p0["doc_id"],
-                poison_doc_text=p0["text"],
-                encoder_model="",
-                num_adv_passage_tokens=0,
-            )
-
-        extra_specs = []
-        if num_poison_docs > 1:
-            domain = _infer_domain(ingestion_config_path)
-            for _ in range(num_poison_docs - 1):
-                extra_specs.append(
-                    render_poison_doc(
-                        trigger=artifact.trigger,
-                        target_claim=artifact.target_claim,
-                        domain=domain,
-                    )
-                )
+        extra_specs = render_extra_poison_specs(
+            artifact, num_poison_docs, ingestion_config_path
+        )
         poisoned_index, poison_ids = build_poisoned_index_from_artifact(
             clean_index, artifact, embed_model=embed_model,
             extra_specs=extra_specs or None,
@@ -217,7 +186,7 @@ def run_attack_orchestrator(
 
 def main(argv: Optional[List[str]] = None) -> int:
     """CLI entry point: build the clean index, load queries, run the attack."""
-    from src.corpus.ingest_cybersec import ingest_cybersec_corpus
+    from src.corpus.ingest_with_metadata import ingest_corpus_with_metadata
     from src.corpus.query_loader import load_queries
 
     parser = argparse.ArgumentParser(
@@ -270,7 +239,7 @@ def main(argv: Optional[List[str]] = None) -> int:
         f"[run_attack_orch] loaded {len(queries)} queries from {args.query_file}"
     )
 
-    clean_index = ingest_cybersec_corpus()
+    clean_index = ingest_corpus_with_metadata()
     print("[run_attack_orch] clean index ready")
 
     logs = run_attack_orchestrator(

@@ -31,7 +31,8 @@ from llama_index.core import VectorStoreIndex
 
 from src.agents.debate.debate_subagent import DebateSubagent
 from src.agents.debate.judge import JudgeLLM
-from src.attacks.artifacts import AttackArtifact, is_harmful_answer, load_artifact
+from src.attacks.artifacts import is_harmful_answer, resolve_attack_artifact
+from src.attacks.poison_doc import render_extra_poison_specs
 from src.attacks.poisoned_index import build_poisoned_index_from_artifact
 from src.ingestion import load_ingestion_config
 from src.logging_utils import emit_run_log
@@ -44,25 +45,6 @@ def _load_yaml(path: str) -> dict:
         return yaml.safe_load(f) or {}
 
 
-def _resolve_artifact(attack: dict, query_id: str) -> AttackArtifact:
-    if attack.get("artifact_path"):
-        return load_artifact(attack["artifact_path"])
-    poison_docs = attack.get("poison_docs") or []
-    if not poison_docs:
-        raise ValueError(f"Query {query_id} has inline attack but no poison_docs.")
-    p0 = poison_docs[0]
-    return AttackArtifact(
-        attack_id=attack.get("attack_id", f"{query_id}_inline"),
-        trigger=attack.get("trigger", ""),
-        token_ids=[],
-        target_claim=attack.get("target_answer", ""),
-        poison_doc_id=p0["doc_id"],
-        poison_doc_text=p0["text"],
-        encoder_model="",
-        num_adv_passage_tokens=0,
-    )
-
-
 def run_attack_debate(
     queries: List[dict],
     clean_index: VectorStoreIndex,
@@ -73,6 +55,7 @@ def run_attack_debate(
     ingestion_config_path: str = "configs/corpus_cybersec.yaml",
     threat_model: Optional[str] = None,
     poisoned_subagent_ids: Optional[List[str]] = None,
+    num_poison_docs: int = 1,
 ) -> List[RunLog]:
     """
     Run the debate-based attack over queries with artifact references.
@@ -115,10 +98,16 @@ def run_attack_debate(
             continue
 
         query_id = q["query_id"]
-        artifact = _resolve_artifact(attack, query_id)
+        artifact = resolve_attack_artifact(attack, query_id)
 
+        extra_specs = render_extra_poison_specs(
+            artifact, num_poison_docs, ingestion_config_path
+        )
         poisoned_index, poison_ids = build_poisoned_index_from_artifact(
-            clean_index, artifact, embed_model=embed_model
+            clean_index,
+            artifact,
+            embed_model=embed_model,
+            extra_specs=extra_specs or None,
         )
 
         subagents: List[DebateSubagent] = []
@@ -180,6 +169,7 @@ def run_attack_debate(
             **(log.metrics or {}),
             "poison_retrieved": float(log.poison_retrieved),
             "harmful_action": harmful_action,
+            "num_poison_docs": float(num_poison_docs),
         }
         emit_run_log(log, output_dir=output_dir)
         logs.append(log)
@@ -191,7 +181,7 @@ def main(argv: Optional[List[str]] = None) -> int:
     """CLI entry point for the debate poisoning attack."""
     from autogen_ext.models.openai import OpenAIChatCompletionClient
 
-    from src.corpus.ingest_cybersec import ingest_cybersec_corpus
+    from src.corpus.ingest_with_metadata import ingest_corpus_with_metadata
     from src.corpus.query_loader import load_queries
 
     parser = argparse.ArgumentParser(
@@ -221,6 +211,12 @@ def main(argv: Optional[List[str]] = None) -> int:
     )
     parser.add_argument("--output-dir", default="results")
     parser.add_argument("--model", default=None, help="Override debate model name.")
+    parser.add_argument(
+        "--num-poison-docs",
+        type=int,
+        default=1,
+        help="Total poison docs injected into each poisoned subagent's index.",
+    )
     args = parser.parse_args(argv)
 
     debate_cfg = {}
@@ -239,7 +235,7 @@ def main(argv: Optional[List[str]] = None) -> int:
         f"[run_attack_debate] loaded {len(queries)} queries from {args.query_file}"
     )
 
-    clean_index = ingest_cybersec_corpus()
+    clean_index = ingest_corpus_with_metadata()
     print("[run_attack_debate] clean index ready")
 
     logs = run_attack_debate(
@@ -252,6 +248,7 @@ def main(argv: Optional[List[str]] = None) -> int:
         ingestion_config_path=args.ingestion_config,
         threat_model=args.threat_model,
         poisoned_subagent_ids=args.poisoned_subagent_ids,
+        num_poison_docs=args.num_poison_docs,
     )
 
     print(f"\n[run_attack_debate] ran {len(logs)} attacked queries")

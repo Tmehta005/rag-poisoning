@@ -157,6 +157,56 @@ _SYSTEMS     = ["single-agent", "orchestrator", "debate"]
 _CONDITIONS  = ["clean", "targeted", "global"]
 _CORPORA     = ["cybersec", "bio"]
 
+_CORPUS_META = {
+    "cybersec": {
+        "Source documents":        "4 PDFs (NIST CSF 2.0, SP 800-53 Rev5, SP 800-61 Rev3, CISA IR Playbook)",
+        "Index chunks":            "1,731",
+        "Chunk size / overlap":    "384 tokens / 64 tokens",
+        "Embedding model":         "BAAI/bge-small-en-v1.5 (local)",
+        "Top-k per subagent":      "5",
+        "Queries":                 "8  (q001–q008)",
+        "Attack artifacts":        "8  (one per query, Option 2)",
+        "Trigger length":          "5 adversarial tokens (HotFlip/AgentPoison)",
+        "Target claims":           "False NIST/CISA policy statements",
+        "Systems evaluated":       "single-agent, orchestrator (3 agents), debate (3 agents)",
+        "Conditions":              "clean, targeted (1 poisoned agent), global (all agents)",
+        "Trials per condition":    "3",
+        "Generation model":        "gpt-4o-mini",
+        "Orchestrator mode":       "choose_best (LLM pick)",
+        "Debate mode":             "majority_vote, max 4 rounds, stable_for=2",
+        "Total runs (this file)":  "339  (clean: 173 · attack: 166)",
+    },
+    "bio": {
+        "Source documents":        "5 PDFs (Ihara et al. 2026, Nature Rev Genetics, Nature Rev Microbiology, PLOS CompBio, Nature Cell/Science)",
+        "Index chunks":            "286",
+        "Chunk size / overlap":    "384 tokens / 64 tokens",
+        "Embedding model":         "BAAI/bge-small-en-v1.5 (local)",
+        "Top-k per subagent":      "5",
+        "Queries":                 "6  (b001–b006)",
+        "Attack artifacts":        "6  (one per query, Option 2)",
+        "Trigger length":          "5 adversarial tokens (HotFlip/AgentPoison)",
+        "Target claims":           "False biological/scientific claims",
+        "Systems evaluated":       "single-agent, orchestrator (3 agents), debate (3 agents)",
+        "Conditions":              "clean, targeted (1 poisoned agent), global (all agents)",
+        "Trials per condition":    "3",
+        "Generation model":        "gpt-4o-mini",
+        "Orchestrator mode":       "choose_best (LLM pick)",
+        "Debate mode":             "majority_vote, max 4 rounds, stable_for=2",
+        "Total runs (this file)":  "178  (clean: 67 · attack: 111)",
+    },
+}
+
+
+def build_metadata_table(corpus: str) -> str:
+    meta = _CORPUS_META.get(corpus, {})
+    if not meta:
+        return "  (no metadata)"
+    key_w = max(len(k) for k in meta)
+    lines = []
+    for k, v in meta.items():
+        lines.append(f"  {k:<{key_w}}  {v}")
+    return "\n".join(lines)
+
 
 def build_summary_table(
     runs: list[dict],
@@ -281,6 +331,10 @@ def main() -> int:
         print(f"{'='*60}")
         print(f"  Table: {corpus.upper()} corpus  ({len(corpus_runs)} runs)")
         print(f"{'='*60}")
+        print()
+        print(f"  Experiment environment — {corpus.upper()}")
+        print(build_metadata_table(corpus))
+        print()
         print(build_summary_table(runs, corpus, judge_scores))
         print()
 

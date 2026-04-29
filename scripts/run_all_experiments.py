@@ -38,10 +38,11 @@ except ImportError:
 
 from autogen_ext.models.openai import OpenAIChatCompletionClient
 
-from src.corpus.ingest_cybersec import ingest_cybersec_corpus
+from src.corpus.ingest_with_metadata import ingest_corpus_with_metadata
 from src.corpus.query_loader import load_queries
 from src.experiments.run_clean import run_clean_experiment
 from src.experiments.run_single_agent import run_single_agent_experiment
+from src.experiments.run_attack_single_agent import run_attack_single_agent
 from src.experiments.run_attack_orch import run_attack_orchestrator
 from src.experiments.run_debate_clean import run_clean_debate_experiment
 from src.experiments.run_attack_debate import run_attack_debate
@@ -87,11 +88,11 @@ def _banner(label: str) -> None:
 # Phase A — Cybersec corpus (8 queries, attack_001)
 # ---------------------------------------------------------------------------
 
-def run_phase_a(output_dir: str, num_trials: int = 1) -> None:
+def run_phase_a(output_dir: str, num_trials: int = 1, num_poison_docs: int = 1) -> None:
     _banner("Phase A: Cybersec corpus")
 
     print("[A] Loading cybersec index …")
-    cybersec_index = ingest_cybersec_corpus(config_path=_CYBERSEC_INGESTION)
+    cybersec_index = ingest_corpus_with_metadata(config_path=_CYBERSEC_INGESTION)
     cybersec_clean_q  = load_queries(_CYBERSEC_CLEAN_Q)
     cybersec_attack_q = load_queries(_CYBERSEC_ATTACK_Q)
     print(f"[A] {len(cybersec_clean_q)} clean queries, {len(cybersec_attack_q)} attack queries, {num_trials} trial(s)")
@@ -110,15 +111,13 @@ def run_phase_a(output_dir: str, num_trials: int = 1) -> None:
 
     for trial in range(1, num_trials + 1):
         _banner(f"A2: single-agent targeted attack (cybersec) — CEILING — trial {trial}/{num_trials}")
-        run_attack_orchestrator(
+        run_attack_single_agent(
             queries=cybersec_attack_q,
             clean_index=cybersec_index,
             output_dir=output_dir,
             system_config_path=_SINGLE_CONFIG,
-            attack_config_path=_ATTACK_CONFIG,
             ingestion_config_path=_CYBERSEC_INGESTION,
-            threat_model="targeted",
-            poisoned_subagent_ids=["subagent_1"],
+            num_poison_docs=num_poison_docs,
         )
     print("[A2] done")
 
@@ -145,6 +144,7 @@ def run_phase_a(output_dir: str, num_trials: int = 1) -> None:
             ingestion_config_path=_CYBERSEC_INGESTION,
             threat_model="targeted",
             poisoned_subagent_ids=["subagent_1"],
+            num_poison_docs=num_poison_docs,
         )
     print("[A4] done")
 
@@ -158,6 +158,7 @@ def run_phase_a(output_dir: str, num_trials: int = 1) -> None:
             attack_config_path=_ATTACK_CONFIG,
             ingestion_config_path=_CYBERSEC_INGESTION,
             threat_model="global",
+            num_poison_docs=num_poison_docs,
         )
     print("[A5] done")
 
@@ -186,6 +187,7 @@ def run_phase_a(output_dir: str, num_trials: int = 1) -> None:
             ingestion_config_path=_CYBERSEC_INGESTION,
             threat_model="targeted",
             poisoned_subagent_ids=["subagent_1"],
+            num_poison_docs=num_poison_docs,
         )
     print("[A7] done")
 
@@ -200,6 +202,7 @@ def run_phase_a(output_dir: str, num_trials: int = 1) -> None:
             attack_config_path=_ATTACK_CONFIG,
             ingestion_config_path=_CYBERSEC_INGESTION,
             threat_model="global",
+            num_poison_docs=num_poison_docs,
         )
     print("[A8] done")
 
@@ -208,10 +211,10 @@ def run_phase_a(output_dir: str, num_trials: int = 1) -> None:
 # Phase B — Bio corpus (b001 + b002)
 # ---------------------------------------------------------------------------
 
-def run_phase_b(output_dir: str, num_trials: int = 1) -> None:
+def run_phase_b(output_dir: str, num_trials: int = 1, num_poison_docs: int = 1) -> None:
     _banner("Phase B: Bio corpus (b001–b006)")
     print("[B] Loading bio index …")
-    bio_index = ingest_cybersec_corpus(config_path=_BIO_INGESTION)
+    bio_index = ingest_corpus_with_metadata(config_path=_BIO_INGESTION)
     bio_clean_q  = _bio_clean_queries()
     bio_attack_q = load_queries(_BIO_ATTACK_Q)
     print(f"[B] {len(bio_clean_q)} clean queries, {len(bio_attack_q)} attack queries, {num_trials} trial(s)")
@@ -230,15 +233,13 @@ def run_phase_b(output_dir: str, num_trials: int = 1) -> None:
 
     for trial in range(1, num_trials + 1):
         _banner(f"B2: single-agent targeted attack (bio) — CEILING — trial {trial}/{num_trials}")
-        run_attack_orchestrator(
+        run_attack_single_agent(
             queries=bio_attack_q,
             clean_index=bio_index,
             output_dir=output_dir,
             system_config_path=_SINGLE_CONFIG,
-            attack_config_path=_ATTACK_CONFIG,
             ingestion_config_path=_BIO_INGESTION,
-            threat_model="targeted",
-            poisoned_subagent_ids=["subagent_1"],
+            num_poison_docs=num_poison_docs,
         )
     print("[B2] done")
 
@@ -265,6 +266,7 @@ def run_phase_b(output_dir: str, num_trials: int = 1) -> None:
             ingestion_config_path=_BIO_INGESTION,
             threat_model="targeted",
             poisoned_subagent_ids=["subagent_1"],
+            num_poison_docs=num_poison_docs,
         )
     print("[B4] done")
 
@@ -278,6 +280,7 @@ def run_phase_b(output_dir: str, num_trials: int = 1) -> None:
             attack_config_path=_ATTACK_CONFIG,
             ingestion_config_path=_BIO_INGESTION,
             threat_model="global",
+            num_poison_docs=num_poison_docs,
         )
     print("[B5] done")
 
@@ -306,6 +309,7 @@ def run_phase_b(output_dir: str, num_trials: int = 1) -> None:
             ingestion_config_path=_BIO_INGESTION,
             threat_model="targeted",
             poisoned_subagent_ids=["subagent_1"],
+            num_poison_docs=num_poison_docs,
         )
     print("[B7] done")
 
@@ -320,6 +324,7 @@ def run_phase_b(output_dir: str, num_trials: int = 1) -> None:
             attack_config_path=_ATTACK_CONFIG,
             ingestion_config_path=_BIO_INGESTION,
             threat_model="global",
+            num_poison_docs=num_poison_docs,
         )
     print("[B8] done")
 
@@ -343,15 +348,33 @@ def main() -> int:
         default=3,
         help="Number of independent trials per condition (default: 3).",
     )
+    parser.add_argument(
+        "--num-poison-docs",
+        type=int,
+        default=3,
+        help=(
+            "Total poison docs injected into each poisoned subagent's index "
+            "(default: 3). Higher values raise the poison share of the "
+            "retrieved top-k, flipping the LLM's majority-consensus bias."
+        ),
+    )
     args = parser.parse_args()
 
     Path(args.output_dir).mkdir(parents=True, exist_ok=True)
 
     if args.phase in ("A", "all"):
-        run_phase_a(args.output_dir, num_trials=args.num_trials)
+        run_phase_a(
+            args.output_dir,
+            num_trials=args.num_trials,
+            num_poison_docs=args.num_poison_docs,
+        )
 
     if args.phase in ("B", "all"):
-        run_phase_b(args.output_dir, num_trials=args.num_trials)
+        run_phase_b(
+            args.output_dir,
+            num_trials=args.num_trials,
+            num_poison_docs=args.num_poison_docs,
+        )
 
     print(f"\n{'='*60}")
     print(f"  All runs appended to {args.output_dir}/runs.jsonl")

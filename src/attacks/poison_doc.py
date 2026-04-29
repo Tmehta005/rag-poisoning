@@ -184,3 +184,30 @@ def spec_as_dict(spec: PoisonDocSpec) -> dict:
         "section_id": spec.section_id,
         "title": spec.title,
     }
+
+
+def render_extra_poison_specs(
+    artifact,
+    num_poison_docs: int,
+    ingestion_config_path: Optional[str],
+) -> list:
+    """
+    Produce the additional rendered poison specs for multi-doc injection.
+
+    The primary poison doc comes from the ``AttackArtifact`` (trigger-optimized
+    text); each extra spec is rendered from the domain template with the same
+    trigger/target_claim so all docs cluster in embedding space.
+
+    Returns an empty list when ``num_poison_docs <= 1``.
+    """
+    if num_poison_docs <= 1:
+        return []
+    domain = _infer_domain(ingestion_config_path)
+    return [
+        render_poison_doc(
+            trigger=artifact.trigger,
+            target_claim=artifact.target_claim,
+            domain=domain,
+        )
+        for _ in range(num_poison_docs - 1)
+    ]

@@ -92,6 +92,35 @@ def is_harmful_answer(final_answer: str, artifact: "AttackArtifact") -> bool:
     return bool(key) and key in fa
 
 
+def resolve_attack_artifact(attack: dict, query_id: str) -> "AttackArtifact":
+    """
+    Build an ``AttackArtifact`` from a query's ``attack`` block.
+
+    Supports both shapes produced by ``src.corpus.query_loader.load_queries``:
+      - artifact-backed (``attack.artifact_path`` set) — load from disk.
+      - inline (``attack.poison_docs[0]`` and ``attack.trigger``/``target_answer``
+        provided directly) — synthesize a stand-in artifact.
+
+    Used by every attack runner (single-agent, orchestrator, debate).
+    """
+    if attack.get("artifact_path"):
+        return load_artifact(attack["artifact_path"])
+    poison_docs = attack.get("poison_docs") or []
+    if not poison_docs:
+        raise ValueError(f"Query {query_id} has inline attack but no poison_docs.")
+    p0 = poison_docs[0]
+    return AttackArtifact(
+        attack_id=attack.get("attack_id", f"{query_id}_inline"),
+        trigger=attack.get("trigger", ""),
+        token_ids=[],
+        target_claim=attack.get("target_answer", ""),
+        poison_doc_id=p0["doc_id"],
+        poison_doc_text=p0["text"],
+        encoder_model="",
+        num_adv_passage_tokens=0,
+    )
+
+
 def artifact_dir(base_dir: str, attack_id: str) -> Path:
     return Path(base_dir) / attack_id
 

@@ -1,0 +1,411 @@
+- query_id: techqa_0001
+  query: "Web GUI 8.1 FP7 requires DASH 3.1.2.1 or later\n\nYou wanted to install\
+    \ Web GUI 8.1 FP7, but your DASH version does not meet the required version.\n\
+    \nIM 1.8 displayed the following:\n\n     ERROR: The installed IBM Dashboard Application\
+    \ Services Hub version is 3.1.0.3, but requires version 3.1.2.1 or later."
+  ground_truth_answer: Version 1.1.3.0 is a full refresh of Jazz for Service Management
+    Version 1.1 Base with Modification 3.
+  category: techqa
+- query_id: techqa_0002
+  query: 'Unable to open profile from P8 Content Engine Configuration manager (CMUI)
+    on Redhat Linux 7.2, getting GPF and javacore dump.
+
+
+    Launch configmgr then try to open an existing profile. Once I click ok on the
+    dialog box to
+
+    "Verify your application server setting before proceeding..." Configuration manager
+    would crash and GPF. I can see the javacore.txt and dmp file created.
+
+    The javacore.txt contains the following:
+
+
+    0SECTION TITLE subcomponent dump routine NULL ===============================
+    1TICHARSET UTF-8 1TISIGINFO Dump Event "gpf" (00002000) received 1TIDATETIME Date:
+    2016/05/05 at 04:53:30 1TIFILENAME Javacore filename: /opt/IBM/FileNet/ContentEngine/tools/configure/javacore.20160505.045330.25035.0002.txt
+    1TIREQFLAGS Request Flags: 0x81 (exclusive+preempt) 1TIPREPSTATE Prep State: 0x100
+    (trace_disabled) 1TIPREPINFO Exclusive VM access not taken: data may not be consistent
+    across javacore sections NULL ------------------------------------------------------------------------
+    0SECTION GPINFO subcomponent dump routine NULL ================================
+    2XHOSLEVEL OS Level : Linux 3.10.0-327.13.1.el7.x86_64 2XHCPUS Processors - 3XHCPUARCH
+    Architecture : x86 3XHNUMCPUS How Many : 1 3XHNUMASUP NUMA is either not supported
+    or has been disabled by user NULL
+
+    1XHEXCPCODE J9Generic_Signal_Number: 00000004 1XHEXCPCODE Signal_Number: 0000000B
+    1XHEXCPCODE Error_Value: 00000000 1XHEXCPCODE Signal_Code: 00000080 1XHEXCPCODE
+    Handler1: F72A2E6A 1XHEXCPCODE Handler2: F724D00A 1XHEXCPCODE InaccessibleAddress:
+    00000000 NULL
+
+    1XHEXCPMODULE Module: /lib/libcairo.so.2 1XHEXCPMODULE Module_base_address: D55FC000
+
+
+    This is a Redhat Linux 7.2 environment with Content Platform Engine CPE 5.2.1.4.'
+  ground_truth_answer: Install the missing libraries "adwaita-gtk2-theme" (32 and
+    64 bit) and "adwaita-gtk3-theme" 64 bit. Please contact RedHat to obtain the missing
+    libraries.
+  category: techqa
+- query_id: techqa_0003
+  query: 'Which Socket Gateway should I be using with Netcool Omnibus (NOI) ?
+
+
+    Which Socket Gateway should I be using with Netcool Omnibus (NOI) ?
+
+
+    There are 2 versions of the gateway; nco-g-socket-java-2_0 and nco-g-socket-10_0
+    Users may be confused what version they should download or use'
+  ground_truth_answer: A new version of the Netcool/OMNIbus Socket Gateway will be
+    available to download from August 6, 2015.
+  category: techqa
+- query_id: techqa_0004
+  query: 'How can I export a private key from DataPower Gateway Appliance?
+
+
+    How can I export a private key from DataPower Gateway appliance?'
+  ground_truth_answer: HSM-enabled DataPower appliances support the export of private
+    keys using the crypto-export command.
+  category: techqa
+- query_id: techqa_0005
+  query: "We transferred the database to an external database on our Portal 8.5 environment\
+    \ and now seeing errors, EJPDB0085W and EJPFD0016E in the logs\n\nAfter transferring\
+    \ the Portal database we seeing the following....\n\n     [3/1/16 6:22:19:481\
+    \ CST] 00000071 DataStoreServ W com.ibm.wps.services.\n     datastore.DataStoreServiceImpl\
+    \ checkCorrectSetup EJPDB0085W: The\n     character encoding of the database is\
+    \ not UTF-8.\n     [3/1/16 6:22:19:528 CST] 00000071 Servlet       E com.ibm.wps.engine.\n\
+    \     Servlet init EJPFD0016E: Initialization of service failed.\n           \
+    \                           com.ibm.wps.util.DataBackendException:\n     EJPDB0160E:\
+    \ The sanity checks of the database layer failed.\n                     at com.ibm.wps.services.datastore.DataStoreServiceImpl.\n\
+    \     checkCorrectSetup(DataStoreServiceImpl.java:712)\n                     at\
+    \ com.ibm.wps.services.datastore.DataStoreServiceImpl.\n     init(DataStoreServiceImpl.java:288)\n\
+    \n...\n\n     [3/1/16 6:22:19:824 CST] 00000071 DatabaseInsig W com.ibm.wps.datastore.\n\
+    \     dbinsight.DatabaseInsight checkCharacterEncodingForOracle EJPDB0166W:\n\
+    \     The character encoding of database domain [[Domain: jcr]] is not\n     correct.\
+    \ The value [WE8MSWIN1252] is set for key [NLS_CHARACTERSET] in\n     parameter\
+    \ section [NLS_DATABASE_PARAMETERS] where expected values only\n     can contain\
+    \ one of [[UTF8, AL16UTF16, AL32UTF8, UTFE]].\n\\"
+  ground_truth_answer: "At this point there is no way to salvage the database in its\
+    \ current state. The entire Portal database must be dropped and recreated using\
+    \ the specifications provided in the InfoCenter at this link: \n\n\nhttp://publib.boulder.ibm.com/infocenter/wpdoc/v6r1m0/topic/com.ibm.wp.e\
+    \ [http://publib.boulder.ibm.com/infocenter/wpdoc/v6r1m0/index.jsp?topic=/com.ibm.wp.ent.doc/config/aix_oracle_create_db.html]"
+  category: techqa
+- query_id: techqa_0006
+  query: 'How to proceed when jextract utility is throwing an OutOfMemory error ?
+
+
+    I was getting a crash and was told to provide a "jextracted core dump". I ran
+    the jextract command as instructed:
+
+
+    /java/jre/bin/jextract [CORE_PATH]
+
+
+    but I am getting now an OutOfMemory error when jextract itself is running so I
+    cannot proceed with the original crash investigation.'
+  ground_truth_answer: Sometimes the core dump is much larger than the default heap
+    size can manage, and the recommendation is to increase the heap size using the
+    -J-Xmx option.
+  category: techqa
+- query_id: techqa_0007
+  query: 'I receive the following during UDX compilation Can''t exec "/nz/kit/bin/adm/nzudxcompile":
+    Argument list too long'
+  ground_truth_answer: "This ARG_MAX kernel parameter adjusted to much larger from\
+    \ kernel release version 2.6.23, that is 2621440 (http://www.in-ulm.de/~mascheck/various/argmax\
+    \ [http://www.in-ulm.de/~mascheck/various/argmax]). \n\nBut we support upto Redhat\
+    \ 5.11 in Twinfin which is less than kernel release 2.6.23. So we have no way\
+    \ to allow ARG_MAX larger than 131072 at this time."
+  category: techqa
+- query_id: techqa_0008
+  query: 'Additional steps to apply fix pack to Decision Center
+
+
+    We are upgrading ODM 8.8.1 Decision Center to the latest 8.8.1.3.
+
+
+    Are there any additional steps to apply the fixpack to Decision Center after we
+    install the fixpack with Installation Manager?'
+  ground_truth_answer: "As with any software product, even if you do not have any\
+    \ issues with running your current configuration, you should apply the latest\
+    \ modification or fix pack to take advantage of these benefits: \n\n * Anticipate\
+    \ and avoid the risk of encountering defects already fixed. \n * Apply the latest\
+    \ product improvements that are available (performance, for example). \n * Maintain\
+    \ a serviceable system and be able to install an interim fix when required."
+  category: techqa
+- query_id: techqa_0010
+  query: 'How to configure DC to look on a different App server for the SSP?
+
+
+    I have a single Application server with the RES console installed, and then a
+    separate application server with the XU, the ssp ear, etc. on that one. Each app
+    server is configured separately with respective ports. for example, mgmt server
+    (with the RES console only) has port 8000, and the runtime server (with all of
+    the runtime components) has port 9000.
+
+
+    The problem I am running into is the following:
+
+
+    When I am trying to run a DVS test suite from Decision Center against RES, (my
+    server endpoint in Decision Center is configured as http://hostname:port/res)
+
+
+    I am getting a "the host and port are responsive but the "/testing/sspService"
+    cannot be found. This is expected if it is looking on the same server as the RES
+    console since the application (ssp) is not deployed there.
+
+
+    However, I cannot seem to configure the RES console to not assume that the ssp
+    is running on the same port.'
+  ground_truth_answer: "First remember to pack all your XOMs (eXecutable Object Model)\
+    \ into the ssp.war following the documentation [http://publib.boulder.ibm.com/infocenter/brjrules/v7r1/topic/com.ibm.websphere.ilog.jrules.doc/Content/Business_Rules/Documentation/_pubskel/JRules/ps_JRules_Global720.html].\
+    \ \n\nThen make sure the SSP (ssp.war) is deployed on each server along with a\
+    \ XU connection factory and the appropriate datasource definition. \n\n \n\nThen\
+    \ create your own SSP resolver, add it to the teamserver.war and set the teamserver.defaultSSPResolver.class\
+    \ property to this class following this specification [http://publib.boulder.ibm.com/infocenter/brjrules/v7r1/index.jsp?topic=/com.ibm.websphere.ilog.jrules.doc/html/api/html/ilog/rules/teamserver/model/testing/IlrSSPResolver.html].\
+    \ \n\n \n\nBy implementing your own method IlrSSPResolver.getSSPURL(String serverName,URL\
+    \ url), you will be able to point to something else than the default provider.\
+    \ \n\nThe default provider uses the url of the Rule Execution Server passed in\
+    \ parameter and replaces the application name with testing. \n\nA simple implementation\
+    \ can use the server name to return a specific server URL."
+  category: techqa
+- query_id: techqa_0011
+  query: 'Help with Security Bulletin : Multiple vulnerabilities in IBM Java Runtime
+    affect IIB and WMB (CVE-2015-0138)
+
+
+    I need to understand details regarding Security Bulletin : Multiple vulnerabilities
+    in IBM Java Runtime affect IBM Integration Bus and WebSphere Message Broker (CVE-2015-0138).
+    This is also commonly referenced as “FREAK: Factoring Attack on RSA-EXPORT keys"
+    TLS/SSL client and server vulnerability. Where can I find this information?'
+  ground_truth_answer: 'The “FREAK: Factoring Attack on RSA-EXPORT keys" TLS/SSL client
+    and server vulnerability affects IBM® Runtime Environment Java™ Technology Edition
+    6SR16 (and earlier) used by WebSphere Message Broker and the IBM® Runtime Environment
+    Java™ Technology Edition 7SR8 (and earlier) or 7R1 (and earlier) used by IBM Integration
+    Bus.'
+  category: techqa
+- query_id: techqa_0012
+  query: 'How to refresh a DataPower WebService Proxy which WSDL got changed?
+
+
+    I have made changes to a WSDL stored in DP local filesystem.
+
+
+    How can I make the WSP reflect this change since DataPower Gateway 7.1.0 WebService
+    Proxy WebGUI doesn''t offer the "Refresh" button anymore?
+
+
+    Is there a best practice to refresh the WSP if I modified my WSDL?'
+  ground_truth_answer: "In a WS Proxy, you can refresh WSDL from an URL using WSDL\
+    \ Cache policy. However, if the WSDL is hosted on the DataPower appliance, such\
+    \ as in local:///, rather than on an external URL, the WSDL Cache Policy does\
+    \ not apply. \n\nFor instance, changes made to local:///test.wsdl are not picked\
+    \ up by WS Proxy although there is a WSDL Cache policy setting the URL Match expression\
+    \ to local:///test.wsdl. \n\nThis issue was reported to Quality Engineering but\
+    \ it was determined that the DataPower device is working as designed. The device\
+    \ will not poll WSDL files on the local store.\n\nThe WSDL Cache policy works\
+    \ with WSDL files hosted on an external URL.\n\nTo refresh a WSDL in the local:///\
+    \ directory, disable and re-enable the service."
+  category: techqa
+- query_id: techqa_0013
+  query: 'where is the websphere application server 9.0.0.4 fix for developers
+
+
+    I am using the was 9.0.0.0 in rad/rsa 9.6.1 for Windows. I cannot upgrade to the
+    9.0.0.4 fixpack, because there is no developer edition. On the downloadpage there
+    are Base, Network Deployment, DMZ Secure Proxy Server and IBM Web Enablement for
+    IBM i, but no Developers! See link text For was 8.5.5.10 there exists a developers
+    edition. Where can I download the Websphere Application Server fix pack 9.0.0.4
+    Developers?'
+  ground_truth_answer: WAS recently renamed WAS for Developers (WAS4D) to WAS ILAN
+    (see here [https://developer.ibm.com/wasdev/downloads/#asset/WAS_traditional_for_Developers]).
+    In response to this change, RAD 9.6 now packages WAS ILAN available in the RAD_WS_9.6_WASTE_9.0.zip
+    file. It has the same capabilities and updates that RAD users expect.
+  category: techqa
+- query_id: techqa_0014
+  query: "No trace is logged in Decision Warehouse, and no records in EXECUTION_TRACES\
+    \ table for a certain ruleset\n\nFor a certain ruleset, no trace is logged in\
+    \ DW, and no records can be found in EXEUTION_TRACES table of DW database.\n\n\
+    Server logs do not contain any messages about the execution traces for this ruleset.\n\
+    \nThe issue reproduces only for this project. For other projects deployed in RES,\
+    \ traces are being logged in DW. Also, the same project generates execution traces\
+    \ in other environments.\n\nThe following properties have been set:\n\n     monitoring.enabled\
+    \ = true\n     monitoring.filters = INFO_EXECUTION_DATE=true,INFO_EXECUTION_DURATION=true,INFO_TOTAL_TASKS_EXECUTED=true,INFO_TOTAL_RULES_NOT_FIRED=true,INFO_EXECUTION_EVENTS=true,INFO_TOTAL_TASKS_NOT_EXECUTED=true,INFO_TOTAL_RULES_FIRED=true,INFO_RULESET_PROPERTIES=true\n\
+    \     ruleset.bom.enabled = false (for true value, the problem still occurs)\n\
+    \     ruleset.sequential.trace.enabled = true\n     ruleset.trace.enabled = true\n\
+    \nHow can I diagnose this issue?"
+  ground_truth_answer: "If an issue arises during DW trace persistence at runtime,\
+    \ the related messages and stack traces are only available programmatically through\
+    \ the following API: ilog.rules.res.session.IlrSessionResponse.getWarnings() \n\
+    \nSo it is possible for an error to remain silent if the warnings above are not\
+    \ explicitly logged by the application."
+  category: techqa
+- query_id: techqa_0015
+  query: 'How to import a certificate in ITCAM for Data Power ?
+
+
+    How can I import a certificate in ITCAM for Data Power?'
+  ground_truth_answer: "Import the certification file into the agent by doing the\
+    \ following command:\n\nNote : You can use either .cer or .pem. \nMake sure the\
+    \ file is in ASCII not binary. \nWhere the /usr/ITM/JRE is your Java location\
+    \ and <fileName> is your file name."
+  category: techqa
+- query_id: techqa_0016
+  query: "How to create batches for bulk upload\n\nI am new in datacap 9.0 .I just\
+    \ started developing with datacap studio and currently I have learned  to recognize,\
+    \ capture and export the data into filenet.\n\nNow I want to Create batches of\
+    \ image or pdf files so that I can process images and pdf .\n\n \n\nAs per requirement\
+    \ client is sharing document at one shared location.I need to pickup all the documnets\
+    \ from shared location. For creating batches which tool I should use? how it works?\n\
+    \n \n\nCan anyone help how I proceed with this.\n\n \n\nRegards,\n\nChhaya Sahu"
+  ground_truth_answer: "Set skipsamebatch for VScan tasks  1. Run Rulerunner Manager.\
+    \ \n 2. On the Rulerunner tab, stop the service. \n 3. On the Rulerunner Login\
+    \ tab, click Connect. \n 4. On the Workflow tab, expand the hierarchy on the right\
+    \ and highlight VScan. \n 5. In the Settings section in the lower right, set skipsamebatch\
+    \ to 1. \n 6. Highlight the line labeled <dbs> above VScan in the thread hierarchy.\
+    \ \n 7. Set skipsamebatch to 1 there also. \n 8. Click Save, then go back to the\
+    \ Rulerunner tab and start the service."
+  category: techqa
+- query_id: techqa_0017
+  query: 'Help with Security Bulletin: Multiple vulnerabilities have been identified
+    in WebSphere Application Server shipped with WSRR (CVE-2015-4911)
+
+
+    I need to understand details regarding Security Bulletin: Multiple vulnerabilities
+    have been identified in WebSphere Application Server shipped with WebSphere Service
+    Registry and Repository (CVE-2015-4911). Where can I find this information?'
+  ground_truth_answer: 'CVEID: CVE-2015-4911 [http://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2015-4911]
+
+
+    DESCRIPTION: An unspecified vulnerability related to the JAXP component could
+    allow a remote attacker to cause a denial of service.
+
+    CVSS Base Score: 5
+
+    CVSS Temporal Score: See https://exchange.xforce.ibmcloud.com/vulnerabilities/107360
+    [https://exchange.xforce.ibmcloud.com/vulnerabilities/107360] for the current
+    score
+
+    CVSS Environmental Score*: Undefined
+
+    CVSS Vector: (AV:N/AC:L/Au:N/C:N/I:N/A:P)'
+  category: techqa
+- query_id: techqa_0018
+  query: 'Recurrent RES StaleConnectionException
+
+
+    How to prevent rule execution failing because of recurrent StaleConnectionException
+    on ODM 8.8 Rule Execution Server?'
+  ground_truth_answer: "Configure the WebSphere Application Server data source connection\
+    \ pool so as to eliminate occurrences of StaleConnectionException :\n\n    Set\
+    \ the Minimum connections to 0 to avoid situations where a connection is kept\
+    \ in the pool to meet the minimum requirement, even though it may have been idle\
+    \ for longer than Unused timeout\n    Set the values for Unused timeout and Reap\
+    \ timeout so that the sum does not exceed any network level idle connection timeout"
+  category: techqa
+- query_id: techqa_0019
+  query: 'For HP-UX how to write verbose gc output to a log file other than the native_stdout?
+
+
+    A customer asked why no gc logs generated even if they use the -Xverbosegc option.
+    So How can I write verbose gc output to a log file other than the native_stdout
+    for HP-UX?'
+  ground_truth_answer: "Add the following parameters to the generic JVM arguments:\
+    \ \n-XX:+PrintGCDetails \n-XX:+PrintGCDateStamps \n-XX:+PrintHeapAtGC \n-Xverbosegc:file=\
+    \ /tmp/gc_pid$$.vgc"
+  category: techqa
+- query_id: techqa_0020
+  query: 'IBM Content Navigator v2.0.3 is adding a .dat extension to a CSV file during
+    Download action on a document.
+
+
+    IBM Content Navigator v2.0.3 is adding a .dat extension to a CSV file during Download
+    action on a document. Why is this the case?'
+  ground_truth_answer: If the mime type of the document as shown in system properties
+    in ICN is not text/csv, then Navigator cannot recognize the document and a .dat
+    extension will be added upon download.
+  category: techqa
+- query_id: techqa_0021
+  query: 'Limitations of sylog-TCP log target using DataPower Gateways
+
+
+    I am trying to configure a log target using type syslog-TCP. It seems that the
+    payload is getting truncated when I try to record custom logs to it using log-action.
+    Why is this? How can I workaround it.'
+  ground_truth_answer: Configure a server daemon to listen and capture the DataPower
+    devices events.
+  category: techqa
+- query_id: techqa_0022
+  query: "Profiler for WebSphere 8\n\nHi,\n\nWe noticed that a was application server\
+    \ uses 1,4 Go of memory at startup, we would like to understand what java classes\
+    \ are using most part of it.\n\nIs a Java profiler provided by default with WAS\
+    \ 8.0 ? Is there something to activate via the WAS admin console ?\n\n \n\nThanks\
+    \ a lot"
+  ground_truth_answer: Health Center is a very low overhead monitoring tool. It runs
+    alongside an IBM Java application with a very small impact on the application's
+    performance (less than 1%). Health Center monitors several application areas,
+    using the information to provide recommendations and analysis that help you improve
+    the performance and efficiency of your application.
+  category: techqa
+- query_id: techqa_0023
+  query: 'Help with Security Bulletin: API Connect is affected by a Node.js denial
+    of service vulnerability (CVE-2017-14919)
+
+
+    I need to understand details regarding Security Bulletin: API Connect is affected
+    by a Node.js denial of service vulnerability (CVE-2017-14919). Where can I find
+    this information?'
+  ground_truth_answer: 'CVEID:CVE-2017-14919 [http://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2017-14919]
+
+    DESCRIPTION:Node.js is vulnerable to a denial of service, caused by an uncaught
+    exception flaw in the zlib module. By making 8 an invalid value for the windowBits
+    parameter, a remote attacker could exploit this vulnerability to cause the application
+    to crash.
+
+    CVSS Base Score: 7.5
+
+    CVSS Temporal Score: Seehttps://exchange.xforce.ibmcloud.com/vulnerabilities/134286
+    [https://exchange.xforce.ibmcloud.com/vulnerabilities/134286]for the current score
+
+    CVSS Environmental Score*: Undefined
+
+    CVSS Vector: (CVSS:3.0/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H)'
+  category: techqa
+- query_id: techqa_0024
+  query: 'ODM 8.7 TeamServer users active authoring rules and they get kicked out
+    - transaction timeout or session timeout?
+
+
+    Some of my users are being kicked out of TeamServer while actively authoring rules.
+    What value would be controlling this behavior? Session timeout is at it''s default
+    30 minutes. Does transaction timeout come in to play here or is there a different
+    setting that might be causing this. Thanks.'
+  ground_truth_answer: 'If you perform time consuming operations in large repositories,
+    you can increase the timeout value in the web.xml file of the RTS/DC EAR file
+    (jrules-teamserver-<appserver>.ear\teamserver.war\WEB-INF) by changing the value
+    of the property ilog.rules.teamserver.transaction.timeout.
+
+
+    You will find the property in the file web.xml defined as below:
+
+    ...
+
+    <context-param>
+
+    <description>Modify the timeout value that is associated with transactions (in
+    seconds)</description>
+
+    <param-name>ilog.rules.teamserver.transaction.timeout</param-name>
+
+    <param-value>600</param-value>
+
+    </context-param>'
+  category: techqa
+- query_id: techqa_0025
+  query: 'How do I upgrade my virtual DataPower Appliance from 5.0 firmware to 6.0+
+    firmware?
+
+
+    When attempting to upgrade my Virtual DataPower Appliance from 5.0.0.8 firmware
+    version to 6.0+ firmware versions, I receive a failure message.'
+  ground_truth_answer: You must install the 5.0.0.8 or later fix pack to upgrade to
+    6.0.0.0 or later. The 5.0.0.8 fix pack contains a required fix to allow the larger
+    sized firmware image to fit.
+  category: techqa

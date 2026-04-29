@@ -267,6 +267,59 @@ EOF
 
 Expected: all 6 queries answered at confidence 0.90. Index is ~286 nodes from 5 PDFs.
 
+### Run the TechQA corpus baseline
+
+TechQA (IBM) is a tech-support QA benchmark used here as a third evaluation domain. It plugs into the same clean pipeline as cybersec and bio — no agent or orchestrator changes.
+
+**Step 1 — get the IBM TechQA release.** The canonical IBM release is published at `PrimeQA/TechQA` on HuggingFace (a 2.8 GB tarball with `dev_Q_A.json` + `training_dev_technotes.json`). Note: the `ibm/techqa` dataset is gated/inaccessible, and community mirrors like `rojagtap/tech-qa` use a different field layout, so prefer `PrimeQA/TechQA`.
+
+```bash
+pip install -U huggingface_hub hf_xet datasets
+
+mkdir -p data/raw/techqa_original
+hf download PrimeQA/TechQA TechQA.tar.gz \
+  --repo-type dataset --local-dir data/raw/techqa_original
+
+# Extract only the train/dev split (skip the 800k-node full technote_corpus):
+tar -xzf data/raw/techqa_original/TechQA.tar.gz \
+  -C data/raw/techqa_original \
+  TechQA/README.txt TechQA/training_and_dev/
+```
+
+**Step 2 — stage the IBM JSON files into a JSONL `prepare_techqa` understands.** `scripts/stage_techqa_ibm.py` joins each Q&A entry to its linked technote (HTML → cleaned text via BeautifulSoup) and emits one JSON row per question with `question`, `answer`, `document`, `doc_id`, `category` fields:
+
+```bash
+python scripts/stage_techqa_ibm.py \
+  --qa-json data/raw/techqa_original/TechQA/training_and_dev/dev_Q_A.json \
+  --technotes-json data/raw/techqa_original/TechQA/training_and_dev/training_dev_technotes.json \
+  --max-questions 25 \
+  --output-jsonl data/raw/techqa_original/dev_staged.jsonl
+```
+
+**Step 3 — convert the staged JSONL into corpus + queries.** `scripts/prepare_techqa.py` writes:
+- `data/corpus_techqa/*.txt` — one file per unique source document (deduped by SHA-1 of body text)
+- `data/queries/techqa_queries.yaml` — `query_id`, `query`, `ground_truth_answer`, `category`
+
+```bash
+python scripts/prepare_techqa.py \
+  --source jsonl \
+  --jsonl-path data/raw/techqa_original/dev_staged.jsonl
+```
+
+The script also accepts `--source hf --hf-name <name>` for any non-gated TechQA-style HF dataset; it normalizes common field-name variants (question / query, answer / accepted_answer, document / context / passage / text). Rows missing question or answer are skipped.
+
+**Step 2 — build the index.** Reads `configs/corpus_techqa.yaml` (chunk_size=384, chunk_overlap=64, embed_model=local) and persists to `data/index_techqa/`:
+
+```bash
+python scripts/build_techqa_index.py
+```
+
+**Step 3 — run the clean orchestrator over TechQA.** Loads the queries YAML and calls `run_clean_experiment` with the TechQA corpus config; results are appended to `results/runs.jsonl` in the same schema as cybersec / bio runs:
+
+```bash
+python scripts/run_techqa_clean.py
+```
+
 ### Run the clean debate
 
 The debate setup spawns N AutoGen-backed subagents in a `RoundRobinGroupChat`, each with its own retriever and a private `retrieve` tool. Rounds continue until the same majority holds for `stable_for` consecutive rounds (configurable in `configs/system_debate.yaml`) or `max_rounds` hits. The Judge relays the majority vote as the final answer and appends a full `DebateTranscript` to the `RunLog`.

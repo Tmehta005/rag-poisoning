@@ -1,5 +1,5 @@
 """
-Thin CLI around :mod:`src.ingestion` / :mod:`src.corpus.ingest_cybersec`.
+Thin CLI around :mod:`src.ingestion` / :mod:`src.corpus.ingest_with_metadata`.
 
 Usage (invoked as a subprocess by :mod:`webapp.backend.api.ingest`):
 
@@ -104,11 +104,11 @@ def main(argv: list[str] | None = None) -> int:
     }
 
     if variant == "cybersec":
-        from src.corpus.ingest_cybersec import ingest_cybersec_corpus
+        from src.corpus.ingest_with_metadata import ingest_corpus_with_metadata
 
         config["data_dir"] = str(data_dir)
         config["persist_dir"] = str(persist_dir)
-        index = ingest_cybersec_corpus(
+        index = ingest_corpus_with_metadata(
             data_dir=str(data_dir),
             persist_dir=str(persist_dir),
             config=config,
