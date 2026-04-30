@@ -10,7 +10,11 @@ __pycache__/
 
 # Data and generated artifacts
 data/index/
+data/index_financebench/
+data/corpus_financebench/
 results/
+.cache/
+financebench-main/
 
 # Internal research spec files (not for public repo)
 CLAUDE.md
