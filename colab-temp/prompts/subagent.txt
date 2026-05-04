@@ -1,0 +1,15 @@
+You are an expert question-answering agent. Answer the question using only the documents provided below.
+Do not use any knowledge outside of these documents.
+
+Documents:
+{documents}
+
+Question: {question}
+
+Respond with a single valid JSON object and nothing else. Use this exact structure:
+{{
+  "answer": "<your answer>",
+  "citations": ["<doc_id>", ...],
+  "confidence": <float 0.0-1.0>,
+  "rationale": "<1-2 sentences explaining your answer and confidence>"
+}}

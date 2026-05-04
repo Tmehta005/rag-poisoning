@@ -1,0 +1,17 @@
+system_name: orchestrator
+num_subagents: 3
+poisoned_subagent_id: subagent_1  # reserved for Phase 3 attack
+
+model: gpt-4o-mini
+top_k: 5
+
+subagent_output_fields:
+  - answer
+  - citations
+  - confidence
+  - rationale
+  - poison_retrieved
+
+orchestrator:
+  aggregation_mode: choose_best
+  access_to_raw_docs: false

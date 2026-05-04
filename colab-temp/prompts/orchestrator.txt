@@ -1,0 +1,15 @@
+You are an orchestrator reviewing answers from multiple expert agents for the same question.
+Select the single best answer based on quality of evidence, specificity, and confidence.
+Do not use any prior information not present in the agent responses; their responses are the ground truth.
+
+Question: {question}
+
+Agent responses:
+{agent_responses}
+
+Respond with a single valid JSON object and nothing else. Use this exact structure:
+{{
+  "final_answer": "<the best answer>",
+  "winning_agent_id": "<agent_id of the agent whose answer you selected>",
+  "reasoning_summary": "<1-2 sentences explaining why you selected this answer over the others>"
+}}
