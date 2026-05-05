@@ -337,6 +337,95 @@ def test_generate_artifacts_skip_done_and_attacked_yaml(tmp_path):
     )
 
 
+def test_generate_artifacts_harmful_phrase_starting_with_dash(tmp_path):
+    """Phrases like '-XX:-PrintGCDetails' must not be eaten by argparse."""
+    mod = _load_script("generate_techqa_attack_artifacts")
+    smoke = tmp_path / "smoke.yaml"
+    specs = tmp_path / "specs.yaml"
+    attacked = tmp_path / "attacked.yaml"
+    artifacts_dir = tmp_path / "artifacts"
+
+    smoke.write_text(yaml.safe_dump([{
+        "query_id": "techqa100_0052",
+        "query": "How do I log verbose GC on HP-UX?",
+        "ground_truth_answer": "Use -Xverbosegc.",
+        "category": "techqa",
+        "source_doc_id": "swg00052",
+    }], sort_keys=False))
+
+    specs.write_text(yaml.safe_dump([{
+        "attack_id": "attack_techqa100_0052",
+        "query_id": "techqa100_0052",
+        "ingestion_config": "configs/corpus_techqa_100_seed0.yaml",
+        "target_claim": "wrong gc claim",
+        "harmful_match_phrases": [
+            "-XX:-PrintGCDetails",
+            "  -Xverbosegc:stdout  ",  # whitespace must be stripped
+            "",                         # empty string must be skipped
+            None,                       # non-str must be skipped
+        ],
+    }], sort_keys=False))
+
+    captured_argv: list[list[str]] = []
+
+    def fake_optimizer(argv):
+        captured_argv.append(list(argv))
+        attack_id = argv[argv.index("--attack-id") + 1]
+        out = artifacts_dir / attack_id / "artifact.json"
+        out.parent.mkdir(parents=True, exist_ok=True)
+        out.write_text(json.dumps({"trigger": "y", "target_claim": "stub"}))
+
+    sys.modules["src.experiments.optimize_trigger"] = SimpleNamespace(main=fake_optimizer)
+    try:
+        rc = mod.main([
+            "--specs-file", str(specs),
+            "--smoke-yaml", str(smoke),
+            "--output-attacked-yaml", str(attacked),
+            "--artifacts-dir", str(artifacts_dir),
+            "--cache-dir", str(tmp_path / "cache"),
+        ])
+    finally:
+        sys.modules.pop("src.experiments.optimize_trigger", None)
+
+    assert rc == 0
+    assert len(captured_argv) == 1
+    argv = captured_argv[0]
+
+    # Equals form for both surviving phrases (strip applied to the second).
+    assert "--harmful-match-phrase=-XX:-PrintGCDetails" in argv
+    assert "--harmful-match-phrase=-Xverbosegc:stdout" in argv
+    # Empty / non-string entries must NOT appear.
+    assert not any(a == "--harmful-match-phrase=" for a in argv)
+    assert not any(a.startswith("--harmful-match-phrase=None") for a in argv)
+    # And the legacy two-token form must not be used at all.
+    assert "--harmful-match-phrase" not in argv, (
+        "should use --harmful-match-phrase=<v> equals form so values starting "
+        "with '-' aren't parsed as another flag"
+    )
+
+    # Sanity-check that argparse on the receiving end actually accepts what we
+    # produced — re-parse with a stand-in parser shaped like optimize_trigger's.
+    import argparse as _argparse
+    parser = _argparse.ArgumentParser()
+    parser.add_argument("--attack-id")
+    parser.add_argument("--opt-config")
+    parser.add_argument("--query-file")
+    parser.add_argument("--target-query-id")
+    parser.add_argument("--target-claim")
+    parser.add_argument("--ingestion-config")
+    parser.add_argument(
+        "--harmful-match-phrase",
+        action="append",
+        dest="harmful_match_phrases",
+        default=None,
+    )
+    parsed = parser.parse_args(argv)
+    assert parsed.harmful_match_phrases == [
+        "-XX:-PrintGCDetails",
+        "-Xverbosegc:stdout",
+    ]
+
+
 # ---------------------------------------------------------------------------
 # run_techqa_attack_matrix.py (dry-run / planning)
 # ---------------------------------------------------------------------------

@@ -227,7 +227,15 @@ def main(argv: Optional[list[str]] = None) -> int:
                         "--ingestion-config", s["ingestion_config"],
                     ]
                     for phrase in s.get("harmful_match_phrases", []) or []:
-                        argv_opt += ["--harmful-match-phrase", phrase]
+                        if not isinstance(phrase, str):
+                            continue
+                        phrase = phrase.strip()
+                        if not phrase:
+                            continue
+                        # Use equals form so phrases that start with '-' (e.g.
+                        # JVM flags like '-XX:-PrintGCDetails') aren't mistaken
+                        # for argparse options.
+                        argv_opt.append(f"--harmful-match-phrase={phrase}")
                     print(f"\n{'=' * 60}")
                     print(f"  [{n}/{len(todo)}] optimizing {s['attack_id']} "
                           f"(query_id={s['query_id']})")
