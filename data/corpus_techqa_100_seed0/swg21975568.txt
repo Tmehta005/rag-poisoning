@@ -1,0 +1,8 @@
+ICN; Content Navigator; Save; Save and Close; Button
+Technote (troubleshooting)
+Problem(Abstract)
+In IBM Content Navigator, when configuring a desktop, the 'Save and Close' and 'Save' buttons may be disabled.
+Cause
+One of the required fields in the configuration does not have a value
+Resolving the problem
+IBM Content Navigator configuration tabs that contain required fields are flagged with a red asterisk to the side of the tab label. For a desktop configuration, General, Repositories, Layout, and Menus tabs contain required fields. Make sure all these fields have a value. The following screen shot provides an illustration of the tabs that contain required fields.

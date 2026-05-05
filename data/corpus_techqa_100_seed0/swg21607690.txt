@@ -1,0 +1,14 @@
+nco_p_mttrapd; snmp; rules file; probe; snmpsend; snmptrap; test; testing; snmpv3
+Technote (FAQ)
+Question
+MTTrapd probe : How can you troubleshoot configuration issues?
+Answer
+The MTTrapd (SNMP) probe is a Generic probe used to process SNMP traps.
+It is a multi-threaded probe and supports both UDP and TCP traps/informs.
+The attached Support's guide to the SNMP probe provides details on how best to configure the probe, troubleshoot issues and how to use third party products to test the probes behaviour.
+The latest probe version is:
+Release ID: 20.0.2
+Or higher.
+Related information
+Where to locate the latest MTTrapd probe release 20.0.2
+SNMP_MTTRAPDProbe_SupportsGuide_22.pdf

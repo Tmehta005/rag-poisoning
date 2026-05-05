@@ -1,0 +1,272 @@
+Product documentation
+Abstract
+This document provides details about the languages that are supported by the different IBM Datacap Taskmaster Capture Version 8.1.0 components.
+Content
+The following tables show the languages that are supported in the corresponding Datacap Taskmaster 8.1.0 component.
+Notes
+OCR-S/OCR-SR
+: Nuance engine
+OCR-A
+: ABBYY engine
+OCR-N
+: NovoDynamics engine
+ICR-C
+: RecoStar engine
+Legal Dict.
+: OCR-S Legal Dictionary
+Financial Dict.
+: OCR-S Financial Dictionary
+Medical Dict.
+: OCR-S Medical Dictionary
+ICR-P
+: Parascript engine
+Admin/Install doc.
+: Administration/installation documentation
+Languages:
+A through C
+D through E
+H through N
+P through Sa
+Se through Z
+Afrikaans through Czech
+Important:
+Support for Arabic requires that customers license NovoDynamics NovoVarus separately and install it on the Rulerunner machine where the Datacap Studio actions for Arabic (Datacap.Libraries.NovoDynamics) will be running.
+For Chinese (traditional) OCR-S/OCR-SR support, HKSCS extensions are not supported.
+For Chinese (simplified) and Chinese (traditional), OCR-A is recommended instead of OCR-S/OCR-SR, because OCR-S confidence calculation might return high confidence for replaced characters.
+Table 1
+Language
+Data Entry
+DotEdit and DotScan
+FastDoc
+Taskmaster Web
+OCR-N
+OCR-S OCR-SR
+Legal Dict.
+Financial Dict.
+Medical Dict.
+Afrikaans
+Albanian
+Arabic
+Bosnian (Latin)
+Catalan
+Chinese (simplified)
+Chinese (traditional)
+Croatian
+Czech
+Table 1 continued
+Language
+OCR-A
+ICR-C
+ICR-P
+IBM Content Classification
+Admin/Install doc.
+Online Help
+Afrikaans
+Albanian
+Arabic
+Bosnian (Latin)
+Catalan
+Chinese (simplified)
+Chinese (traditional)
+Croatian
+Czech
+Back to top
+Table 2
+Danish through Estonian
+Language
+Data Entry
+DotEdit and DotScan
+FastDoc
+Taskmaster Web
+OCR-S OCR-SR
+Legal Dict.
+Financial Dict.
+Medical Dict.
+Danish
+Dutch
+Dutch Belgian
+English
+Esperanto
+Estonian
+Table 2
+Danish through Estonian
+continued
+Language
+OCR-A
+ICR-C
+ICR-P
+IBM Content Classification
+Admin/Install doc.
+Online Help
+Danish
+Dutch
+Dutch Belgian
+English
+Esperanto
+Estonian
+Back to top
+Table 3
+Faroese through Greek
+Language
+Data Entry
+DotEdit and DotScan
+FastDoc
+Taskmaster Web
+OCR-S OCR-SR
+Legal Dict.
+Financial Dict.
+Medical Dict.
+Faroese
+Finnish
+French
+Gaelic Irish
+Gaelic Scottish
+German
+Greek
+Table 3
+Faroese through Greek
+continued
+Language
+OCR-A
+ICR-C
+ICR-P
+IBM Content Classification
+Admin/Install doc.
+Online Help
+Faroese
+Finnish
+French
+Gaelic Irish
+Gaelic Scottish
+German
+Greek
+Back to top
+Table 4
+Hebrew through Norwegian
+Important:
+OCR-A support for Hebrew and Japanese requires the IBM Datacap Taskmaster Capture interim fix,
+8.1.0.2-Datacap-Taskmaster-WIN-IF-OCRA:0609577
+, which is available at
+IBM Support Fix Central
+.
+For Japanese, OCR-A is recommended instead of OCR-S/OCR-SR, because OCR-S confidence calculation might return high confidence for replaced characters.
+Language
+Data Entry
+DotEdit and DotScan
+FastDoc
+Taskmaster Web
+OCR-S OCR-SR
+Legal Dict.
+Financial Dict.
+Medical Dict.
+Hebrew
+Hungarian
+Icelandic
+Italian
+Japanese
+Latvian
+Lithuanian
+Maltese
+Norwegian
+Table 4
+Hebrew through Norwegian
+continued
+Language
+OCR-A
+ICR-C
+ICR-P
+IBM Content Classification
+Admin/Install doc.
+Online Help
+Hebrew
+Hungarian
+Icelandic
+Italian
+Japanese
+Latvian
+Lithuanian
+Maltese
+Norwegian
+Back to top
+Table 5
+Polish through Sami Southern
+Language
+Data Entry
+DotEdit and DotScan
+FastDoc
+Taskmaster Web
+OCR-S OCR-SR
+Legal Dict.
+Financial Dict.
+Medical Dict.
+Polish
+Portuguese (Brazil)
+Portuguese (Portugal)
+Rhaeto-Romanic
+Romanian
+Russian
+Sami
+Sami Northern
+Sami Southern
+Table 5
+Polish through Sami Southern
+continued
+Language
+OCR-A
+ICR-C
+ICR-P
+IBM Content Classification
+Admin/Install doc.
+Online Help
+Polish
+Portuguese (Brazil)
+Portuguese (Portugal)
+Rhaeto-Romanic
+Romanian
+Russian
+Sami
+Sami Northern
+Sami Southern
+Back to top
+Table 6
+Serbian through Turkish
+Language
+Data Entry
+DotEdit and DotScan
+FastDoc
+Taskmaster Web
+OCR-S OCR-SR
+Legal Dict.
+Financial Dict.
+Medical Dict.
+Serbian (Cyrillic)*
+Serbian (Latin)
+Slovak
+Slovenian
+Spanish
+Swahili
+Swedish
+Turkish
+Table 6
+Serbian through Turkish
+continued
+Language
+OCR-A
+ICR-C
+ICR-P
+IBM Content Classification
+Admin/Install doc.
+Online Help
+Serbian (Cyrillic)*
+Serbian (Latin)
+Slovak
+Slovenian
+Spanish
+Swahili
+Swedish
+Turkish
+*Important:
+Datacap Taskmaster Version 8.1.0 does not expose a user interface to select the Serbian Cyrillic recognition option, but support for Serbian (Cyrillic) is invoked through the implementation of actions in Datacap Studio. See the technical document,
+Setting the OCR/S recognition language to Serbian (Cyrillic)
+.
+Back to top

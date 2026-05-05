@@ -1,0 +1,144 @@
+Security Bulletin
+Summary
+There are multiple vulnerabiltities in the IBM® SDK Java™ Technology Edition that is shipped with IBM WebSphere Application Server. These issues were disclosed as part of the IBM Java SDK updates in July 2017. These may affect some configurations of IBM WebSphere Application Server Traditional, IBM WebSphere Application Server Liberty and IBM WebSphere Application Server Hypervisor Edition.
+Vulnerability Details
+For information on the IBM Java SDK that is now bundled with WebSphere Application Server Version 8.5.5 refer to the Knowledge Center link in the References section.
+If you run your own Java code using the IBM Java Runtime delivered with this product, you should evaluate your code to determine whether the complete list of vulnerabilities are applicable to your code. For a complete list of vulnerabilities please refer to the link for “IBM Java SDK Security Bulletin" located in the References section for more information.
+HP fixes are on a delayed schedule.
+CVEID:
+CVE-2017-10102
+DESCRIPTION:
+An unspecified vulnerability related to the Java SE RMI component could allow an unauthenticated attacker to take control of the system.
+CVSS Base Score: 9
+CVSS Temporal Score: See
+https://exchange.xforce.ibmcloud.com/vulnerabilities/128863
+for the current score
+CVSS Environmental Score*: Undefined
+CVSS Vector: (CVSS:3.0/AV:N/AC:H/PR:N/UI:N/S:C/C:H/I:H/A:H)
+CVEID:
+CVE-2017-10116
+DESCRIPTION:
+An unspecified vulnerability related to the Java SE, Java SE Embedded, JRockit Security component could allow an unauthenticated attacker to take control of the system.
+CVSS Base Score: 8.3
+CVSS Temporal Score: See
+https://exchange.xforce.ibmcloud.com/vulnerabilities/128877
+for the current score
+CVSS Environmental Score*: Undefined
+CVSS Vector: (CVSS:3.0/AV:N/AC:H/PR:N/UI:R/S:C/C:H/I:H/A:H)
+CVEID:
+CVE-2017-10115
+DESCRIPTION:
+An unspecified vulnerability related to the Java SE, Java SE Embedded, JRockit JCE component could allow an unauthenticated attacker to obtain sensitive information resulting in a high confidentiality impact using unknown attack vectors.
+CVSS Base Score: 7.5
+CVSS Temporal Score: See
+https://exchange.xforce.ibmcloud.com/vulnerabilities/128876
+for the current score
+CVSS Environmental Score*: Undefined
+CVSS Vector: (CVSS:3.0/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N)
+Affected Products and Versions
+IBM SDK, Java Technology Editions shipped with WebSphere Application Server Liberty up to 17.0.0.2. IBM SDK, Java Technology Editions shipped with IBM WebSphere Application Server Traditional Version 9.0.0.0 through 9.0.0.4, 8.5.0.0 through 8.5.5.12, Version 8.0.0.0 through 8.0.0.13, Version 7.0.0.0 through 7.0.0.43.
+This
+does not occur
+on IBM SDK, Java Technology Editions that are shipped with WebSphere Application Servers Fix Packs 17.0.0.3, 9.0.0.5 8.5.5.13, 8.0.0.14, and 7.0.0.45 or later.
+Remediation/Fixes
+Download and apply the interim fix APARs below, for your appropriate release
+For the IBM Java SDK updates:
+For WebSphere Application Server Liberty:
+For the IBM SDK, Java Technology Version that you use, upgrade to WebSphere Application Server Liberty Fix Packs as noted below or later fix pack level and apply one of the interim fixes below:
+Upgrade to WebSphere Application Server Liberty Fix Pack 8.5.5.1 or later then apply Interim Fix
+PI84267
+: Will upgrade you to IBM SDK, Java Technology Edition, Version 6R1 Service Refresh 8 Fix Pack 50
+Upgrade to WebSphere Application Server Liberty Fix Pack 8.5.5.1 or later then apply Interim Fix
+PI84265
+:
+Will upgrade you to IBM SDK, Java Technology Edition, Version 7 Service Refresh 10 FP10
+For IBM SDK, Java Technology Edition Version 7R1 and IBM SDK, Java Technology Edition Version 8, please refer to
+IBM Java SDKs for Liberty
+--OR--
+Apply IBM Java SDK shipped with WebSphere Application Server Liberty (17.0.0.3) or later.
+For Version 9 WebSphere Application Server Traditional:
+Update the IBM SDK, Java Technology Edition using the instructions in the IBM Knowledge Center
+Installing and updating IBM SDK, Java Technology Edition on distributed environments
+then use the IBM Installation manager to access the
+online product repositories
+to install the SDK or use IBM Installation manager and access the
+packages from Fixcentral
+.
+For V8.5.0.0 through 8.5.5.12 WebSphere Application Server Traditional and WebSphere Application Server Hypervisor Edition:
+For information on the IBM Java SDK that is now bundled with WebSphere Application Server Version 8.5.5 refer to the Knowledge Center link in the References section.
+Upgrade to WebSphere Application Server Traditional Fix Packs as noted below or later fix pack level and then apply one or more of the interim fixes below:
+Upgrade to WebSphere Application Server Traditional Fix Pack 8.5.5.1 or later then apply Interim Fix
+PI84266
+: Will upgrade you to IBM SDK, Java Technology Edition, Version 6R1 Service Refresh 8 Fix Pack 50
+Upgrade to WebSphere Application Server Traditional Fix Pack 8.5.5.1 or later then apply Interim Fix
+PI84265
+:
+Will upgrade you to IBM SDK, Java Technology Edition, Version 7 Service Refresh 10 FP10
+Upgrade to WebSphere Application Server Traditional Fix Pack 8.5.5.2 or later then apply Interim Fix
+PI84264
+:
+Will upgrade you to IBM SDK, Java Technology Edition, Version 7R1 Service Refresh 4 FP10
+Upgrade to WebSphere Application Server Traditional Fix Pack 8.5.5.9 or later then apply Interim Fix
+PI84261
+:
+Will upgrade you to IBM SDK, Java Technology Edition, Version 8 Service Refresh 4 FP10
+For environnments that have been upgraded to use the new default IBM SDK Version 8 bundled with WebSphere Application Server Fix Pack 8.5.5.11 or later: Apply Interim Fix
+PI84263
+: Will upgrade you to IBM SDK, Java Technology Edition, Version 8 Service Refresh 4 FP10
+--OR--
+Apply IBM Java SDK shipped with WebSphere Application Server Fix pack 13 (8.5.5.13) or later.
+For V8.0.0.0 through 8.0.0.13 WebSphere Application Server and WebSphere Application Server Hypervisor Edition:
+Upgrade to WebSphere Application Server Fix Pack 8.0.0.7 or later then apply the interim fix below:
+Apply Interim Fix
+PI84268
+:
+Will upgrade you to IBM SDK, Java Technology Edition, Version 6R1 Service Refresh 8
+Fix Pack 50
+--OR--
+Apply IBM Java SDK shipped with WebSphere Application Server Fix pack 14 (8.0.0.14) or later.
+For V7.0.0.0 through 7.0.0.43 WebSphere Application Server and WebSphere Application Server Hypervisor Edition:
+Upgrade to WebSphere Application Server Fix Pack 7.0.0.31 or later then apply the interim fix below:
+Apply Interim Fix
+PI84269
+: Will upgrade you to IBM SDK, Java Technology Edition, Version 6 Service Refresh 16
+Fix Pack 50
+--OR--
+Apply IBM Java SDK shipped with WebSphere Application Server Fix pack 45 (7.0.0.45) or later.
+For unsupported versions of the above products, IBM recommends upgrading to a fixed, supported version of the product.
+Workarounds and Mitigations
+none
+Get Notified about Future Security Bulletins
+Subscribe to
+My Notifications
+to be notified of important product support alerts like this.
+Important note
+IBM strongly suggests that all System z customers be subscribed to the System z Security Portal to receive the latest critical System z security and integrity service. If you are not subscribed, see the instructions on the
+System z Security web site
+. Security and integrity APARs and associated fixes will be posted to this portal. IBM suggests reviewing the CVSS scores and applying all security or integrity fixes as soon as possible to minimize any potential risk.
+References
+Complete CVSS v3 Guide
+On-line Calculator v3
+IBM Java SDK Security Bulletin
+IBM Java SDK Version 8 bundled with WebSphere Application Server
+IBM Java SDKs for WebSphere Liberty
+IBM SDK Java Technology Edition Version 8.0 for WebSphere Liberty using archives
+Related information
+IBM Secure Engineering Web Portal
+IBM Product Security Incident Response Blog
+Change History
+30 August 2017: original document published
+06 September 2017: replaced CVE-2017-10107 with CVE-2017-10102
+*The CVSS Environment Score is customer environment specific and will ultimately impact the Overall CVSS Score. Customers can evaluate the impact of this vulnerability in their environments by accessing the links in the Reference section of this Security Bulletin.
+Disclaimer
+According to the Forum of Incident Response and Security Teams (FIRST), the Common Vulnerability Scoring System (CVSS) is an "industry open standard designed to convey vulnerability severity and help to determine urgency and priority of response." IBM PROVIDES THE CVSS SCORES "AS IS" WITHOUT WARRANTY OF ANY KIND, INCLUDING THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE. CUSTOMERS ARE RESPONSIBLE FOR ASSESSING THE IMPACT OF ANY ACTUAL OR POTENTIAL SECURITY VULNERABILITY.
+Related information
+A Japanese translation is available
+Cross reference information
+Segment
+Product
+Component
+Platform
+Version
+Edition
+Application Servers
+WebSphere Application Server Hypervisor Edition

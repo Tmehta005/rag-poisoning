@@ -1,0 +1,10 @@
+corba; visibroker; ibm corba; orb; ior; ior file; nonnative; probes; probe; corba-framework; dumpns; CORBA
+Technote (FAQ)
+Question
+IBM CORBA probe : What happened to the visibroker patches?
+Cause
+Visibroker was replaced by the IBM CORBA integration
+Answer
+The Visibroker software is a third party product, and was replaced in 2012 by the IBM CORBA software.
+Please review Support's Guide to IBM CORBA probes [attached] to understand the integration, alongside the probe's specific documentation.
+GENERIC_CORBA_SupportsGuide_20.pdf

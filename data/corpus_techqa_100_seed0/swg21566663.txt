@@ -1,0 +1,23 @@
+ce health page; storage areas unavailable
+Technote (troubleshooting)
+Problem(Abstract)
+The Content Engine Health Page (http://<CEserver>:<port>/P8CE/Health ) provides the status for different areas of the FileNet P8 system. When viewing the page, both the Fixed Content Devices and the Storage Areas may display red icons instead of checkmark green icons.
+Symptom
+Red icons are displayed next to the Fixed Content Devices and Storage Areas even though users can add and access content.
+Diagnosing the problem
+The p8_server_error log may contain the following E_ACCESS_DENIED error:
+yyyy-mm-ddThh:mm:ss nnnnnn ENG FNRCE0241E - ERROR method name: postLoadSecurity principal name: <username> Global Transaction: false User Transaction: false Exception Info: The requester has insufficient access rights to perform the requested operation.
+com.filenet.api.exception.EngineRuntimeException: E_ACCESS_DENIED: The requester has insufficient access rights to perform the requested operation.
+at com.filenet.engine.retrieve.IndependentClassRetriever.postLoadSecurity(IndependentClassRetriever.java:1390)
+at com.filenet.engine.retrieve.RetrieverClassBase.loadNonScalarProperties(RetrieverClassBase.java:633)
+at com.filenet.engine.retrieve.IndependentClassRetriever.loadNonScalarProperties(IndependentClassRetriever.java:1298)
+at com.filenet.engine.retrieve.IndependentClassRetriever.loadObject(IndependentClassRetriever.java:1119)
+...
+Resolving the problem
+Verify the Content Engine Bootstrap User has Full Control on the Object Store and all associated Storage Areas.
+Inspect Storage Area security by right-clicking on the Object Store
+Choose Properties
+Select the All Properties radio button and view the Storage Area property name
+Click on the drop down list to select the Storage Area.
+The Storage Area properties screen will appear.
+Verify the Security tab allows the Content Engine Bootstrap User has Full Control.

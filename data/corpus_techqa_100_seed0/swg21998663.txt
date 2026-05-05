@@ -1,0 +1,53 @@
+Security Bulletin
+Summary
+An administration command can cause IBM MQ to access an invalid memory address, leading to a segmentation failure and causing the queue manager to become unresponsive.
+Vulnerability Details
+CVEID:
+CVE-2016-8971
+DESCRIPTION:
+IBM MQ could allow an authenticated user with queue manager permissions to cause a segmentation fault. This would result in the machine needing to be rebooted to resume normal operations.
+CVSS Base Score: 5.3
+CVSS Temporal Score: See
+https://exchange.xforce.ibmcloud.com/vulnerabilities/118862
+for the current score
+CVSS Environmental Score*: Undefined
+CVSS Vector: (CVSS:3.0/AV:N/AC:H/PR:L/UI:N/S:U/C:N/I:N/A:H)
+Affected Products and Versions
+IBM MQ V9.0 Long Term Support Release
+IBM MQ V9.0.0.0 only.
+IBM MQ V8.0
+IBM MQ V8.0.0.0 - V8.0.0.5 maintenance levels.
+Remediation/Fixes
+IBM MQ V9.0 Long Term Support Release
+Apply
+9.0.0.1
+maintenance level.
+IBM MQ V8.0
+Apply
+8.0.0.6
+maintenance level.
+Workarounds and Mitigations
+None.
+Get Notified about Future Security Bulletins
+Subscribe to
+My Notifications
+to be notified of important product support alerts like this.
+Important note
+IBM strongly suggests that all System z customers be subscribed to the System z Security Portal to receive the latest critical System z security and integrity service. If you are not subscribed, see the instructions on the
+System z Security web site
+. Security and integrity APARs and associated fixes will be posted to this portal. IBM suggests reviewing the CVSS scores and applying all security or integrity fixes as soon as possible to minimize any potential risk.
+References
+Complete CVSS v3 Guide
+On-line Calculator v3
+Related information
+IBM Secure Engineering Web Portal
+IBM Product Security Incident Response Blog
+Change History
+20 February 2017: Original version published.
+23 February 2017: Minor corrections to wording.
+21 June 2017: Add 9.0 LTS applicability
+*The CVSS Environment Score is customer environment specific and will ultimately impact the Overall CVSS Score. Customers can evaluate the impact of this vulnerability in their environments by accessing the links in the Reference section of this Security Bulletin.
+Disclaimer
+According to the Forum of Incident Response and Security Teams (FIRST), the Common Vulnerability Scoring System (CVSS) is an "industry open standard designed to convey vulnerability severity and help to determine urgency and priority of response." IBM PROVIDES THE CVSS SCORES "AS IS" WITHOUT WARRANTY OF ANY KIND, INCLUDING THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE. CUSTOMERS ARE RESPONSIBLE FOR ASSESSING THE IMPACT OF ANY ACTUAL OR POTENTIAL SECURITY VULNERABILITY.
+Related information
+A Japanese translation is available

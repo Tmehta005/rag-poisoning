@@ -1,0 +1,59 @@
+verbosegc log rotation HP Solaris JVM rotate file
+Technote (FAQ)
+Question
+How can I write verbose gc output to a log file other than the native_stdout?
+Cause
+By default, Solaris and HP-UX do not write verbose GC to a log file. This must be configured.
+Answer
+WAS 8.5.0.2 (and higher), WAS 8.0.0.6 (and higher), WAS 7.0.0.27 (and higher):
+Solaris
+:
+Add the following parameters to the generic JVM arguments:
+-XX:+PrintGCDetails
+-XX:+PrintGCDateStamps
+-XX:+PrintHeapAtGC
+-Xloggc:/tmp/gc.log
+To enable log file rotation:
+-XX:+UseGCLogFileRotation
+-XX:NumberOfGCLogFiles=10
+-XX:GCLogFileSize=10M
+notes:
+-Xloggc:<fileName>
+ex:
+-Xloggc:/tmp/gc.log
+-XX:+UseGCLogFileRotati
+o
+n
+Enabled GC log rotation, requires
+-Xloggc
+-XX:NumberOfGClogFiles=
+<num_of_files>
+Set the number of files to use when rotating logs, must be >= 1. The rotated log files will use the following naming scheme, <filename>.0, <filename>.1, ..., <filename>.n-1.
+-XX:GCLogFileSize=<number>K
+(or
+M
+)
+The size of the log file at which point the log will be rotated, must be >= 8K.
+HP:
+Add the following parameters to the generic JVM arguments:
+-XX:+PrintGCDetails
+-XX:+PrintGCDateStamps
+-XX:+PrintHeapAtGC
+-Xverbosegc:file=
+/tmp/gc_pid$$.vgc
+To enable log file rotation:
+-XX:+UseGCLogFileRotation
+-XX:NumberOfGCLogFiles=10
+-XX:GCLogFileSize=10M
+note
+:
+$$
+maps to the PID of the java process
+Related information
+6941923 : RFE: Handling large log files produced by lon
+Enabling verbose garbage collection (verbosegc) in WebS
+Where to set generic JVM arguments in WebSphere Applica
+Verify Java SDK version shipped with IBM WebSphere Appl
+HP-UX Java 6.0.18 - Handling large GC log files
+HP-UX Java 7.0.05 - Handling large GC log files
+Oracle - Java HotSpot VM Options

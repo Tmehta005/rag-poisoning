@@ -1,0 +1,111 @@
+Security Bulletin
+Summary
+A comma separated file (CSV) download feature exists in IBM BPM and WLE and is available for anonymous users. An attacker can craft a URL that can trigger a download of attacker-supplied content under an attacker-supplied file name onto the victim's machine.
+Vulnerability Details
+CVEID:
+CVE-2016-9693
+DESCRIPTION:
+IBM Business Process Manager has a file download capability that is vulnerable to a set of attacks. Ultimately, an attacker can cause an unauthenticated victim to download a malicious payload. An existing file type restriction can be bypassed so that the payload might be considered executable and cause damage on the victim's machine.
+CVSS Base Score: 7.1
+CVSS Temporal Score: See
+https://exchange.xforce.ibmcloud.com/vulnerabilities/119517
+for the current score
+CVSS Environmental Score*: Undefined
+CVSS Vector: (CVSS:3.0/AV:N/AC:L/PR:N/UI:R/S:C/C:L/I:L/A:L)
+Affected Products and Versions
+- WebSphere Lombardi Edition V7.2.0.0 - V7.2.0.5
+- IBM Business Process Manager Advanced V7.5.0.0 - V7.5.1.2
+- IBM Business Process Manager Advanced V8.0.0.0 - V8.0.1.3
+- IBM Business Process Manager Advanced V8.5.0.0 - V8.5.7.0 including cumulative fix 2016.12
+Remediation/Fixes
+Install IBM BPM or WLE interim fix
+JR57149
+as appropriate for your current version.
+IBM Business Process Manager Advanced
+IBM Business Process Manager Standard
+IBM Business Process Manager Express
+WebSphere Lombardi Edition
+As IBM Business Process Manager V7.5 and WebSphere Lombardi Edition are out of general support, customers with a support extension contract can contact IBM support to request the fix.
+The fix disables the vulnerable URL and uses HTML5 features to trigger CSV download without server interaction.
+For WebSphere Lombardi Edition 7.2.0.0 through 7.2.0.5
+Install
+Fix Pack 5
+as required by iFix and then apply iFix
+JR57149
+For IBM BPM V7.5.0.0 through V7.5.1.2:
+Upgrade to minimal
+Refresh Pack 1
+, install
+Fix Pack 2
+as required by iFix and then apply iFix
+JR57149
+For IBM BPM V8.0.0.0 through V8.0.1.3
+Upgrade to minimal
+Refresh Pack 1
+, install
+Fix Pack 3
+as required by iFix and then apply iFix
+JR57149
+For IBM BPM V8.5.0.0 through V8.5.0.2
+Install
+Fix Pack 2
+as required by iFix and then apply iFix
+JR57149
+For IBM BPM V8.5.5.0
+Apply iFix
+JR57149
+For IBM BPM V8.5.6.0 through V8.5.6.0 CF2
+Install
+CF2
+as required by iFix and then apply iFix
+JR57149
+For IBM BPM V8.5.7.0 through V8.5.7.0 CF 2016.12
+Install
+CF 2016.12
+and then apply iFix
+JR57149
+Workarounds and Mitigations
+None
+Get Notified about Future Security Bulletins
+Subscribe to
+My Notifications
+to be notified of important product support alerts like this.
+Important note
+IBM strongly suggests that all System z customers be subscribed to the System z Security Portal to receive the latest critical System z security and integrity service. If you are not subscribed, see the instructions on the
+System z Security web site
+. Security and integrity APARs and associated fixes will be posted to this portal. IBM suggests reviewing the CVSS scores and applying all security or integrity fixes as soon as possible to minimize any potential risk.
+References
+Complete CVSS v3 Guide
+On-line Calculator v3
+Related information
+IBM Secure Engineering Web Portal
+IBM Product Security Incident Response Blog
+Acknowledgement
+The vulnerability was reported to IBM by Nalla Muthu S and Prasath K
+Change History
+24 Feb 2017: initial version published
+*The CVSS Environment Score is customer environment specific and will ultimately impact the Overall CVSS Score. Customers can evaluate the impact of this vulnerability in their environments by accessing the links in the Reference section of this Security Bulletin.
+Disclaimer
+According to the Forum of Incident Response and Security Teams (FIRST), the Common Vulnerability Scoring System (CVSS) is an "industry open standard designed to convey vulnerability severity and help to determine urgency and priority of response." IBM PROVIDES THE CVSS SCORES "AS IS" WITHOUT WARRANTY OF ANY KIND, INCLUDING THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE. CUSTOMERS ARE RESPONSIBLE FOR ASSESSING THE IMPACT OF ANY ACTUAL OR POTENTIAL SECURITY VULNERABILITY.
+Cross reference information
+Segment
+Product
+Component
+Platform
+Version
+Edition
+Business Integration
+IBM Business Process Manager Express
+Security
+Linux, Windows
+8.5.7.CF201612, 8.5.7.CF201609, 8.5.7.CF201606, 8.5.7, 8.5.6.2, 8.5.6.1, 8.5.6, 8.5.5, 8.5.0.2, 8.5.0.1, 8.5, 8.0.1.3, 8.0.1.2, 8.0.1.1, 8.0.1, 8.0, 7.5.1.2, 7.5.1.1, 7.5.1, 7.5.0.1, 7.5
+Business Integration
+IBM Business Process Manager Standard
+Security
+AIX, Linux, Solaris, Windows
+8.5.7.CF201612, 8.5.7.CF201609, 8.5.7.CF201606, 8.5.7, 8.5.6.2, 8.5.6.1, 8.5.6, 8.5.5, 8.5.0.2, 8.5.0.1, 8.5, 8.0.1.3, 8.0.1.2, 8.0.1.1, 8.0.1, 8.0, 7.5.1.2, 7.5.1.1, 7.5.1, 7.5.0.1, 7.5
+Business Integration
+WebSphere Lombardi Edition
+Security
+AIX, HP-UX, Linux, Solaris, Windows
+7.2.0.5, 7.2.0.4, 7.2.0.3, 7.2.0.2, 7.2.0.1, 7.2

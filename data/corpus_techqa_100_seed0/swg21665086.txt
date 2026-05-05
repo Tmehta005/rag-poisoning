@@ -1,0 +1,43 @@
+SAML; SSO; TAI; PUMA; CWWIM1011E; InvalidUniqueNameException
+Technote (troubleshooting)
+Problem
+After configuring the Security Assertion Markup Language (SAML) SAML Trust Association Interceptor (TAI) in WebSphere Application Server, you attempt to access WebSphere Portal after authenticating to your Identity Provider (IdP), but you are unable to view the Portal page.
+Symptom
+- Portal page is blank
+- SystemOut.log contains the following error at the time of the problem occurrence:
+com.ibm.websphere.wim.exception.InvalidUniqueNameException: CWWIM1011E
+The '<userId>' unique name is not valid.
+Cause
+SAML TAI parameter
+sso_<n>.sp.idMap =
+is configured to use "idAssertion" which results in the userid instead of the fully distinguished name of the user to be set in the JAAS subject. Portal then uses this value to query Virtual Member Manager (VMM) via findUserByIdentifier() and the failure occurs since the value is not formatted as a distinguished name.
+Diagnosing the problem
+- Collect
+Portal Login troubleshooting data
+- Look for the following in security.xml:
+<interceptors xmi:id="TAInterceptor_<identifier>" interceptorClassName="com.ibm.ws.security.web.saml.ACSTrustAssociationInterceptor">
+...
+<trustProperties xmi:id="Property_<identifier>" name="
+sso_1.sp.idMap
+" value="
+idAssertion
+"/>
+Note: There may be more than one sso_<n>.sp.idMap property (for example, sso_1.sp.idMap, sso_2.sp.idMap, etc).
+Resolving the problem
+Option #1:
+The idAssertion value means that no entry is necessary for the user in the user registry, which is not supported in WebSphere Portal by default. Update the sso_<n>.sp.idMap property via the Integrated Solutions Console to use the value "localRealm" instead of "idAssertion."
+The localRealm value ensures that WebSphere Application Server will complete the JAAS Subject with the full distinguished name for the user by querying the user registry and thus Portal will pass the correct format to VMM.
+Option #2:
+Transient user support
+has been introduced for
+SAML TAI
+starting with Cumulative Fix (CF) #8 for 8.5. Refer to the
+WebSphere Portal Security blog
+for more details regarding the business case and implementation details.
+Note:
+WebSphere Portal also provides transient user support when configured with
+OpenId authentication
+.
+Related information
+Understanding the SAML Trust Association Interceptor
+WebSphere Portal Support Statement

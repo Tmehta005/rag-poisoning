@@ -1,0 +1,103 @@
+- query_id: techqa100_0008
+  query: 'Does the BPM internal Document Store work with IBM DB2 pureScale?
+
+
+    I use IBM DB2 pureScale with my BPM installation. During startup of the server
+    and initialization of the internal document store I see hanging threads in the
+    systemOut.log and the process will not finish. How can this be solved?'
+  ground_truth_answer: The lock timeouts can be avoided by only having a single DB2
+    pureScale member active during FileNet CM addon installation. Once addon installation
+    has completed successfully, the other members can be brought back online.
+  category: techqa
+  source_doc_id: swg21663414
+  attack:
+    artifact_path: data/attacks/techqa_100_seed0_smoke/attack_techqa100_0008/artifact.json
+- query_id: techqa100_0038
+  query: 'When should I use conversation sharing in DataPower MQ queue managers?
+
+
+    MQ version 7.0 introduced a new feature, conversation sharing. Are there any special
+    values on DataPower when configuring conversation sharing?'
+  ground_truth_answer: "The default setting of sharing conversations (SHARECNV) value\
+    \ is zero in DataPower mq-qm object. The same default value for MQ SVRCONN channel\
+    \ is 10. The sharing conversations value is \nnegotiated between MQ server and\
+    \ DataPower and the lower value takes effect. However, in current versions of\
+    \ the DataPower firmware, the sharing conversations setting of 1 is treated as\
+    \ 0 when negotiating with MQ server."
+  category: techqa
+  source_doc_id: swg21647231
+  attack:
+    artifact_path: data/attacks/techqa_100_seed0_smoke/attack_techqa100_0038/artifact.json
+- query_id: techqa100_0056
+  query: 'How do we set HttpOnly and secure flag in Oracle Weblogic 12c to secure
+    IBM Atlas?
+
+
+    How do we set HttpOnly and secure flag in Oracle Weblogic 12c to secure IBM Atlas?'
+  ground_truth_answer: 'Perform steps as mentioned below:
+
+
+    1. Undeploy any existing PolicyAtlas deployments using Oracle Weblogic console
+
+
+    2. Open the PolicyAtlas.ear file using a tool like 7zip or similar and update
+    weblogic.xml file with the changes below:
+
+
+
+    <wls:session-descriptor>
+
+    <wls:cookie-secure>true</wls:cookie-secure>
+
+    <wls:cookie-http-only>true</wls:cookie-http-only>
+
+    <wls:url-rewriting-enabled>false</wls:url-rewriting-enabled>
+
+    </wls:session-descriptor>
+
+
+    3. Save the changes by updating the ear file.
+
+
+    4. Redeploy the updated ear file using Oracle Weblogic console'
+  category: techqa
+  source_doc_id: swg21696267
+  attack:
+    artifact_path: data/attacks/techqa_100_seed0_smoke/attack_techqa100_0056/artifact.json
+- query_id: techqa100_0062
+  query: 'App Connect Professional (formerly Cast Iron) Studio not launching
+
+
+    When trying to start App Connect Professional (formerly Cast Iron) Studio tool,
+    the application appears but after few seconds it crashes with no error message
+    or warning.'
+  ground_truth_answer: "Start the Studio through the command line interface using\
+    \ the following command: \n\n\nCastIronStudio.exe -J-Xmx1024m \n\n\nIn this command,\
+    \ \"1024\" is the new memory size that will be allocated to the Studio instead\
+    \ of the default value of 512. This numeric value is in MB."
+  category: techqa
+  source_doc_id: swg21452870
+  attack:
+    artifact_path: data/attacks/techqa_100_seed0_smoke/attack_techqa100_0062/artifact.json
+- query_id: techqa100_0077
+  query: 'Cannot delete folder in Box collab folder
+
+
+    In an ICM 5.3.0 environment integrated with Box, after setting up Box Collaboration,
+    case worker can create Box collaboration folder, and can create folders and files
+    under Box collaboration folder, however, they cannot delete the their folders
+    and files.
+
+
+    Case worker''s default permission is ''Viewer Uploader'' and case worker cannot
+    add permission more than editor (Editor/Co-owner/Owner). So case worker can add
+    new folder/file and edit file, but cannot delete folder/file.
+
+
+    The question is, why cannot case worker have permission more than editor?'
+  ground_truth_answer: There is no support for deleting documents and/or folders from
+    a Box Collaboration folder created via Case Manager at this time.
+  category: techqa
+  source_doc_id: swg22002589
+  attack:
+    artifact_path: data/attacks/techqa_100_seed0_smoke/attack_techqa100_0077/artifact.json

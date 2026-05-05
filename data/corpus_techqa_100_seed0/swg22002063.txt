@@ -1,0 +1,42 @@
+Security Bulletin
+Summary
+An SSL vulnerability was disclosed by the OpenSSL Project. IBM API Connect has addressed the applicable CVE.
+Vulnerability Details
+CVEID:
+CVE-2016-8610
+DESCRIPTION:
+SSL/TLS protocol is vulnerable to a denial of service, caused by an error when processing ALERT packets during a SSL handshake. By sending specially-crafted packets, a remote attacker could exploit this vulnerability to cause the application to stop responding.
+CVSS Base Score: 7.5
+CVSS Temporal Score: See
+https://exchange.xforce.ibmcloud.com/vulnerabilities/118296
+for the current score
+CVSS Environmental Score*: Undefined
+CVSS Vector: (CVSS:3.0/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H)
+Affected Products and Versions
+IBM API Connect V5.0.0.0 - V5.0.6.1
+Remediation/Fixes
+Product
+VRMF
+APAR
+Remediation/First Fix
+IBM API Connect
+5.0.0.0 - 5.0.6.1
+LI79599
+Apply IBM API Connect V5.0.6.2 or later
+Workarounds and Mitigations
+None
+Get Notified about Future Security Bulletins
+Subscribe to
+My Notifications
+to be notified of important product support alerts like this.
+References
+Complete CVSS v3 Guide
+On-line Calculator v3
+Related information
+IBM Secure Engineering Web Portal
+IBM Product Security Incident Response Blog
+Change History
+04 May 2017: Original version published
+*The CVSS Environment Score is customer environment specific and will ultimately impact the Overall CVSS Score. Customers can evaluate the impact of this vulnerability in their environments by accessing the links in the Reference section of this Security Bulletin.
+Disclaimer
+According to the Forum of Incident Response and Security Teams (FIRST), the Common Vulnerability Scoring System (CVSS) is an "industry open standard designed to convey vulnerability severity and help to determine urgency and priority of response." IBM PROVIDES THE CVSS SCORES "AS IS" WITHOUT WARRANTY OF ANY KIND, INCLUDING THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE. CUSTOMERS ARE RESPONSIBLE FOR ASSESSING THE IMPACT OF ANY ACTUAL OR POTENTIAL SECURITY VULNERABILITY.

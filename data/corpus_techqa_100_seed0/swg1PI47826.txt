@@ -1,0 +1,80 @@
+Fixes are available
+8.5.5.9: WebSphere Application Server V8.5.5 Fix Pack 9
+8.5.5.10: WebSphere Application Server V8.5.5 Fix Pack 10
+8.5.5.11: WebSphere Application Server V8.5.5 Fix Pack 11
+8.0.0.13: WebSphere Application Server V8.0 Fix Pack 13
+8.5.5.12: WebSphere Application Server V8.5.5 Fix Pack 12
+8.0.0.14: WebSphere Application Server V8.0 Fix Pack 14
+8.5.5.13: WebSphere Application Server V8.5.5 Fix Pack 13
+8.0.0.15: WebSphere Application Server V8.0 Fix Pack 15
+Subscribe
+You can track all active APARs for this component.
+APAR status
+Closed as program error.
+Error description
+If base entry and name in repository is different and
+clearCache functionality is used with clearEntity mode then
+virtual member manager (VMM) still looks in the cache and gets
+the entity from the cache instead of fetching it from the LDAP
+server.
+Local fix
+test fix
+Problem summary
+****************************************************************
+* USERS AFFECTED: All users of IBM WebSphere Application *
+* Server V8.0 and V8.5 virtual member *
+* manager (VMM) *
+****************************************************************
+* PROBLEM DESCRIPTION: Clear cache does not work if *
+* clearEntity *
+* mode is used. *
+****************************************************************
+* RECOMMENDATION: *
+****************************************************************
+LDAP Clear cache functionality of VMM does not work when using
+clearEntity mode. Problems occur only if there is a different
+base entry used than the name in the repository entry.
+Problem conclusion
+This APAR fixes the issue. It clears the cache properly even if
+base entry is different than name in repository.
+The fix for this APAR is currently targeted for inclusion in
+fix packs 8.0.0.13 and 8.5.5.9. Please refer to the
+Recommended Updates page for delivery information:
+http://www.ibm.com/support/docview.wss?rs=180&uid=swg27004980
+Temporary fix
+Comments
+APAR Information
+APAR number
+PI47826
+Reported component name
+WEBS APP SERV N
+Reported component ID
+5724H8800
+Reported release
+800
+Status
+CLOSED PER
+PE
+NoPE
+HIPER
+NoHIPER
+Special Attention
+NoSpecatt / Xsystem
+Submitted date
+2015-08-28
+Closed date
+2015-12-09
+Last modified date
+2015-12-09
+APAR is sysrouted FROM one or more of the following:
+APAR is sysrouted TO one or more of the following:
+Fix information
+Fixed component name
+WEBS APP SERV N
+Fixed component ID
+5724H8800
+Applicable component levels
+R800 PSY
+UP
+R850 PSY
+UP

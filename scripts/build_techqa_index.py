@@ -1,15 +1,21 @@
 """
-Build the LlamaIndex vector store for the TechQA corpus.
+Build the LlamaIndex vector store for a TechQA corpus config.
 
-Reads ``configs/corpus_techqa.yaml`` for chunking + embedding settings, then
-calls :func:`src.ingestion.ingest_corpus` to chunk, embed, and persist the
-index. If ``persist_dir`` already exists, ``ingest_corpus`` reloads it
-in-place — delete the directory to force a fresh build.
+Reads any corpus config (``configs/corpus_techqa*.yaml``) for chunking +
+embedding settings, then calls :func:`src.ingestion.ingest_corpus` to chunk,
+embed, and persist the index. If ``persist_dir`` already exists,
+``ingest_corpus`` reloads it in-place — delete the directory to force a
+fresh build.
+
+``--config`` accepts any corpus config produced in the repo's standard shape
+(e.g. configs written by ``scripts/build_techqa_subset.py`` for the
+TechQA-100 subsets), not just the default 24-doc smoke corpus.
 
 Usage::
 
     python scripts/build_techqa_index.py
     python scripts/build_techqa_index.py --config configs/corpus_techqa.yaml
+    python scripts/build_techqa_index.py --config configs/corpus_techqa_100_seed0.yaml
 """
 
 from __future__ import annotations

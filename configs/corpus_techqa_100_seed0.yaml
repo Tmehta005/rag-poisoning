@@ -1,0 +1,6 @@
+data_dir: data/corpus_techqa_100_seed0
+persist_dir: data/index_techqa_100_seed0
+chunk_size: 384
+chunk_overlap: 64
+embed_model: local
+similarity_top_k: 5

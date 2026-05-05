@@ -1,0 +1,29 @@
+SQL1763N; Alter Tablespace; reclaimable storage; DMS; Automatic storage table spaces; MON_GET_TABLESPACE; RECLAIMABLE_SPACE_ENABLED; SMS; DB2 Version 9.7; lower high water mark
+Technote (troubleshooting)
+Problem(Abstract)
+Receiving SQL1763N error with Reason Code 11 while running "Alter Tablespace" command to reclaim unused storage space against DMS or automatic storage tablespaces.
+Symptom
+Following reasons apply:
+If the DMS or automatic storage tablespaces are not created in DB2 Version 9.7 or later, as the "Reclaimable Storage" is not available in tablespaces created in earlier versions(V9.1/V9.5) of the DB2 product.
+Trying to alter a SMS tablespace as this feature is not supported on SMS tablespaces.
+Example testcase on a TEMPSPACE1 SMS tablespace.
+db2 "alter tablespace TEMPSPACE1 lower high water mark"
+DB21034E The command was processed as an SQL statement because it was not a valid Command Line Processor command. During SQL processing it returned: SQL1763N Invalid ALTER TABLESPACE statement for table space "TEMPSPACE1" due to reason "11" SQLSTATE=429BC
+Diagnosing the problem
+MON_GET_TABLESPACE table function and RECLAIMABLE_SPACE_ENABLED monitor element can be used to identify whether the tablespace is enabled for reclaimable storage or not. Example:
+db2 "SELECT varchar(tbsp_name, 30) as tbsp_name, tbsp_type, RECLAIMABLE_SPACE_ENABLED FROM TABLE(MON_GET_TABLESPACE('',-2))"
+Snippet of the output:
+TBSP_NAME TBSP_TYPE RECLAIMABLE_SPACE_ENABLED
+----------------- ----------- -------------------------
+SYSCATSPACE DMS 1
+TEMPSPACE1 SMS 0
+USERSPACE1 DMS 1
+If the RECLAIMABLE_SPACE_ENABLED monitor element returns a value of 1, then the tablespace is enabled for reclaimable storage. Otherwise, it returns a value of 0.
+Resolving the problem
+To use the reclaimable storage feature, make sure to create the DMS or automatic storage tablespaces in DB2 Version 9.7 or later. Example testcase on SYSCATSPACE DMS tablespace which has reclaimable storage enabled.
+db2 "alter tablespace SYSCATSPACE lower high water mark"
+DB20000I The SQL command completed successfully.
+Note:
+Tablespaces migrated from DB2 V9.1/V9.5 to V9.7 won't get upgraded directly to use the reclaimable storage feature.
+Related information
+Reclaimable storage

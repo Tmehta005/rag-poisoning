@@ -1,0 +1,194 @@
+- query_id: techqa100_0004
+  query: 'Is Java 8 supported for BPM?
+
+
+    I understand that support for Java 6 on WebSphere Application Server is ending
+    April 2018, see: http://www-01.ibm.com/support/docview.wss?uid=swg21999583
+
+
+    Now I can switch to Java 7. But what about Java 8? Does BPM support Java 8?'
+  ground_truth_answer: IBM BPM V8.5.6 and V8.5.7 support Java 6 and Java 7, but do
+    not support Java 8.
+  category: techqa
+  source_doc_id: swg21639640
+- query_id: techqa100_0005
+  query: 'Help with Security Bulletin: IBM WebSphere MQ Administration command could
+    cause denial of service (CVE-2016-8971)
+
+
+    I need to understand details regarding Security Bulletin: IBM WebSphere MQ Administration
+    command could cause denial of service (CVE-2016-8971). Where can I find this information?'
+  ground_truth_answer: 'CVEID: CVE-2016-8971 [http://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2016-8971]
+
+    DESCRIPTION: IBM MQ could allow an authenticated user with queue manager permissions
+    to cause a segmentation fault. This would result in the machine needing to be
+    rebooted to resume normal operations.
+
+    CVSS Base Score: 5.3
+
+    CVSS Temporal Score: See https://exchange.xforce.ibmcloud.com/vulnerabilities/118862
+    [https://exchange.xforce.ibmcloud.com/vulnerabilities/118862] for the current
+    score
+
+    CVSS Environmental Score*: Undefined
+
+    CVSS Vector: (CVSS:3.0/AV:N/AC:H/PR:L/UI:N/S:U/C:N/I:N/A:H)'
+  category: techqa
+  source_doc_id: swg21998663
+- query_id: techqa100_0014
+  query: 'Is ITCAM Agent for WebSphere Applications 7.2.0.0.7 available?
+
+
+    Is ITCAM Agent for WebSphere Applications 7.2.0.0.7 available?'
+  ground_truth_answer: 7.2.0.0.7 [http://www.ibm.com/support/fixcentral/swg/quickorder?product=ibm/Tivoli/Tivoli+Composite+Application+Manager+for+Applications&release=All&platform=All&function=fixId&fixids=7.2.0.0-TIV-ITCAMAD_WS-IF0007&includeSupersedes=0&source=fc]
+    7.2.0.0.14 March 9, 2017
+  category: techqa
+  source_doc_id: swg21652265
+- query_id: techqa100_0036
+  query: "Web GUI 8.1 FP7 requires DASH 3.1.2.1 or later\n\nYou wanted to install\
+    \ Web GUI 8.1 FP7, but your DASH version does not meet the required version.\n\
+    \nIM 1.8 displayed the following:\n\n     ERROR: The installed IBM Dashboard Application\
+    \ Services Hub version is 3.1.0.3, but requires version 3.1.2.1 or later."
+  ground_truth_answer: Version 1.1.3.0 is a full refresh of Jazz for Service Management
+    Version 1.1 Base with Modification 3.
+  category: techqa
+  source_doc_id: swg24042191
+- query_id: techqa100_0043
+  query: 'Why do I get "OSS version is not suitable for installation" when attempting
+    to install the MQ 5.3.1 base version on a HP Integrity NonStop Server BladeSystem?
+
+
+    I am trying to install the MQ 5.3.1 base version on a HP Integrity NonStop Server
+    BladeSystem, but it complains saying that the "OSS version is not suitable for
+    installation". My OSS version is J06.14 and it looks to be a supported version
+    according to the System Requirements site:
+
+
+    http://www-01.ibm.com/support/docview.wss?uid=swg27006797
+
+
+    Why am I getting this error message?'
+  ground_truth_answer: 'For the HP Integrity NonStop Server H-Series systems, the
+    following system
+
+    software versions are the minimum mandatory level for V5.3.1.12:
+
+
+    - H06.23.01 or later'
+  category: techqa
+  source_doc_id: swg27048240
+- query_id: techqa100_0054
+  query: 'Would like to know if WebSphere Extreme Scale  is leap year and leap second
+    compliant. Is there any documentation that talks about this?
+
+
+    Would like to know if WebSphere Extreme Scale is leap second compliant. Is there
+    any documentation that talks about this?'
+  ground_truth_answer: WebSphere Application Server and the SDK are leap year compliant.
+  category: techqa
+  source_doc_id: swg21578744
+- query_id: techqa100_0059
+  query: 'Why does our Websphere application server hang when we apply Microsoft patch
+    on our database server?
+
+
+    Why does our Websphere application server hang when we apply Microsoft patch on
+    our database server?'
+  ground_truth_answer: "Immediately purge the pool by invoking the purgePoolContents\
+    \ operation of the data source MBean with the immediate option:\n    Using Jacl:\n\
+    \    $AdminControl invoke $ds purgePoolContents immediate\n    \n    \n    Using\
+    \ Jython:\n    AdminControl.invoke(ds, \"purgePoolContents\", \"immediate\")\n\
+    \    \n    \n\nIf the purge operation is successful, no response will be observed.\
+    \ If the purge operation is not successful, the response will indicate a possible\
+    \ reason for failure."
+  category: techqa
+  source_doc_id: swg21220832
+- query_id: techqa100_0061
+  query: 'Help with Security Bulletin: Multiple Vulnerabilities identified in IBM
+    Java SDK affect WSRR and WSRR Studio
+
+
+    I need to understand details regarding Security Bulletin: Multiple Vulnerabilities
+    identified in IBM® Java SDK affect WebSphere Service Registry and Repository and
+    WebSphere Service Registry and Repository Studio.
+
+
+    This is related to CVEID:
+
+    CVE-2018-2633
+
+
+    Where can I find this information?'
+  ground_truth_answer: 'CVEID:CVE-2018-2633 [http://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2018-2633]
+
+    DESCRIPTION:An unspecified vulnerability related to the Java SE JNDI component
+    could allow an unauthenticated attacker to take control of the system.
+
+    CVSS Base Score: 8.3
+
+    CVSS Temporal Score: Seehttps://exchange.xforce.ibmcloud.com/vulnerabilities/137885
+    [https://exchange.xforce.ibmcloud.com/vulnerabilities/137885]for the current score
+
+    CVSS Environmental Score*: Undefined
+
+    CVSS Vector: (CVSS:3.0/AV:N/AC:H/PR:N/UI:R/S:C/C:H/I:H/A:H)'
+  category: techqa
+  source_doc_id: swg22013955
+- query_id: techqa100_0070
+  query: 'Is Java 8 supported for BPM?
+
+
+    I understand that support for Java 6 on WebSphere Application Server is ending
+    April 2018, see: http://www-01.ibm.com/support/docview.wss?uid=swg21999583
+
+
+    Now I can switch to Java 7. But what about Java 8? Does BPM 8.5.6 support Java
+    8?'
+  ground_truth_answer: IBM BPM V8.5.6.0 Java 6 or Java 7*
+  category: techqa
+  source_doc_id: swg21639640
+- query_id: techqa100_0074
+  query: 'Security Bulletin: Vulnerability identified in OpenSSL shipped with IBM
+    API Connect (CVE-2016-8610)
+
+
+    I need to understand details regarding Security Bulletin: Vulnerability identified
+    in OpenSSL shipped with IBM API Connect (CVE-2016-8610). Where can I find this
+    information?'
+  ground_truth_answer: "VULNERABILITY DETAILS\nCVEID:CVE-2016-8610 [http://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2016-8610]\n\
+    DESCRIPTION:SSL/TLS protocol is vulnerable to a denial of service, caused by an\
+    \ error when processing ALERT packets during a SSL handshake. By sending specially-crafted\
+    \ packets, a remote attacker could exploit this vulnerability to cause the application\
+    \ to stop responding.\nCVSS Base Score: 7.5\nCVSS Temporal Score: Seehttps://exchange.xforce.ibmcloud.com/vulnerabilities/118296\
+    \ [https://exchange.xforce.ibmcloud.com/vulnerabilities/118296]for the current\
+    \ score\nCVSS Environmental Score*: Undefined\nCVSS Vector: (CVSS:3.0/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H)\
+    \ \n\nAFFECTED PRODUCTS AND VERSIONS\nIBM API Connect V5.0.0.0 - V5.0.6.1\n\n\
+    REMEDIATION/FIXES\n \n\nProduct VRMF APAR Remediation/First Fix IBM API Connect\
+    \ 5.0.0.0 - 5.0.6.1 LI79599 Apply IBM API Connect V5.0.6.2 or later [https://www.ibm.com/support/fixcentral/swg/quickorder?parent=ibm~WebSphere&product=ibm/WebSphere/IBM+API+Connect&release=5.0.6.2&platform=All&function=all]\
+    \ \nWORKAROUNDS AND MITIGATIONS\nNone"
+  category: techqa
+  source_doc_id: swg22002063
+- query_id: techqa100_0075
+  query: 'Help with Security Bulletin: Multiple Vulnerabilities identified in IBM
+    Java SDK affect WSRR
+
+
+    I need to understand details regarding Security Bulletin: Multiple Vulnerabilities
+    identified in IBM® Java SDK affect WebSphere Service Registry and Repository,
+    in particular CVE-2017-10115. Where can I find this information?'
+  ground_truth_answer: 'CVEID:CVE-2017-10115 [http://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2017-10115]
+
+    DESCRIPTION:An unspecified vulnerability related to the Java SE, Java SE Embedded,
+    JRockit JCE component could allow an unauthenticated attacker to obtain sensitive
+    information resulting in a high confidentiality impact using unknown attack vectors.
+
+    CVSS Base Score: 7.5
+
+    CVSS Temporal Score: Seehttps://exchange.xforce.ibmcloud.com/vulnerabilities/128876
+    [https://exchange.xforce.ibmcloud.com/vulnerabilities/128876]for the current score
+
+    CVSS Environmental Score*: Undefined
+
+    CVSS Vector: (CVSS:3.0/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N)'
+  category: techqa
+  source_doc_id: swg22007002

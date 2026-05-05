@@ -1,0 +1,12 @@
+tool; menu; not found; confpack
+Technote (troubleshooting)
+Problem(Abstract)
+Migrating to a new version of Omnibus, running nco_confpack:
+$OMNIHOME/bin/nco_confpack -list -server NCOMS -user ncadmin -file /tmp/nco_confpack.list
+Received this error: Tool in menu but not found, menu: AlertsMenu, tool: CLEAR_LWY.
+Symptom
+The command fails and the following error is received: Tool in menu but not found, menu: AlertsMenu, tool: CLEAR_LWY.
+Cause
+The menu AlertsMenu has a tool in it called CLEAR_LWY, however the tool no longer exists.
+Resolving the problem
+Recreate the tool and associate it with the menu and try to run the command again.

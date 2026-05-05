@@ -1,0 +1,54 @@
+PI50993; PI50993; PI50993
+Downloadable files
+Abstract
+Apache HTTPComponents vulnerabilities in WebSphere Application Server (CVE-2012-6153, CVE-2014-3577)
+Download Description
+PI50993 resolves the following problem:
+ERROR DESCRIPTION:
+Apache HTTPComponents vulnerabilities in WebSphere Application Server
+LOCAL FIX:
+PROBLEM SUMMARY:
+Apache HTTPComponents vulnerabilities in WebSphere Application Server
+PROBLEM CONCLUSION:
+Apache HTTPComponents vulnerabilities in WebSphere Application Server
+Prerequisites
+None
+Installation Instructions
+Please review the readme.txt for detailed installation instructions.
+URL
+LANGUAGE
+SIZE(Bytes)
+Readme
+US English
+2260
+Readme
+US English
+2296
+Download package
+Known side effects
+There would be NoClassDefFoundError observed after applying the fix because the API in HTTPCore and HTTPClient libraries are no long visible to application. To resolve this error, application may need to be updated with HTTPCore and HTTPClient libraries bundled.
+Download
+RELEASE DATE
+LANGUAGE
+SIZE(Bytes)
+Download Options
+What is Fix Central(FC)?
+8.5.5.6-WS-WASProd-IFPI50993
+12-03-2015
+US English
+254093
+HTTP
+8.0.0.10-WS-WASProd-IFPI50993
+12-03-2015
+US English
+253242
+HTTP
+Technical support
+Contact IBM Support using SR (
+http://www.ibm.com/software/support/probsub.html
+), visit the WebSphere Application Server support web site (
+http://www.ibm.com/software/webservers/appserv/was/support/
+), or contact 1-800-IBM-SERV (U.S. only).
+Problems (APARS) fixed
+Problems (APARS) fixed
+PI50993

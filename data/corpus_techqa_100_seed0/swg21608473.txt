@@ -1,0 +1,51 @@
+Rational Integration Tester; License error; Users of ibmrit; PACKAGE ibmrtw ibmratl COMPONENTS="ibmrit ibmrft ibmrpt ibmrpt_pvu; The server is available; but does not serve license keys for IBM Rational Integration Tester
+Technote (troubleshooting)
+Problem(Abstract)
+Attempts to configure the floating license for IBM Rational Integration Tester using IBM Installation Manager leads to the warning 'The server is available, but does not serve license keys for IBM Rational Integration Tester'.
+Symptom
+Steps to reproduce:
+In Rational Integration Tester client, Click on
+Start > IBM Installation Manager > Manage Licenses.
+Highlight Rational Integration Tester from the List of Installed Products.
+Configure floating license support
+for Rational Integration Tester.
+Clicking on "Test Connection" results in the below message:
+-------------------
+'The server is available, but does not serve license keys for IBM Rational Integration Tester'.
+-------------------
+Cause
+The PACKAGE ibmrtw block (as shown below) is missing which displays the components of IBM Rational Test Workbench Suite.
+-------------------
+PACKAGE ibmrtw ibmratl COMPONENTS="ibmrit ibmrft ibmrpt ibmrpt_pvu"
+-------------------
+Diagnosing the problem
+On the license server, launch Rational License Key Administrator.
+Verify if there are 5 lines of
+'IBM Rational Test Workbench License' key
+served by the license server as shown below:
+If the lines are not displayed, perform a status enquiry by clicking on
+Start> IBM Rational> LMTools > Server Status.
+If the line
+'Users of ibmrit'
+is missing, follow the steps below to resolve the problem.
+Resolving the problem
+Steps to resolve:
+Navigate to
+IBM Rational License Key Center
+website.
+Return and generate the license
+file for IBM Rational Test Workbench Floating License.
+Download and Import the license file again.
+Click on
+Start > IBM Rational > LMTools > Start/Stop/Reread
+tab to stop and start the license server.
+Next, click on
+Start > IBM Rational > LMTools > Server Status
+to perform status enquiry and look for '
+Users of ibmrit
+' line.
+Reactivate
+the floating license for Rational Integration Tester using Rational Installation Manager.
+Related information
+License Requirements for Rational Integration Tester
+A simplified Chinese translation is available

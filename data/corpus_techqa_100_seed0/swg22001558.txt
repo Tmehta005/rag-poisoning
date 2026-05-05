@@ -1,0 +1,11 @@
+StoredIQ ssh
+Technote (FAQ)
+Question
+Why I am not able to login to StoredIQ Dataserver and Getway using ssh?
+Cause
+Restriction in remote login using ssh
+Answer
+Review the file /etc/ssh/sshd_config on the specific server using console
+Make sure PermitRootLogin is set to yes
+Save the change in the file
+Restart the appliance

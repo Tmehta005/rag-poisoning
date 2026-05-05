@@ -1,0 +1,16 @@
+Technote (troubleshooting)
+Problem(Abstract)
+Transformation Extender map does not complete when using xmllib functions on z/OS.
+Example map rule using xmllib function:
+=NUMBERTOTEXT( xmllib->VALIDATEEX( "ipo.in.xml", "urn:hl7-org:v3
+http://www.example.com/IPO
+ipo.xsd", "numtotext.log" ) )
+Symptom
+Map execution is incomplete and JOBLOG reports the following error:
+1CEE3501S The module libxslt4c.1_11_0q.dll was not found.
+Cause
+The XML toolkit xml4c library directory is missing from LIBPATH environment variable.
+Resolving the problem
+Add the XML toolkit xml4c library directory to the LIBPATH environment variable.
+Example:
+export LIBPATH=$LIBPATH:/usr/lpp/ixm/xslt4c-1_11/lib/

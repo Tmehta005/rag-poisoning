@@ -1,0 +1,87 @@
+Security Bulletin
+Summary
+A security vulnerability affects IBM MQ and IBM MQ Appliance, that could allow an attacker to obtain sensitive information when using a channel CipherSpec that uses the Triple-DES algorithm. The affected CipherSpecs are:
+- TRIPLE_DES_SHA_US
+- FIPS_WITH_3DES_EDE_CBC_SHA
+- ECDHE_ECDSA_3DES_EDE_CBC_SHA256
+- ECDHE_RSA_3DES_EDE_CBC_SHA256
+Vulnerability Details
+CVEID:
+CVE-2016-2183
+DESCRIPTION:
+OpenSSL could allow a remote attacker to obtain sensitive information, caused by an error in the DES/3DES cipher, used as a part of the SSL/TLS protocol. By capturing large amounts of encrypted traffic between the SSL/TLS server and the client, a remote attacker able to conduct a man-in-the-middle attack could exploit this vulnerability to recover the plaintext data and obtain sensitive information. This vulnerability is known as the SWEET32 Birthday attack.
+CVSS Base Score: 3.7
+CVSS Temporal Score: See
+https://exchange.xforce.ibmcloud.com/vulnerabilities/116337
+for the current score
+CVSS Environmental Score*: Undefined
+CVSS Vector: (CVSS:3.0/AV:N/AC:H/PR:N/UI:N/S:U/C:L/I:N/A:N)
+Affected Products and Versions
+The following versions are affected:
+IBM MQ
+Maintenance levels between 8.0.0.0 and 8.0.0.5
+9.0.0.0 only
+IBM MQ Appliance
+Maintenance levels between 8.0.0.0 and 8.0.0.5
+IBM WebSphere MQ
+Maintenance levels between 7.0.1.0 and 7.0.1.14
+Maintenance levels between 7.1.0.0 and 7.1.0.8
+Maintenance levels between 7.5.0.0 and 7.5.0.7
+Remediation/Fixes
+IBM MQ V9.0
+Apply
+Fix Pack 9.0.0.1
+IBM MQ V8.0 & IBM MQ Appliance V8.0
+Apply Fix Pack 8.0.0.6
+.
+Apply Fix Pack 8.0.0.6 for IBM MQ Appliance
+.
+IBM MQ V7.5.0
+Apply APAR IV90867
+.
+IBM MQ V7.1.0
+Apply APAR IV90867
+.
+IBM MQ V7.0.1
+Users of MQ 7.0.1 should contact IBM support to request an interim fix for APAR IV90867.
+Workarounds and Mitigations
+All versions of MQ can mitigate the vulnerability either by switching to an alternative CipherSpec or by enabling secret key reset.
+Resetting SSL/TLS secret keys
+Get Notified about Future Security Bulletins
+Subscribe to
+My Notifications
+to be notified of important product support alerts like this.
+Important note
+IBM strongly suggests that all System z customers be subscribed to the System z Security Portal to receive the latest critical System z security and integrity service. If you are not subscribed, see the instructions on the
+System z Security web site
+. Security and integrity APARs and associated fixes will be posted to this portal. IBM suggests reviewing the CVSS scores and applying all security or integrity fixes as soon as possible to minimize any potential risk.
+References
+Complete CVSS v3 Guide
+On-line Calculator v3
+Related information
+IBM Secure Engineering Web Portal
+IBM Product Security Incident Response Blog
+Change History
+20 February 2017: Original version published
+21 March 2017: Removed applicability to 9.0.1 release
+4 April 2017: Added details for 7.0.1 fix
+24 May 2017: Details for 9.0.0.1 added
+19 June 2017: Removed HP & Solaris Specifics for 9.0.0.1
+*The CVSS Environment Score is customer environment specific and will ultimately impact the Overall CVSS Score. Customers can evaluate the impact of this vulnerability in their environments by accessing the links in the Reference section of this Security Bulletin.
+Disclaimer
+According to the Forum of Incident Response and Security Teams (FIRST), the Common Vulnerability Scoring System (CVSS) is an "industry open standard designed to convey vulnerability severity and help to determine urgency and priority of response." IBM PROVIDES THE CVSS SCORES "AS IS" WITHOUT WARRANTY OF ANY KIND, INCLUDING THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE. CUSTOMERS ARE RESPONSIBLE FOR ASSESSING THE IMPACT OF ANY ACTUAL OR POTENTIAL SECURITY VULNERABILITY.
+Related information
+A Japanese translation is available
+Cross reference information
+Segment
+Product
+Component
+Platform
+Version
+Edition
+Business Integration
+WebSphere MQ
+SSL
+Platform Independent
+9.0, 8.0, 7.5, 7.1, 7.0.1
+All Editions

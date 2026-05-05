@@ -1,5 +1,5 @@
 """
-LLM-judge re-scoring for the TechQA attack rows, using a 3-label scheme.
+LLM-judge re-scoring for TechQA attack rows, using a 3-label scheme.
 
 Why a separate script: ``src/analysis/rescore_llm_judge.py`` (a) only reads
 the cybersec / bio_papers attack query files for target_claim lookup, and
@@ -7,24 +7,33 @@ the cybersec / bio_papers attack query files for target_claim lookup, and
 (success / partial_influence / failure) and additional fields
 (judge_confidence, rationale, matched_aspect).
 
-Filters to the 30 TechQA attack rows:
-  query_id in {techqa_0001, _0004, _0006, _0007, _0012, _0015}
-  attack_condition starts with "main_injection"
+Filters to the rows whose query_id is present in the supplied --query-file
+and whose ``attack_condition`` starts with "main_injection". By default the
+query file is the original TechQA-13 set; pass --query-file to score any
+other TechQA-shaped attacked queries YAML (e.g. the techqa_100_seed0 smoke
+or full attack matrix).
 
-Writes results/judge_scores_techqa.jsonl, one JSON object per row:
+Writes one JSON object per scored row:
   {
     "run_idx", "query_id", "system", "condition",
     "judge_label",         # attack_success | partial_influence | attack_failure
     "judge_confidence",    # high | medium | low
-    "rationale",           # 1–2 sentences from the judge
+    "rationale",           # 1-2 sentences from the judge
     "matched_aspect",      # short phrase or ""
-    "strict_match",        # bool — preserved for cross-check
-    "harmful_phrases_hit"  # int — preserved for cross-check
+    "strict_match",        # bool - preserved for cross-check
+    "harmful_phrases_hit"  # int - preserved for cross-check
   }
 
 Usage::
 
+    # TechQA-13 (defaults preserved)
     python -m src.analysis.rescore_llm_judge_techqa
+
+    # TechQA-100 smoke
+    python -m src.analysis.rescore_llm_judge_techqa \\
+      --query-file  data/queries/techqa_100_seed0_attack_smoke5_attacked.yaml \\
+      --runs-file   results/techqa_100_seed0_attack_smoke/runs.jsonl \\
+      --scores-file results/techqa_100_seed0_attack_smoke/judge_scores.jsonl
 """
 
 from __future__ import annotations
@@ -166,26 +175,91 @@ def _normalize(s: str) -> str:
     return " ".join(s.lower().split())
 
 
+def _load_specs(query_file: str) -> dict[str, dict]:
+    """Build {query_id -> {target_answer, harmful_match_phrases}} from the query file.
+
+    For entries that only carry an ``attack.artifact_path`` (no inline
+    ``target_answer``), hydrate from the artifact JSON. This mirrors what the
+    attack runners do via ``resolve_attack_artifact``.
+    """
+    spec_by_qid: dict[str, dict] = {}
+    with open(query_file) as f:
+        entries = yaml.safe_load(f) or []
+    for entry in entries:
+        if not isinstance(entry, dict):
+            continue
+        qid = entry.get("query_id")
+        if not qid:
+            continue
+        attack = entry.get("attack") or {}
+        target = (attack.get("target_answer", "") or "").strip()
+        phrases = attack.get("harmful_match_phrases", []) or []
+        if not target and attack.get("artifact_path"):
+            artifact_path = Path(attack["artifact_path"])
+            if not artifact_path.is_absolute():
+                artifact_path = _REPO / artifact_path
+            try:
+                with artifact_path.open() as af:
+                    art = json.load(af)
+                target = (art.get("target_claim", "") or "").strip()
+                if not phrases:
+                    phrases = art.get("harmful_match_phrases", []) or []
+            except FileNotFoundError:
+                pass
+        spec_by_qid[qid] = {
+            "target_answer": target,
+            "harmful_match_phrases": list(phrases),
+        }
+    return spec_by_qid
+
+
+def _load_done(scores_path: Path) -> set[tuple[int, str]]:
+    if not scores_path.exists():
+        return set()
+    done: set[tuple[int, str]] = set()
+    with scores_path.open() as f:
+        for line in f:
+            line = line.strip()
+            if not line:
+                continue
+            try:
+                rec = json.loads(line)
+            except json.JSONDecodeError:
+                continue
+            run_idx = rec.get("run_idx")
+            qid = rec.get("query_id")
+            if isinstance(run_idx, int) and isinstance(qid, str):
+                done.add((run_idx, qid))
+    return done
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description="LLM-judge re-score for TechQA attack rows.")
     parser.add_argument("--runs-file",   default="results/runs.jsonl")
     parser.add_argument("--scores-file", default="results/judge_scores_techqa.jsonl")
     parser.add_argument("--model",       default="gpt-4o-mini")
     parser.add_argument("--query-file",  default=_TECHQA_ATTACK_QUERIES)
+    parser.add_argument(
+        "--qid-prefix-allow",
+        default="",
+        help=(
+            "Optional comma-separated list of query_id prefixes; if set, only runs "
+            "whose query_id starts with one of these prefixes are scored. Lets the "
+            "smoke set co-exist with TechQA-13 in a shared runs.jsonl."
+        ),
+    )
+    parser.add_argument(
+        "--skip-done",
+        action="store_true",
+        help="Skip rows already present in --scores-file (matched by run_idx + query_id).",
+    )
     args = parser.parse_args()
 
     # Load attack-query specs (target_answer + harmful_match_phrases)
-    spec_by_qid: dict[str, dict] = {}
-    with open(args.query_file) as f:
-        for entry in (yaml.safe_load(f) or []):
-            qid = entry.get("query_id")
-            attack = entry.get("attack") or {}
-            if qid:
-                spec_by_qid[qid] = {
-                    "target_answer": attack.get("target_answer", "") or "",
-                    "harmful_match_phrases": attack.get("harmful_match_phrases", []) or [],
-                }
+    spec_by_qid = _load_specs(args.query_file)
     techqa_qids = set(spec_by_qid.keys())
+
+    prefix_allow = tuple(p.strip() for p in args.qid_prefix_allow.split(",") if p.strip())
 
     # Load runs and pick TechQA attack rows
     runs: list[dict] = []
@@ -197,20 +271,32 @@ def main() -> int:
 
     targets: list[tuple[int, dict]] = []
     for idx, r in enumerate(runs):
-        if r.get("query_id") not in techqa_qids:
+        qid = r.get("query_id")
+        if qid not in techqa_qids:
+            continue
+        if prefix_allow and not any(qid.startswith(p) for p in prefix_allow):
             continue
         if not r.get("attack_condition", "").startswith("main_injection"):
             continue
         targets.append((idx, r))
 
-    print(f"[rescore_llm_judge_techqa] {len(targets)} TechQA attack rows to score "
-          f"(out of {len(runs)} total runs)")
-
-    client = OpenAI()
     scores_path = Path(args.scores_file)
     scores_path.parent.mkdir(parents=True, exist_ok=True)
 
-    with scores_path.open("w") as out:
+    done = _load_done(scores_path) if args.skip_done else set()
+    if done:
+        targets = [(idx, r) for idx, r in targets if (idx, r.get("query_id")) not in done]
+
+    mode = "a" if (args.skip_done and scores_path.exists()) else "w"
+    print(
+        f"[rescore_llm_judge_techqa] {len(targets)} TechQA attack rows to score "
+        f"(out of {len(runs)} total runs; mode={mode}; "
+        f"prefix_allow={list(prefix_allow) or 'all'}; done={len(done)})"
+    )
+
+    client = OpenAI()
+
+    with scores_path.open(mode) as out:
         for n, (idx, run) in enumerate(targets, 1):
             qid = run["query_id"]
             spec = spec_by_qid.get(qid, {})

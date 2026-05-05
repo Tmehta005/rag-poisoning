@@ -1,0 +1,42 @@
+Security Bulletin
+Summary
+IBM WebSphere MQ 5.3 and IBM MQ 8 for HPE NonStop have addressed a vulnerability in which OpenSSL could allow a remote attacker to obtain sensitive information, caused by an error while parsing an IPAddressFamily extension in an X.509 certificate
+Vulnerability Details
+CVEID:
+CVE-2017-3735
+DESCRIPTION:
+OpenSSL could allow a remote attacker to obtain sensitive information, caused by an error while parsing an IPAddressFamily extension in an X.509 certificate. An attacker could exploit this vulnerability to trigger an out-of-bounds read, resulting in an incorrect text display of the certificate.
+CVSS Base Score: 4.3
+CVSS Temporal Score: See
+https://exchange.xforce.ibmcloud.com/vulnerabilities/131047
+for the current score
+CVSS Environmental Score*: Undefined
+CVSS Vector: (CVSS:3.0/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:N/A:N)
+Affected Products and Versions
+All versions of WebSphere MQ 5.3 and MQ 8 for HPE NonStop Server
+Remediation/Fixes
+For MQ 5.3
+Apply
+the following interim fix (contains OpenSSL 1.0.2n) for APAR IT24026.
+Use the following URL and download 5.3.1.14-WS-MQ-HPNSS-LAIT24026
+https://www-945.ibm.com/support/fixcentral/swg/selectFixes?parent=ibm%7EWebSphere&product=ibm/WebSphere/WebSphere+MQ&release=5.3.1.14&platform=HP+NonStop&function=all
+For MQ 8
+See APARs IT24033 and IT24034
+Upgrade to MQ 8.0.2 which can be downloaded from Passport Advantage
+here
+(see part numbers CNR8NML for NonStop X and CNR8MML for NonStop i).
+Workarounds and Mitigations
+None
+Get Notified about Future Security Bulletins
+Subscribe to
+My Notifications
+to be notified of important product support alerts like this.
+References
+Complete CVSS v3 Guide
+On-line Calculator v3
+Related information
+IBM Secure Engineering Web Portal
+IBM Product Security Incident Response Blog
+*The CVSS Environment Score is customer environment specific and will ultimately impact the Overall CVSS Score. Customers can evaluate the impact of this vulnerability in their environments by accessing the links in the Reference section of this Security Bulletin.
+Disclaimer
+According to the Forum of Incident Response and Security Teams (FIRST), the Common Vulnerability Scoring System (CVSS) is an "industry open standard designed to convey vulnerability severity and help to determine urgency and priority of response." IBM PROVIDES THE CVSS SCORES "AS IS" WITHOUT WARRANTY OF ANY KIND, INCLUDING THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE. CUSTOMERS ARE RESPONSIBLE FOR ASSESSING THE IMPACT OF ANY ACTUAL OR POTENTIAL SECURITY VULNERABILITY.

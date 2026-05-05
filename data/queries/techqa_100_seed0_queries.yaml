@@ -1,0 +1,1708 @@
+- query_id: techqa100_0001
+  query: 'TLS protocol with ITCAM for Datapower
+
+
+    We have a DataPower appliance with TLS security protocol enabled. Can we configure
+    ITCAM for DataPower appliance v7.1 to specifically use the TLS protocol v1.2 (not
+    v1.0)?'
+  ground_truth_answer: TLSv1.2 is supported by using the same fix.
+  category: techqa
+  source_doc_id: swg21959224
+- query_id: techqa100_0002
+  query: 'Event Log Hashing - Performance?
+
+
+    I''m curious how much performance is affected by hashing events and flows. I don''t
+    see that information in the admin guide for 7.3.1. Can someone list that out by
+    algorithm?'
+  ground_truth_answer: The overhead of writing these files is negligible, regardless
+    of the hashing method selected.
+  category: techqa
+  source_doc_id: swg21965783
+- query_id: techqa100_0003
+  query: 'Limitations of sylog-TCP log target using DataPower Gateways
+
+
+    I am trying to configure a log target using type syslog-TCP. It seems that the
+    payload is getting truncated when I try to record custom logs to it using log-action.
+    Why is this? How can I workaround it.'
+  ground_truth_answer: Configure a server daemon to listen and capture the DataPower
+    devices events.
+  category: techqa
+  source_doc_id: swg21269136
+- query_id: techqa100_0004
+  query: 'Is Java 8 supported for BPM?
+
+
+    I understand that support for Java 6 on WebSphere Application Server is ending
+    April 2018, see: http://www-01.ibm.com/support/docview.wss?uid=swg21999583
+
+
+    Now I can switch to Java 7. But what about Java 8? Does BPM support Java 8?'
+  ground_truth_answer: IBM BPM V8.5.6 and V8.5.7 support Java 6 and Java 7, but do
+    not support Java 8.
+  category: techqa
+  source_doc_id: swg21639640
+- query_id: techqa100_0005
+  query: 'Help with Security Bulletin: IBM WebSphere MQ Administration command could
+    cause denial of service (CVE-2016-8971)
+
+
+    I need to understand details regarding Security Bulletin: IBM WebSphere MQ Administration
+    command could cause denial of service (CVE-2016-8971). Where can I find this information?'
+  ground_truth_answer: 'CVEID: CVE-2016-8971 [http://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2016-8971]
+
+    DESCRIPTION: IBM MQ could allow an authenticated user with queue manager permissions
+    to cause a segmentation fault. This would result in the machine needing to be
+    rebooted to resume normal operations.
+
+    CVSS Base Score: 5.3
+
+    CVSS Temporal Score: See https://exchange.xforce.ibmcloud.com/vulnerabilities/118862
+    [https://exchange.xforce.ibmcloud.com/vulnerabilities/118862] for the current
+    score
+
+    CVSS Environmental Score*: Undefined
+
+    CVSS Vector: (CVSS:3.0/AV:N/AC:H/PR:L/UI:N/S:U/C:N/I:N/A:H)'
+  category: techqa
+  source_doc_id: swg21998663
+- query_id: techqa100_0006
+  query: 'Why AUTOMATIC value for NUM_IOSERVERS is changed after applying 10.5FP7?
+
+
+    Why AUTOMATIC value for NUM_IOSERVERS is changed after applying 10.5FP7?'
+  ground_truth_answer: Yes, it is expected. Due to IT09990, we changed the fomula
+    for calculating the number of prefetchers to start at database activation time.
+  category: techqa
+  source_doc_id: swg21991890
+- query_id: techqa100_0007
+  query: 'Must the TOKEN_SEPARATOR value be enclosed in quotes for the custom scripting
+    feature?
+
+
+    Must the TOKEN_SEPARATOR value be enclosed in quotes for the custom scripting
+    feature?'
+  ground_truth_answer: "TOKEN_SEPARATOR (Optional - default semicolon \";\"). \nIt\
+    \ sets the string to be used as separator to split the output row in tokens. It\
+    \ is ignored if TOKEN_TYPES is not set. Empty value (blank) is accepted as separator\
+    \ and multiple consecutive blanks in output rows are considered as a single one."
+  category: techqa
+  source_doc_id: swg21960062
+- query_id: techqa100_0008
+  query: 'Does the BPM internal Document Store work with IBM DB2 pureScale?
+
+
+    I use IBM DB2 pureScale with my BPM installation. During startup of the server
+    and initialization of the internal document store I see hanging threads in the
+    systemOut.log and the process will not finish. How can this be solved?'
+  ground_truth_answer: The lock timeouts can be avoided by only having a single DB2
+    pureScale member active during FileNet CM addon installation. Once addon installation
+    has completed successfully, the other members can be brought back online.
+  category: techqa
+  source_doc_id: swg21663414
+- query_id: techqa100_0009
+  query: 'Are there any known issue or limitation to LOAD data using ADMIN_CMD stored
+    procedure?
+
+
+    Hello,
+
+
+    We have JDBC applications on WebShpere, LOAD data using ADMIN_CMD. Now, we are
+    planning to use them under XA environment. Are there any known issue or limitation
+    to LOAD data using ADMIN_CMD under XA environment?'
+  ground_truth_answer: It is an known current limitation of DB2.
+  category: techqa
+  source_doc_id: swg21988939
+- query_id: techqa100_0010
+  query: 'How to change the maximum string length for properties in FileNet Administration
+    Console for Content Engine (ACCE)
+
+
+    I am trying to change the maximum string length in ACCE like we do in FileNet
+    Enterprise Manager, but in the more Tab, I am not seeing the option. In this case,
+    how can I change it?'
+  ground_truth_answer: "Follow the below steps to update the property definition properties\
+    \ on ACCE: \n\n\n\n\n 1. Launch ACCE \n 2. Expand the object stores folder and\
+    \ click the object store to open the Object store tab \n 3. Expand the Data Design\
+    \ folder and Classes folder. Click the document class to open Document Class tab\
+    \ \n 4. From Properties tab, open Property Definitions drop down and select the\
+    \ property definition you want to modify \n 5. ACCE will open that property definition\
+    \ in a new Properties tab \n 6. Modify the property definition as required \n\
+    \ 7. Go back to the Class Definition tab and click Save"
+  category: techqa
+  source_doc_id: swg21696083
+- query_id: techqa100_0011
+  query: 'Netcool/Impact 7.1.0: The StateChange value being used by the OMNIbusEventReader
+    is too high
+
+
+    The value being used is a date and time in the future and as such is preventing
+    the EventReader from capturing the current events.'
+  ground_truth_answer: The simplest solution is to manually reset the EventReader
+    StateChange value via the GUI. Stop the EventReader, open it for edit, click the
+    "Clear State" button, exit the editor and restart the EventReader.
+  category: techqa
+  source_doc_id: swg21610844
+- query_id: techqa100_0012
+  query: 'Help with Security Bulletin: Malicious File Download vulnerability in IBM
+    Business Process Manager (BPM) and WebSphere Lombardi Edition (WLE) - CVE-2016-9693
+
+
+    Where can I find information for Security bulletin: Malicious File Download vulnerability
+    in IBM Business Process Manager (BPM) and WebSphere Lombardi Edition (WLE) - CVE-2016-9693?'
+  ground_truth_answer: 'CVEID: CVE-2016-9693
+
+    DESCRIPTION: IBM Business Process Manager has a file download capability that
+    is vulnerable to a set of attacks. Ultimately, an attacker can cause an unauthenticated
+    victim to download a malicious payload. An existing file type restriction can
+    be bypassed so that the payload might be considered executable and cause damage
+    on the victim''s machine.
+
+    CVSS Base Score: 7.1
+
+    CVSS Temporal Score: See https://exchange.xforce.ibmcloud.com/vulnerabilities/119517
+    for the current score
+
+    CVSS Environmental Score*: Undefined
+
+    CVSS Vector: (CVSS:3.0/AV:N/AC:L/PR:N/UI:R/S:C/C:L/I:L/A:L)'
+  category: techqa
+  source_doc_id: swg21998655
+- query_id: techqa100_0013
+  query: 'Hide a page in dotedit step
+
+
+    I am working on datacap 8.1 version. I have 2 pages in a batch. Page 1 with status
+    as 1, Page 2 with status as 20. Both are of same page type. In verification step
+    (dotedit) I want to hide the page which is with status 20. I have given status
+    20 in ignored page status in web administrator for verify. But still when I navigate
+    through pages in dotedit batch view the respective panel is loading. I am able
+    to submit the batch even if I have one page in a batch with 20 as status.
+
+
+    Is there any way to delete the page (we have multiple same type of pages in a
+    batch) from dotedit based on the page status?'
+  ground_truth_answer: The DeleteChildType from the Validations library can be used
+    by running it from the parent of the object to be deleted and specifying the specific
+    child.
+  category: techqa
+  source_doc_id: swg21509510
+- query_id: techqa100_0014
+  query: 'Is ITCAM Agent for WebSphere Applications 7.2.0.0.7 available?
+
+
+    Is ITCAM Agent for WebSphere Applications 7.2.0.0.7 available?'
+  ground_truth_answer: 7.2.0.0.7 [http://www.ibm.com/support/fixcentral/swg/quickorder?product=ibm/Tivoli/Tivoli+Composite+Application+Manager+for+Applications&release=All&platform=All&function=fixId&fixids=7.2.0.0-TIV-ITCAMAD_WS-IF0007&includeSupersedes=0&source=fc]
+    7.2.0.0.14 March 9, 2017
+  category: techqa
+  source_doc_id: swg21652265
+- query_id: techqa100_0015
+  query: 'Help with Security Bulletin: Vulnerabilities in OpenSSL affect WebSphere
+    MQ 5.3 and MQ 8 for HPE NonStop Server (CVE-2017-3735)
+
+
+    I need to understand details regarding Security Bulletin: Vulnerabilities in OpenSSL
+    affect WebSphere MQ 5.3 and MQ 8 for HPE NonStop Server (CVE-2017-3735). Where
+    can I find this information?'
+  ground_truth_answer: 'CVEID: CVE-2017-3735 [http://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2017-3735]
+
+    DESCRIPTION: OpenSSL could allow a remote attacker to obtain sensitive information,
+    caused by an error while parsing an IPAddressFamily extension in an X.509 certificate.
+    An attacker could exploit this vulnerability to trigger an out-of-bounds read,
+    resulting in an incorrect text display of the certificate.
+
+    CVSS Base Score: 4.3
+
+    CVSS Temporal Score: See https://exchange.xforce.ibmcloud.com/vulnerabilities/131047
+    [https://exchange.xforce.ibmcloud.com/vulnerabilities/131047] for the current
+    score
+
+    CVSS Environmental Score*: Undefined
+
+    CVSS Vector: (CVSS:3.0/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:N/A:N)'
+  category: techqa
+  source_doc_id: swg22014367
+- query_id: techqa100_0016
+  query: "No trace is logged in Decision Warehouse, and no records in EXECUTION_TRACES\
+    \ table for a certain ruleset\n\nFor a certain ruleset, no trace is logged in\
+    \ DW, and no records can be found in EXEUTION_TRACES table of DW database.\n\n\
+    Server logs do not contain any messages about the execution traces for this ruleset.\n\
+    \nThe issue reproduces only for this project. For other projects deployed in RES,\
+    \ traces are being logged in DW. Also, the same project generates execution traces\
+    \ in other environments.\n\nThe following properties have been set:\n\n     monitoring.enabled\
+    \ = true\n     monitoring.filters = INFO_EXECUTION_DATE=true,INFO_EXECUTION_DURATION=true,INFO_TOTAL_TASKS_EXECUTED=true,INFO_TOTAL_RULES_NOT_FIRED=true,INFO_EXECUTION_EVENTS=true,INFO_TOTAL_TASKS_NOT_EXECUTED=true,INFO_TOTAL_RULES_FIRED=true,INFO_RULESET_PROPERTIES=true\n\
+    \     ruleset.bom.enabled = false (for true value, the problem still occurs)\n\
+    \     ruleset.sequential.trace.enabled = true\n     ruleset.trace.enabled = true\n\
+    \nHow can I diagnose this issue?"
+  ground_truth_answer: "If an issue arises during DW trace persistence at runtime,\
+    \ the related messages and stack traces are only available programmatically through\
+    \ the following API: ilog.rules.res.session.IlrSessionResponse.getWarnings() \n\
+    \nSo it is possible for an error to remain silent if the warnings above are not\
+    \ explicitly logged by the application."
+  category: techqa
+  source_doc_id: swg21433278
+- query_id: techqa100_0017
+  query: 'How do I upgrade my virtual DataPower Appliance from 5.0 firmware to 6.0+
+    firmware?
+
+
+    When attempting to upgrade my Virtual DataPower Appliance from 5.0.0.8 firmware
+    version to 6.0+ firmware versions, I receive a failure message.'
+  ground_truth_answer: You must install the 5.0.0.8 or later fix pack to upgrade to
+    6.0.0.0 or later. The 5.0.0.8 fix pack contains a required fix to allow the larger
+    sized firmware image to fit.
+  category: techqa
+  source_doc_id: swg21638268
+- query_id: techqa100_0018
+  query: "Are there any probes that can connecto the Nokia NSP EPC v17.9 and Nokia\
+    \ NSP RAN v17.3 using JMS/HTTP?\n\nThe customer has asked if there are any probes\
+    \ that can connect to their Nokia servers, both of which use a HTTP/JMS interface:\n\
+    \n Nokia NSP EPC v17.9 \n Nokia NSP RAN v17.3"
+  ground_truth_answer: This probe is written to support Nokia Network Functions Manager
+    for Packet release 17.3.
+  category: techqa
+  source_doc_id: swg22005197
+- query_id: techqa100_0019
+  query: 'I am receiving AC power supply failures on my DataPower 9235 appliance.
+    How can I resolve this?
+
+
+    I am observing the following errors on my DataPower 9235 device:
+
+
+    [failure] Power supply ''1'' has no AC input power, or is not present. [failure]
+    Power supply ''2'' has no AC input power, or is not present.
+
+    Do i need to replace the power supplies?'
+  ground_truth_answer: This problem is caused by a highly intermittent error that
+    may allow the sensor reading mechanism to get into a bad state. This bad state
+    then generates the false error messages.
+  category: techqa
+  source_doc_id: swg21512291
+- query_id: techqa100_0020
+  query: 'Is transient user support available for SAML integration with WebSphere
+    Portal 8.0?
+
+
+    I am looking to leverage the SAML TAI provided by WebSphere Application Server
+    for my WebSphere Portal 8.0 environment. Is transient user support available so
+    that I do not have to maintain a local account in my Portal user registry for
+    every external user which is verified and trusted by my identity provider?'
+  ground_truth_answer: 'Transient user support [http://www-01.ibm.com/support/knowledgecenter/SSHRKX_8.5.0/mp/overview/new_cf08.dita?lang=en]
+    has been introduced for SAML TAI [http://www-01.ibm.com/support/knowledgecenter/SSHRKX_8.5.0/mp/wcm/wcm_secure_int_tai_auth.dita?lang=en]
+    starting with Cumulative Fix (CF) #8 for 8.5. Refer to the WebSphere Portal Security
+    blog [https://www.ibm.com/developerworks/community/blogs/8f2bc166-3bdc-4a9d-bad4-3620dbb3e46c/entry/portal_transient_user_support_with_was_saml_tai_business_case_clarification?lang=en]
+    for more details regarding the business case and implementation details.'
+  category: techqa
+  source_doc_id: swg21665086
+- query_id: techqa100_0021
+  query: 'DB2 Non Reclaimable Storage .
+
+
+    We have tablespaces defined under DB2 9.5 that apparently are not able
+
+    to reclaim storage back to the OS, but does that mean DB2 cannot reuse
+
+    this space as well?'
+  ground_truth_answer: to use the reclaimable storage feature, make sure to create
+    the dms or automatic storage tablespaces in db2 version 9.7 or later  example
+    testcase on syscatspace dms tablespace which has reclaimable storage enabled
+  category: techqa
+  source_doc_id: swg21438047
+- query_id: techqa100_0022
+  query: 'Table ""."" could not be found
+
+
+    When doing a table mapping with DB2 as source, selecting a table which contains
+    special characters on column comments like:
+
+
+    COMMENT ON COLUMN .. IS ''Test comment ‘1’ complete'';
+
+
+    Mapping fails with following error message: Table . could not be found in the
+    database.'
+  ground_truth_answer: Reinsert data with codepage conversion enforced by setting
+    the operation system codepage matching to the codepage of data to be inserted
+  category: techqa
+  source_doc_id: swg21412846
+- query_id: techqa100_0023
+  query: 'How can I check the health of my IBM PureApplication System?
+
+
+    How can I check the health of my IBM PureApplication System?
+
+    Are there steps to verify that my system is healthy? Is this something I can do,
+    or does IBM have to verify the health of my system?'
+  ground_truth_answer: "Consider forwarding the PureApplication System Events to an\
+    \ external monitoring system, such as IBM Netcool/OMIbus. and enabling the call\
+    \ home feature. \n\n \n\nWith PureApplication System firmware versions 2.1.0.1\
+    \ or newer you can use the System Health check report to see a consolidated view\
+    \ of some of the PureApplication System UI pages. \n\nSystem > System Troubleshooting,\
+    \ click on System Health Check."
+  category: techqa
+  source_doc_id: swg21675742
+- query_id: techqa100_0024
+  query: 'Port number error starting 9.0 Launcher
+
+
+    I''m attempting to start up v9.0 for the first time with one .msl file on a Windows
+    server and get the following error.  I also have v8.4 on this server and it starts
+    fine.  I do not have v8.4 running when I attempt to start v9.0.
+
+
+    Cannot recognize if the system RecordChangeSystem.msl; has started. Reason: Server
+    is unable to get the status of the system on port number 6,002.
+
+
+    I have the port range set to 7000/8000.  I''ve never seen this error before.
+
+
+    Any help?  Thanks.'
+  ground_truth_answer: Obtain patch for APAR PI64816.
+  category: techqa
+  source_doc_id: swg21986219
+- query_id: techqa100_0025
+  query: 'Help with Security Bulletin: Multiple vulnerabilities in IBM Java Runtime
+    affect WMB and IIB
+
+
+    I need to understand details regarding Security Bulletin: Multiple vulnerabilities
+    in IBM Java Runtime affect WebSphere Message Broker and IBM Integration Bus. Where
+    can I find this information?'
+  ground_truth_answer: If you run your own Java code using the IBM Java Runtime delivered
+    with this product, you should evaluate your code to determine whether the complete
+    list of vulnerabilities are applicable to your code. For a complete list of vulnerabilities,
+    refer to the “IBM Java SDK Security Bulletin”, located in the References section
+    for more information.
+  category: techqa
+  source_doc_id: swg22005345
+- query_id: techqa100_0026
+  query: 'How to clear Errors Found in crm_mon
+
+
+    How to clear Errors Found in crm_mon'
+  ground_truth_answer: "The following steps can be used to clear each failed resource\
+    \ using cib_tool.pl. \n\n[root@system pts]# /opt/nz-hwsupport/pts/cib_tools.pl\n\
+    heartbeat is running on ha1\nheartbeat is running on ha2\nNo split brain detected\
+    \ on ha1\nNo split brain detected on ha2\nCRM running on ha1\nCRM running on ha2"
+  category: techqa
+  source_doc_id: swg21694876
+- query_id: techqa100_0027
+  query: 'Why SSH connections fail after upgrade to v7.5.2 and above?
+
+
+    Why SSH connections fail after upgrade to v7.5.2 and above? The same configuration
+    works on v7.2.'
+  ground_truth_answer: Disabled diffie-hellman-group-exchange-sha1 and diffie-hellman-group1-sha1
+    algorithms by default. Disabled MD5-based MAC algorithms. Limited DH-GEX to 4096
+    bits for Cisco devices.
+  category: techqa
+  source_doc_id: swg21974106
+- query_id: techqa100_0028
+  query: 'Additional steps to apply fix pack to Decision Center
+
+
+    We are upgrading ODM 8.8.1 Decision Center to the latest 8.8.1.3.
+
+
+    Are there any additional steps to apply the fixpack to Decision Center after we
+    install the fixpack with Installation Manager?'
+  ground_truth_answer: "As with any software product, even if you do not have any\
+    \ issues with running your current configuration, you should apply the latest\
+    \ modification or fix pack to take advantage of these benefits: \n\n * Anticipate\
+    \ and avoid the risk of encountering defects already fixed. \n * Apply the latest\
+    \ product improvements that are available (performance, for example). \n * Maintain\
+    \ a serviceable system and be able to install an interim fix when required."
+  category: techqa
+  source_doc_id: swg21665766
+- query_id: techqa100_0029
+  query: "RTW eclipse license error\n\nI get a RTW eclipse license error on IM stating\
+    \ server is available, but license is not available. License is imported fine\
+    \ on license key admin and RPT floating license and RIT floating license shows\
+    \ on the  pc end on license key admin 8.1.3, but not showing on IM. \n\nRTW 8.5\n\
+    \nWhat to do?"
+  ground_truth_answer: "Navigate to IBM Rational License Key Center [http://www-01.ibm.com/software/rational/support/licensing/]\
+    \ website. \n    \n    \n    \n 2. Return and generate the license [https://www-304.ibm.com/support/docview.wss?uid=swg21308308]\
+    \ file for IBM Rational Test Workbench Floating License. \n    \n    \n    \n\
+    \ 3. Download and Import the license file again.\n    \n    \n    \n 4. Click\
+    \ on Start > IBM Rational > LMTools > Start/Stop/Reread tab to stop and start\
+    \ the license server.\n    \n    \n    \n 5. Next, click on Start > IBM Rational\
+    \ > LMTools > Server Status to perform status enquiry and look for 'Users of ibmrit'\
+    \ line.\n    \n    \n    \n 6. Reactivate [http://www-01.ibm.com/support/docview.wss?uid=swg21403623]\
+    \ the floating license for Rational Integration Tester using Rational Installation\
+    \ Manager."
+  category: techqa
+  source_doc_id: swg21608473
+- query_id: techqa100_0030
+  query: 'How to install Packaging utility?
+
+
+    How to install Packaging utility?'
+  ground_truth_answer: Use Installation Manager to install and update Packaging Utility.
+  category: techqa
+  source_doc_id: swg24037641
+- query_id: techqa100_0031
+  query: 'Help with Security Bulletin: Multiple vulnerabilities have been identified
+    in WebSphere Application Server shipped with WSRR (CVE-2015-4911)
+
+
+    I need to understand details regarding Security Bulletin: Multiple vulnerabilities
+    have been identified in WebSphere Application Server shipped with WebSphere Service
+    Registry and Repository (CVE-2015-4911). Where can I find this information?'
+  ground_truth_answer: 'CVEID: CVE-2015-4911 [http://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2015-4911]
+
+
+    DESCRIPTION: An unspecified vulnerability related to the JAXP component could
+    allow a remote attacker to cause a denial of service.
+
+    CVSS Base Score: 5
+
+    CVSS Temporal Score: See https://exchange.xforce.ibmcloud.com/vulnerabilities/107360
+    [https://exchange.xforce.ibmcloud.com/vulnerabilities/107360] for the current
+    score
+
+    CVSS Environmental Score*: Undefined
+
+    CVSS Vector: (AV:N/AC:L/Au:N/C:N/I:N/A:P)'
+  category: techqa
+  source_doc_id: swg21975747
+- query_id: techqa100_0032
+  query: 'Is there a security vulnerability in the IBM WebSphere Application Server
+    shipped with IBM Tivoli Netcool Configuration Manager?
+
+
+    Is there a security vulnerability in the IBM WebSphere Application Server shipped
+    with IBM Tivoli Netcool Configuration Manager?'
+  ground_truth_answer: Please consult the security bulletin Vulnerability in Apache
+    Commons affects IBM WebSphere Application Server (CVE-2015-7450) [http://www-01.ibm.com/support/docview.wss?uid=swg21970575]
+    for vulnerability details and information about fixes.
+  category: techqa
+  source_doc_id: swg21972146
+- query_id: techqa100_0033
+  query: 'Upgrading from ibm bpm 8.5 to ibm bpm 8.5.5
+
+
+    Hi there,
+
+
+    I was wondering if it is possible to upgrade from ibm bpm 8.5 to 8.5.5 ? is this
+    possible? please suggest. thanks'
+  ground_truth_answer: V8.5 Refresh Pack 5 is intended to be used on IBM Business
+    Process Manager Express, IBM Business Process Manager Standard, IBM Business Process
+    Manager Advanced, and IBM Business Process Manager Advanced - Process Server installations.
+  category: techqa
+  source_doc_id: swg27042065
+- query_id: techqa100_0034
+  query: 'Why do I still get "certificate expired" error after adding new certificate?
+
+
+    The remote SSL vendor has provided us a new certificate to replace an expiring
+    one. We have added the new certificate to the appropriate Datapower validation
+    credential, however, connections are still failing with "certificate expired":
+
+
+    mpgw(Inbound_MPG): tid(51005)[request][10.20xx.xx] gtid(51345): certificate validation
+    failed for ''/C=US/O=People Services/OU=IT/CN=test.site.com'' against ''My_ValCred'':
+    certificate has expired'
+  ground_truth_answer: If the replacement certificate has the same file name of the
+    expired certificate, you MUST disable/enable the certificate object in order to
+    clear all cached references to the expired certificate.
+  category: techqa
+  source_doc_id: swg21500046
+- query_id: techqa100_0035
+  query: 'How to increase the HTTP Session time-out value for Workplace application
+    on WebSphere Application Server?
+
+
+    We would like to increase the HTTP Session time-out value for our Workplace application.
+    Where are all the locations that this value is set and what are their precedence?'
+  ground_truth_answer: "The HTTP Session time-out can be set in the following places:\n\
+    \n    From the Administrative Console at the server, Enterprise application, and\
+    \ Web application levels\n    At the time when the application is packaged\n \
+    \   In the application code"
+  category: techqa
+  source_doc_id: swg21163875
+- query_id: techqa100_0036
+  query: "Web GUI 8.1 FP7 requires DASH 3.1.2.1 or later\n\nYou wanted to install\
+    \ Web GUI 8.1 FP7, but your DASH version does not meet the required version.\n\
+    \nIM 1.8 displayed the following:\n\n     ERROR: The installed IBM Dashboard Application\
+    \ Services Hub version is 3.1.0.3, but requires version 3.1.2.1 or later."
+  ground_truth_answer: Version 1.1.3.0 is a full refresh of Jazz for Service Management
+    Version 1.1 Base with Modification 3.
+  category: techqa
+  source_doc_id: swg24042191
+- query_id: techqa100_0037
+  query: 'Why do I receive the message, "IKJ79154I INSTALLATION EXIT IKJEESX0 REQUESTED
+    TERMINATION. " for a TSO SEND command?
+
+
+    If you issue the TSO SEND command in a batch job and receive this message:
+
+
+    IKJ79154I INSTALLATION EXIT IKJEESX0 REQUESTED TERMINATION.
+
+    IKJ79154I REASON CODE X''00000004''.'
+  ground_truth_answer: coded a facility class for the FEK.CMD.SEND and FEK.CMD.SEND.CLEAR.
+  category: techqa
+  source_doc_id: swg21980860
+- query_id: techqa100_0038
+  query: 'When should I use conversation sharing in DataPower MQ queue managers?
+
+
+    MQ version 7.0 introduced a new feature, conversation sharing. Are there any special
+    values on DataPower when configuring conversation sharing?'
+  ground_truth_answer: "The default setting of sharing conversations (SHARECNV) value\
+    \ is zero in DataPower mq-qm object. The same default value for MQ SVRCONN channel\
+    \ is 10. The sharing conversations value is \nnegotiated between MQ server and\
+    \ DataPower and the lower value takes effect. However, in current versions of\
+    \ the DataPower firmware, the sharing conversations setting of 1 is treated as\
+    \ 0 when negotiating with MQ server."
+  category: techqa
+  source_doc_id: swg21647231
+- query_id: techqa100_0039
+  query: "Problem with XMLLIB->VALIDATEEX during XML Validation\n\nI am using XMLLIB\
+    \ VALIDATEXX in WTX 8.3.0.5 for XML Validations and it is running fine on Windows.\n\
+    When deployed same code on zos map is executing in loop(output card having rule\
+    \ with xmllib method call is not completing) \nPlease suggest.Thanks"
+  ground_truth_answer: 'Add the XML toolkit xml4c library directory to the LIBPATH
+    environment variable.
+
+
+    Example:
+
+
+    export LIBPATH=$LIBPATH:/usr/lpp/ixm/xslt4c-1_11/lib/'
+  category: techqa
+  source_doc_id: swg21988389
+- query_id: techqa100_0040
+  query: "Why is the reload() not clearing the attribute cache so I can see my newly\
+    \ updated LDAP data in real time?\n\nYou are leveraging the reload() functionality\
+    \ as described in the blog post:\n  https://www.ibm.com/developerworks/community/blogs/PortalL2Thoughts/entry/how_to_programatically_refresh_data_from_ldap64?lang=en\n\
+    \nto refresh the attribute cache after a change has been made to data within your\
+    \ LDAP. The purpose of this reload() is to update the data in real time on the\
+    \ Portal server. You discover that you are calling the reload(); however, the\
+    \ newly updated data is not immediately available to the application. Why is that?"
+  ground_truth_answer: "If base entry and name in repository is different and\n  \
+    \ clearCache functionality is used with clearEntity mode then\n   virtual member\
+    \ manager (VMM) still looks in the cache and gets\n   the entity from the cache\
+    \ instead of fetching it from the LDAP\n   server."
+  category: techqa
+  source_doc_id: swg1PI47826
+- query_id: techqa100_0041
+  query: 'How to refresh a DataPower WebService Proxy which WSDL got changed?
+
+
+    I have made changes to a WSDL stored in DP local filesystem.
+
+
+    How can I make the WSP reflect this change since DataPower Gateway 7.1.0 WebService
+    Proxy WebGUI doesn''t offer the "Refresh" button anymore?
+
+
+    Is there a best practice to refresh the WSP if I modified my WSDL?'
+  ground_truth_answer: "In a WS Proxy, you can refresh WSDL from an URL using WSDL\
+    \ Cache policy. However, if the WSDL is hosted on the DataPower appliance, such\
+    \ as in local:///, rather than on an external URL, the WSDL Cache Policy does\
+    \ not apply. \n\nFor instance, changes made to local:///test.wsdl are not picked\
+    \ up by WS Proxy although there is a WSDL Cache policy setting the URL Match expression\
+    \ to local:///test.wsdl. \n\nThis issue was reported to Quality Engineering but\
+    \ it was determined that the DataPower device is working as designed. The device\
+    \ will not poll WSDL files on the local store.\n\nThe WSDL Cache policy works\
+    \ with WSDL files hosted on an external URL.\n\nTo refresh a WSDL in the local:///\
+    \ directory, disable and re-enable the service."
+  category: techqa
+  source_doc_id: swg21298897
+- query_id: techqa100_0042
+  query: 'How do I run the prerequisite scan for jazzSM?
+
+
+    How do I run the prerequisite scan?'
+  ground_truth_answer: "In this particular case, in order to properly run the prerequisite\
+    \ scanner, the codes for DASH and JazzSM should be passed like this: \n\n * \n\
+    \ * \n * \n\n\nThe above will provide a detailed"
+  category: techqa
+  source_doc_id: swg21696179
+- query_id: techqa100_0043
+  query: 'Why do I get "OSS version is not suitable for installation" when attempting
+    to install the MQ 5.3.1 base version on a HP Integrity NonStop Server BladeSystem?
+
+
+    I am trying to install the MQ 5.3.1 base version on a HP Integrity NonStop Server
+    BladeSystem, but it complains saying that the "OSS version is not suitable for
+    installation". My OSS version is J06.14 and it looks to be a supported version
+    according to the System Requirements site:
+
+
+    http://www-01.ibm.com/support/docview.wss?uid=swg27006797
+
+
+    Why am I getting this error message?'
+  ground_truth_answer: 'For the HP Integrity NonStop Server H-Series systems, the
+    following system
+
+    software versions are the minimum mandatory level for V5.3.1.12:
+
+
+    - H06.23.01 or later'
+  category: techqa
+  source_doc_id: swg27048240
+- query_id: techqa100_0044
+  query: 'Is there a support''s guide to the MTTrapd probe ?
+
+
+    Where do you download the Support''s guide to the MTTrapd [SNMP] probe ?'
+  ground_truth_answer: The attached Support's guide to the SNMP probe provides details
+    on how best to configure the probe, troubleshoot issues and how to use third party
+    products to test the probes behaviour.
+  category: techqa
+  source_doc_id: swg21607690
+- query_id: techqa100_0045
+  query: 'Why I am not able to login to StoredIQ Dataserver and Getway using ssh?
+
+
+    Why I am not able to login to StoredIQ Dataserver and Getway using ssh?'
+  ground_truth_answer: Restriction in remote login using ssh
+  category: techqa
+  source_doc_id: swg22001558
+- query_id: techqa100_0046
+  query: 'Help with Security Bulletin: Multiple vulnerabilities in IBM Java SDK affect
+    IBM OS Images for Red Hat Linux Systems and AIX (CVE-2015-0410 and CVE-2014-6593)
+
+
+    I need to understand details regarding "Security Bulletin: Multiple vulnerabilities
+    in IBM Java SDK affect IBM OS Images for Red Hat Linux Systems and AIX (CVE-2015-0410
+    and CVE-2014-6593)" Where can I find this information?'
+  ground_truth_answer: 'CVEID: CVE-2015-0410
+
+    DESCRIPTION: An unspecified vulnerability related to the Security component could
+    allow a remote attacker to cause a denial of service.
+
+    CVSS Base Score: 5
+
+    CVSS Temporal Score: See https://exchange.xforce.ibmcloud.com/vulnerabilities/100151
+    for the current score
+
+    CVSS Environmental Score*: Undefined
+
+    CVSS Vector: (AV:N/AC:L/Au:N/C:N/I:N/A:P)
+
+
+    CVEID: CVE-2014-6593
+
+    DESCRIPTION: An unspecified vulnerability related to the JSSE component has partial
+    confidentiality impact, partial integrity impact, and no availability impact.
+
+    CVSS Base Score: 4
+
+    CVSS Temporal Score: See https://exchange.xforce.ibmcloud.com/vulnerabilities/100153
+    for the current score
+
+    CVSS Environmental Score*: Undefined
+
+    CVSS Vector: (AV:N/AC:H/Au:N/C:P/I:P/A:N)'
+  category: techqa
+  source_doc_id: swg21962588
+- query_id: techqa100_0047
+  query: 'How to import a certificate in ITCAM for Data Power ?
+
+
+    How can I import a certificate in ITCAM for Data Power?'
+  ground_truth_answer: "Import the certification file into the agent by doing the\
+    \ following command:\n\nNote : You can use either .cer or .pem. \nMake sure the\
+    \ file is in ASCII not binary. \nWhere the /usr/ITM/JRE is your Java location\
+    \ and <fileName> is your file name."
+  category: techqa
+  source_doc_id: swg21959588
+- query_id: techqa100_0048
+  query: 'Why are HTML documents not rendering  and just shown as plain text after
+    upgrading and installing ifixes to BPM?
+
+
+    After upgrading BPM, my HTML documents that were once rendering are no longer
+    being displayed correctly and are being shown as plain text. This is happening
+    in multiple web browses.'
+  ground_truth_answer: Install IBM Business Process Manager interim fix JR50092 as
+    appropriate for your current IBM Business Process Manager or WebSphere Lombardi
+    Edition version.
+  category: techqa
+  source_doc_id: swg21679979
+- query_id: techqa100_0049
+  query: 'can Datacap support to Arabic language?
+
+
+    can Datacap support to Arabic language?'
+  ground_truth_answer: Support for Arabic requires that customers license NovoDynamics
+    NovoVarus separately and install it on the Rulerunner machine where the Datacap
+    Studio actions for Arabic (Datacap.Libraries.NovoDynamics) will be running.
+  category: techqa
+  source_doc_id: swg27035841
+- query_id: techqa100_0050
+  query: 'Error: "MBEANSTARTER LOADEXTENSIONS FAILED TO LOAD EXTENSION" occurs at
+    portal startup
+
+
+    We are using Portal Server 8.5 and when starting the Portal server we see following
+    error:
+
+
+    0000005e MBeanStarter E com.ibm.wps.scripting.server.MBeanStarter loadExtensions
+    failed to load extension: key: ServerExt.applications / value: com.ibm.wps.scripting.server.ApplicationServerExtensions
+
+
+    How can we resolve this error?'
+  ground_truth_answer: "A code fix for this issue is integrated into the WebSphere\n\
+    \   Portal & WCM Combined Cumulative Fix 05 (PI31198 [http://www-01.ibm.com/support/docview.wss?uid=swg1PI31198])\
+    \ for Portal\n   8.5.0.0 available from Fix Central:"
+  category: techqa
+  source_doc_id: swg1PI34677
+- query_id: techqa100_0051
+  query: 'Non-admin users cannot access webDAV filestore. What is the likely reason?
+
+
+    A non-admin user trying to access the webDAV filestore is unable to do so and
+    they see the below exception in the portal logs:
+
+
+    Caused by: com.ibm.icm.da.DBAccessException: User id can not be null at com.ibm.icm.da.portable.connection.Logon.logon(Logon.java:159)
+    at com.ibm.icm.da.portable.connection.ConnectionManager.logon(ConnectionManager.java:45)'
+  ground_truth_answer: Authenticated user does not have the attribute defined in the
+    backend user registry which matches the attribute defined in the store.puma_default.user.fbadefault.filter
+    property in WP PumaStoreService Resource Environment Provider.
+  category: techqa
+  source_doc_id: swg21664629
+- query_id: techqa100_0052
+  query: 'For HP-UX how to write verbose gc output to a log file other than the native_stdout?
+
+
+    A customer asked why no gc logs generated even if they use the -Xverbosegc option.
+    So How can I write verbose gc output to a log file other than the native_stdout
+    for HP-UX?'
+  ground_truth_answer: "Add the following parameters to the generic JVM arguments:\
+    \ \n-XX:+PrintGCDetails \n-XX:+PrintGCDateStamps \n-XX:+PrintHeapAtGC \n-Xverbosegc:file=\
+    \ /tmp/gc_pid$$.vgc"
+  category: techqa
+  source_doc_id: swg21636533
+- query_id: techqa100_0053
+  query: '''Save and Close'' and ''Save'' buttons grayed out in desktop configuration
+
+
+    In IBM Content Navigator, when configuring a desktop, the ''Save and Close'' and
+    ''Save'' buttons may be disabled.'
+  ground_truth_answer: One of the required fields in the configuration does not have
+    a value
+  category: techqa
+  source_doc_id: swg21975568
+- query_id: techqa100_0054
+  query: 'Would like to know if WebSphere Extreme Scale  is leap year and leap second
+    compliant. Is there any documentation that talks about this?
+
+
+    Would like to know if WebSphere Extreme Scale is leap second compliant. Is there
+    any documentation that talks about this?'
+  ground_truth_answer: WebSphere Application Server and the SDK are leap year compliant.
+  category: techqa
+  source_doc_id: swg21578744
+- query_id: techqa100_0055
+  query: 'Recurrent RES StaleConnectionException
+
+
+    How to prevent rule execution failing because of recurrent StaleConnectionException
+    on ODM 8.8 Rule Execution Server?'
+  ground_truth_answer: "Configure the WebSphere Application Server data source connection\
+    \ pool so as to eliminate occurrences of StaleConnectionException :\n\n    Set\
+    \ the Minimum connections to 0 to avoid situations where a connection is kept\
+    \ in the pool to meet the minimum requirement, even though it may have been idle\
+    \ for longer than Unused timeout\n    Set the values for Unused timeout and Reap\
+    \ timeout so that the sum does not exceed any network level idle connection timeout"
+  category: techqa
+  source_doc_id: swg21496354
+- query_id: techqa100_0056
+  query: 'How do we set HttpOnly and secure flag in Oracle Weblogic 12c to secure
+    IBM Atlas?
+
+
+    How do we set HttpOnly and secure flag in Oracle Weblogic 12c to secure IBM Atlas?'
+  ground_truth_answer: 'Perform steps as mentioned below:
+
+
+    1. Undeploy any existing PolicyAtlas deployments using Oracle Weblogic console
+
+
+    2. Open the PolicyAtlas.ear file using a tool like 7zip or similar and update
+    weblogic.xml file with the changes below:
+
+
+
+    <wls:session-descriptor>
+
+    <wls:cookie-secure>true</wls:cookie-secure>
+
+    <wls:cookie-http-only>true</wls:cookie-http-only>
+
+    <wls:url-rewriting-enabled>false</wls:url-rewriting-enabled>
+
+    </wls:session-descriptor>
+
+
+    3. Save the changes by updating the ear file.
+
+
+    4. Redeploy the updated ear file using Oracle Weblogic console'
+  category: techqa
+  source_doc_id: swg21696267
+- query_id: techqa100_0057
+  query: 'Error while installing SpSS modeler trial version
+
+
+    I have downloaded the SPSS modeller trial version (18.1) (64 bit) and trying to
+    install the same. I get the following error 1152: Error extracting modelerClient64.msi
+    to the temporary location'
+  ground_truth_answer: 'When an IBM SPSS compressed image is launched, files compressed
+    within it are extracted to the temporary location assigned to the signed in user
+    i.e. /Documents and settings/... or /users.
+
+    The possibility of these files downloaded improperly exists. You can use a tool
+    such
+
+    as MD5 to verify the file content or simply attempt downloading a second time
+    and test.
+
+
+    Other possible causes of this error:
+
+    - Available space within the temporary location noted by the installer.
+
+    - Ability to write in the temporary location noted by the installer.
+
+
+
+    ANSWER
+
+    Transfer the files again, resolved the issue.'
+  category: techqa
+  source_doc_id: swg21577970
+- query_id: techqa100_0058
+  query: 'Is MQ or MQ Appliance impacted by Sweet32 Birthday Attack if we are running
+    triple-DES cipher.?
+
+
+    Is MQ or MQ Appliance impacted by Sweet32 Birthday Attack if we are running triple-DES
+    cipher.?'
+  ground_truth_answer: "The following versions are affected: \n\n * IBM MQ  * Maintenance\
+    \ levels between 8.0.0.0 and 8.0.0.5 \n    * 9.0.0.0 only\n   \n   \n * IBM MQ\
+    \ Appliance  * Maintenance levels between 8.0.0.0 and 8.0.0.5\n   \n   \n * IBM\
+    \ WebSphere MQ  * Maintenance levels between 7.0.1.0 and 7.0.1.14 \n    * Maintenance\
+    \ levels between 7.1.0.0 and 7.1.0.8 \n    * Maintenance levels between 7.5.0.0\
+    \ and 7.5.0.7"
+  category: techqa
+  source_doc_id: swg21995099
+- query_id: techqa100_0059
+  query: 'Why does our Websphere application server hang when we apply Microsoft patch
+    on our database server?
+
+
+    Why does our Websphere application server hang when we apply Microsoft patch on
+    our database server?'
+  ground_truth_answer: "Immediately purge the pool by invoking the purgePoolContents\
+    \ operation of the data source MBean with the immediate option:\n    Using Jacl:\n\
+    \    $AdminControl invoke $ds purgePoolContents immediate\n    \n    \n    Using\
+    \ Jython:\n    AdminControl.invoke(ds, \"purgePoolContents\", \"immediate\")\n\
+    \    \n    \n\nIf the purge operation is successful, no response will be observed.\
+    \ If the purge operation is not successful, the response will indicate a possible\
+    \ reason for failure."
+  category: techqa
+  source_doc_id: swg21220832
+- query_id: techqa100_0060
+  query: 'Help with Security Bulletin: API Connect is affected by a Node.js denial
+    of service vulnerability (CVE-2017-14919)
+
+
+    I need to understand details regarding Security Bulletin: API Connect is affected
+    by a Node.js denial of service vulnerability (CVE-2017-14919). Where can I find
+    this information?'
+  ground_truth_answer: 'CVEID:CVE-2017-14919 [http://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2017-14919]
+
+    DESCRIPTION:Node.js is vulnerable to a denial of service, caused by an uncaught
+    exception flaw in the zlib module. By making 8 an invalid value for the windowBits
+    parameter, a remote attacker could exploit this vulnerability to cause the application
+    to crash.
+
+    CVSS Base Score: 7.5
+
+    CVSS Temporal Score: Seehttps://exchange.xforce.ibmcloud.com/vulnerabilities/134286
+    [https://exchange.xforce.ibmcloud.com/vulnerabilities/134286]for the current score
+
+    CVSS Environmental Score*: Undefined
+
+    CVSS Vector: (CVSS:3.0/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H)'
+  category: techqa
+  source_doc_id: swg22013168
+- query_id: techqa100_0061
+  query: 'Help with Security Bulletin: Multiple Vulnerabilities identified in IBM
+    Java SDK affect WSRR and WSRR Studio
+
+
+    I need to understand details regarding Security Bulletin: Multiple Vulnerabilities
+    identified in IBM® Java SDK affect WebSphere Service Registry and Repository and
+    WebSphere Service Registry and Repository Studio.
+
+
+    This is related to CVEID:
+
+    CVE-2018-2633
+
+
+    Where can I find this information?'
+  ground_truth_answer: 'CVEID:CVE-2018-2633 [http://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2018-2633]
+
+    DESCRIPTION:An unspecified vulnerability related to the Java SE JNDI component
+    could allow an unauthenticated attacker to take control of the system.
+
+    CVSS Base Score: 8.3
+
+    CVSS Temporal Score: Seehttps://exchange.xforce.ibmcloud.com/vulnerabilities/137885
+    [https://exchange.xforce.ibmcloud.com/vulnerabilities/137885]for the current score
+
+    CVSS Environmental Score*: Undefined
+
+    CVSS Vector: (CVSS:3.0/AV:N/AC:H/PR:N/UI:R/S:C/C:H/I:H/A:H)'
+  category: techqa
+  source_doc_id: swg22013955
+- query_id: techqa100_0062
+  query: 'App Connect Professional (formerly Cast Iron) Studio not launching
+
+
+    When trying to start App Connect Professional (formerly Cast Iron) Studio tool,
+    the application appears but after few seconds it crashes with no error message
+    or warning.'
+  ground_truth_answer: "Start the Studio through the command line interface using\
+    \ the following command: \n\n\nCastIronStudio.exe -J-Xmx1024m \n\n\nIn this command,\
+    \ \"1024\" is the new memory size that will be allocated to the Studio instead\
+    \ of the default value of 512. This numeric value is in MB."
+  category: techqa
+  source_doc_id: swg21452870
+- query_id: techqa100_0063
+  query: 'We got a NullPointerException when bootstrapping the object store or accessing
+    Site Preferences/Access Role on WorkplaceXT
+
+
+    After logging into FileNet Workplace XT, a java.lang.NullPointerException error
+    is logged when bootstrapping the object store or when accessing Site Preferences/Access
+    Role.
+
+
+    Here''s the error stack,
+
+
+    Error Stack Trace extracted from the J2EE Application Server error log:
+
+
+    java.lang.NullPointerException
+
+
+    at org.apache.jasper.runtime.JspWriterImpl.write(JspWriterImpl.java:421)
+
+
+    at com.filenet.wcm.apps.server.ui.info.prefs.PrefAccessRolesInfoPage.renderRoleMembers(PrefAccessRolesInfoPage.java:254)
+
+
+    at com.filenet.wcm.apps.server.ui.info.prefs.PrefAccessRolesInfoPage.renderRole(PrefAccessRolesInfoPage.java:220)
+
+
+    at com.filenet.wcm.apps.server.ui.info.prefs.PrefBootstrapInfoPage.renderAdminRole(PrefBootstrapInfoPage.java:131)
+
+
+    at com.filenet.wcm.apps.server.ui.info.prefs.PrefBootstrapInfoPage.render(PrefBootstrapInfoPage.java:303)'
+  ground_truth_answer: In FEM, change the User Display Name Attribute or Group Display
+    Name Attribute to a valid LDAP entry such as cn, displayName or uid and restart
+    the FileNet Content Engine and Workplace XT instances.
+  category: techqa
+  source_doc_id: swg21495799
+- query_id: techqa100_0064
+  query: 'Help with Security Bulletin: Multiple vulnerabilities in IBM Java Runtime
+    affect IIB and WMB
+
+
+    I need to understand details regarding "Security Bulletin: Multiple vulnerabilities
+    in IBM Java Runtime affect IBM Integration Bus and WebSphere Message Broker" This
+    is related to
+
+    CVE-2017-10115
+
+    CVE-2017-10116
+
+    CVE-2017-10109
+
+    CVE-2017-10108
+
+
+    Where can I find this information?'
+  ground_truth_answer: 'CVEID:CVE-2017-10115 [http://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2017-10115]
+
+    DESCRIPTION:An unspecified vulnerability in Oracle Java SE related to the Java
+    SE, Java SE Embedded, JRockit JCE component could allow an unauthenticated attacker
+    to obtain sensitive information resulting in a high confidentiality impact using
+    unknown attack vectors.
+
+    CVSS Base Score: 7.5
+
+    CVSS Temporal Score: Seehttps://exchange.xforce.ibmcloud.com/vulnerabilities/128876
+    [https://exchange.xforce.ibmcloud.com/vulnerabilities/128876]for the current score
+
+    CVSS Environmental Score*: Undefined
+
+    CVSS Vector: (CVSS:3.0/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N)'
+  category: techqa
+  source_doc_id: swg22010090
+- query_id: techqa100_0065
+  query: 'When should I use conversation sharing in DataPower MQ queue managers?
+
+
+    MQ version 7.0 introduced a new feature, conversation sharing.  Are there any
+    special values on DataPower when configuring conversation sharing?'
+  ground_truth_answer: "The default setting of sharing conversations (SHARECNV) value\
+    \ is zero in DataPower mq-qm object. The same default value for MQ SVRCONN channel\
+    \ is 10. The sharing conversations value is \nnegotiated between MQ server and\
+    \ DataPower and the lower value takes effect. However, in current versions of\
+    \ the DataPower firmware, the sharing conversations setting of 1 is treated as\
+    \ 0 when negotiating with MQ server."
+  category: techqa
+  source_doc_id: swg21647231
+- query_id: techqa100_0066
+  query: 'Is there a support''s guide to the CORBA Probes?
+
+
+    Where can I download the support''s guide to the IBM CORBA probes?'
+  ground_truth_answer: GENERIC_CORBA_SupportsGuide_20.pdf
+  category: techqa
+  source_doc_id: swg21614208
+- query_id: techqa100_0067
+  query: 'Why is MQ pattern showing installed MQ version as 8.0.0.2, instead of 8.0.0.4
+    when client tries to deploy pattern at the MQ 8.0.0.4 version in PureApplication
+    System?
+
+
+    In the pattern, it was clearly showing MQ version 8.0.0.4. After deployment, client
+    checked the MQ version on the Virtual Machine and it shows 8.0.0.2 instead.'
+  ground_truth_answer: A new maintenance.py lifecycle script is available to enable
+    installation and migration of the latest maintenance level of IBM MQ contained
+    in the pattern-type.
+  category: techqa
+  source_doc_id: swg21984588
+- query_id: techqa100_0068
+  query: 'Want to find out if Microsoft Edge is supported with ICC?
+
+
+    Want to find out Microsoft Edge is supported with ICC?'
+  ground_truth_answer: Microsoft Edge is supported starting with IBM Content Collector
+    4.0.1 Fix Pack 2.
+  category: techqa
+  source_doc_id: swg27042658
+- query_id: techqa100_0069
+  query: 'How to proceed when jextract utility is throwing an OutOfMemory error ?
+
+
+    I was getting a crash and was told to provide a "jextracted core dump". I ran
+    the jextract command as instructed:
+
+
+    /java/jre/bin/jextract [CORE_PATH]
+
+
+    but I am getting now an OutOfMemory error when jextract itself is running so I
+    cannot proceed with the original crash investigation.'
+  ground_truth_answer: Sometimes the core dump is much larger than the default heap
+    size can manage, and the recommendation is to increase the heap size using the
+    -J-Xmx option.
+  category: techqa
+  source_doc_id: swg21577379
+- query_id: techqa100_0070
+  query: 'Is Java 8 supported for BPM?
+
+
+    I understand that support for Java 6 on WebSphere Application Server is ending
+    April 2018, see: http://www-01.ibm.com/support/docview.wss?uid=swg21999583
+
+
+    Now I can switch to Java 7. But what about Java 8? Does BPM 8.5.6 support Java
+    8?'
+  ground_truth_answer: IBM BPM V8.5.6.0 Java 6 or Java 7*
+  category: techqa
+  source_doc_id: swg21639640
+- query_id: techqa100_0071
+  query: 'After uninstalling Portal 8.0 only from my WAS environment my subsequent
+    attempts to install Portal 8.0 into that same existing WAS fails.
+
+
+    I installed Portal 8.0.0.1 CF12 with an existing WAS 8.0.0.8 application server
+    and everything was successful. I want to script my install so I uninstalled Portal
+    8.0.0.1 only and was left with an existing WAS 8.0.0.8...as before. However, when
+    I attempt to reinstall Portal 8.0.0.1 into that same existing WAS 8.0.0.8 to test
+    my scripting I get the following error immediately:
+
+
+    ERROR: The required version 8.0.0.5 or later of WebSphere Application Server has
+    not been detected on this system. Select the WebSphere Application Server Package
+    to install WebSphere Application Server and WebSphere Portal.
+
+
+    IIM shows WAS as installed, so I am not sure what is causing this behavior when
+    it installed fine just a few hours ago.'
+  ground_truth_answer: 'Navigate to the AppServer folder and remove the following
+    files (they are regenerated with a reinstall of Portal):
+
+
+    lib/ext/commons-codec-1.3.jar
+
+    lib/ext/commons-httpclient-3.0.1.jar
+
+    lib/ext/openid4java-full-0.9.5.jar
+
+    lib/ext/wp.auth.base.sua_RedirectServletFilter.jar
+
+    lib/ext/wp.auth.base.sua_loginmodule.jar
+
+    lib/ext/wp.auth.tai.jar
+
+    lib/wp.user.connections.jar
+
+    lib/wp.wire.jar
+
+    plugins/com.ibm.patch.was.plugin.jar
+
+    plugins/com.ibm.wp.was.plugin.jar
+
+    plugins/wp.ext.jar
+
+    properties/jndi.properties'
+  category: techqa
+  source_doc_id: swg21635341
+- query_id: techqa100_0072
+  query: 'CQWEB  can\''t retrieve repository dropdown list options in RedHat Linux,
+    how to deal with it ?
+
+
+    I setup a cq demo env in redhat linux with oracle database, CQ 7.1.2, LRKS 8.1.3,  Linux
+    CQ client can login CQ as the following picture 1, but CQWEB login page can''t
+    retrieve the repository dropdown list options as the following picture 2.  I used
+    cqreg to register CQ database:
+
+
+    cqreg add_dbset -v ORACLE -s 192.168.0.84 -d ESBDB -u cqadmin -p cqadmin -dbset
+    CQ_DEMO_ORACLE -co LOB_TYPE=CLOB -force
+
+
+    What''s matter for this happen?'
+  ground_truth_answer: Normally, at the end of a ClearQuest installation on UNIX®
+    based platforms, the cqreg initialize command runs automatically. The command
+    creates the registry structure for database sets. During the installation, the
+    command did not run successfully.
+  category: techqa
+  source_doc_id: swg21320206
+- query_id: techqa100_0073
+  query: 'Content Engine System Health Page page doesn''t reflect correctly, Fixed
+    Content Advise and Storage Area showing unavailable.
+
+
+    Content Engine System Health Page page doesn''t reflect correctly, Fixed Content
+    Advise and Storage Area showing unavailable.'
+  ground_truth_answer: "Verify the Content Engine Bootstrap User has Full Control\
+    \ on the Object Store and all associated Storage Areas. \n    \n    \n 2. Inspect\
+    \ Storage Area security by right-clicking on the Object Store\n    \n    \n 3.\
+    \ Choose Properties\n    \n    \n 4. Select the All Properties radio button and\
+    \ view the Storage Area property name\n    \n    \n 5. Click on the drop down\
+    \ list to select the Storage Area. \n    \n    \n 6. The Storage Area properties\
+    \ screen will appear. \n    \n    \n 7. Verify the Security tab allows the Content\
+    \ Engine Bootstrap User has Full Control."
+  category: techqa
+  source_doc_id: swg21566663
+- query_id: techqa100_0074
+  query: 'Security Bulletin: Vulnerability identified in OpenSSL shipped with IBM
+    API Connect (CVE-2016-8610)
+
+
+    I need to understand details regarding Security Bulletin: Vulnerability identified
+    in OpenSSL shipped with IBM API Connect (CVE-2016-8610). Where can I find this
+    information?'
+  ground_truth_answer: "VULNERABILITY DETAILS\nCVEID:CVE-2016-8610 [http://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2016-8610]\n\
+    DESCRIPTION:SSL/TLS protocol is vulnerable to a denial of service, caused by an\
+    \ error when processing ALERT packets during a SSL handshake. By sending specially-crafted\
+    \ packets, a remote attacker could exploit this vulnerability to cause the application\
+    \ to stop responding.\nCVSS Base Score: 7.5\nCVSS Temporal Score: Seehttps://exchange.xforce.ibmcloud.com/vulnerabilities/118296\
+    \ [https://exchange.xforce.ibmcloud.com/vulnerabilities/118296]for the current\
+    \ score\nCVSS Environmental Score*: Undefined\nCVSS Vector: (CVSS:3.0/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H)\
+    \ \n\nAFFECTED PRODUCTS AND VERSIONS\nIBM API Connect V5.0.0.0 - V5.0.6.1\n\n\
+    REMEDIATION/FIXES\n \n\nProduct VRMF APAR Remediation/First Fix IBM API Connect\
+    \ 5.0.0.0 - 5.0.6.1 LI79599 Apply IBM API Connect V5.0.6.2 or later [https://www.ibm.com/support/fixcentral/swg/quickorder?parent=ibm~WebSphere&product=ibm/WebSphere/IBM+API+Connect&release=5.0.6.2&platform=All&function=all]\
+    \ \nWORKAROUNDS AND MITIGATIONS\nNone"
+  category: techqa
+  source_doc_id: swg22002063
+- query_id: techqa100_0075
+  query: 'Help with Security Bulletin: Multiple Vulnerabilities identified in IBM
+    Java SDK affect WSRR
+
+
+    I need to understand details regarding Security Bulletin: Multiple Vulnerabilities
+    identified in IBM® Java SDK affect WebSphere Service Registry and Repository,
+    in particular CVE-2017-10115. Where can I find this information?'
+  ground_truth_answer: 'CVEID:CVE-2017-10115 [http://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2017-10115]
+
+    DESCRIPTION:An unspecified vulnerability related to the Java SE, Java SE Embedded,
+    JRockit JCE component could allow an unauthenticated attacker to obtain sensitive
+    information resulting in a high confidentiality impact using unknown attack vectors.
+
+    CVSS Base Score: 7.5
+
+    CVSS Temporal Score: Seehttps://exchange.xforce.ibmcloud.com/vulnerabilities/128876
+    [https://exchange.xforce.ibmcloud.com/vulnerabilities/128876]for the current score
+
+    CVSS Environmental Score*: Undefined
+
+    CVSS Vector: (CVSS:3.0/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N)'
+  category: techqa
+  source_doc_id: swg22007002
+- query_id: techqa100_0076
+  query: 'Can we create Match design specification db in xmeta
+
+
+    Could you please let me know if we can create schema for Match design
+
+    specification database in xmeta db.'
+  ground_truth_answer: You should start from an empty Database; using the default
+    XMETA Database is not recommended because it can become corrupt.
+  category: techqa
+  source_doc_id: swg21409481
+- query_id: techqa100_0077
+  query: 'Cannot delete folder in Box collab folder
+
+
+    In an ICM 5.3.0 environment integrated with Box, after setting up Box Collaboration,
+    case worker can create Box collaboration folder, and can create folders and files
+    under Box collaboration folder, however, they cannot delete the their folders
+    and files.
+
+
+    Case worker''s default permission is ''Viewer Uploader'' and case worker cannot
+    add permission more than editor (Editor/Co-owner/Owner). So case worker can add
+    new folder/file and edit file, but cannot delete folder/file.
+
+
+    The question is, why cannot case worker have permission more than editor?'
+  ground_truth_answer: There is no support for deleting documents and/or folders from
+    a Box Collaboration folder created via Case Manager at this time.
+  category: techqa
+  source_doc_id: swg22002589
+- query_id: techqa100_0078
+  query: 'Help with Security Bulletin: TLS padding vulnerability affects IBM PureApplication
+    System (CVE-2014-8730)
+
+
+    I need to understand details regarding "Security Bulletin: TLS padding vulnerability
+    affects IBM PureApplication System (CVE-2014-8730)". Where can I find this information?'
+  ground_truth_answer: 'CVEID: CVE-2014-8730 [http://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2014-8730]
+
+    DESCRIPTION: IBM PureApplication Server bundles IBM HTTP Server, which could allow
+    a remote attacker to obtain sensitive information, caused by the failure to check
+    the contents of the padding bytes when using CBC cipher suites of some TLS implementations.
+    A remote user with the ability to conduct a man-in-the-middle attack could exploit
+    this vulnerability via a POODLE (Padding Oracle On Downgraded Legacy Encryption)
+    like attack to decrypt sensitive information and calculate the plain text of secure
+    connections.
+
+    CVSS Base Score: 4.3
+
+    CVSS Temporal Score: See https://exchange.xforce.ibmcloud.com/vulnerabilities/99216
+    [https://exchange.xforce.ibmcloud.com/vulnerabilities/99216] for the current score
+
+    CVSS Environmental Score*: Undefined
+
+    CVSS Vector: (AV:N/AC:M/Au:N/C:P/I:N/A:N)'
+  category: techqa
+  source_doc_id: swg21960375
+- query_id: techqa100_0079
+  query: 'Why is the OUTPUT_TYPE specified in the properties file for the custom scripting
+    feature ignored?
+
+
+    Why is the OUTPUT_TYPE specified in the properties file for the custom scripting
+    feature ignored in ITM V6?
+
+
+    Specifying "I" for INTEGER, or "F" for FLOAT for the OUTPUT_TYPE doesn''t work,
+    but specifying OUTPUT_TYPE=S results in STRING type for the first token.'
+  ground_truth_answer: OUTPUT_TYPE (STRING|INTEGER|FLOAT - Optional - default string).
+    It defines the type of the first token returned by each row of the script;
+  category: techqa
+  source_doc_id: swg21960062
+- query_id: techqa100_0080
+  query: 'What exactly is "wpcollector" in WebSphere Portal Server?
+
+
+    I''ve been told to get wpcollector output? What exactly is this?'
+  ground_truth_answer: Wpcollector is a command line tool that automates the collection
+    of portal logs and configuration files.
+  category: techqa
+  source_doc_id: swg21445430
+- query_id: techqa100_0081
+  query: "Crash happened due to \"PI50993:Apache HTTPComponents vulnerabilities in\
+    \ WebSphere Application Server (CVE-2012-6153, CVE-2014-3577)\"\n\nCrash happened\
+    \ due to \"PI50993:Apache HTTPComponents vulnerabilities in WebSphere Application\
+    \ Server (CVE-2012-6153, CVE-2014-3577)\"\n\nDetails of gpf crash events: A VerifyError\
+    \ was thrown due to \"Inaccessible class\" at offset 39(0x27) of the method executeInternal(Lorg/springframework/http/HttpHeaders;[B)Lorg/springfram\
+    \ ework/http/client/ClientHttpResponse of the above class org/springframework/http/client/HttpComponentsClientHttpRequest.\n\
+    \nLooking at method the bytecodes :\n\n31 invokespecial 15 org/apache/http/entity/ByteArrayEntity.([B)V\
+    \ 34 astore 4 36 aload3 37 aload 4 39 invokeinterface2 41 invokeinterface 16 org/apache/http/HttpEntityEnclosingRequest.setEntity(Lorg/apache/http/Ht\
+    \ tpEntity;)V\n\nThe above sequence of bytecodes indicates it created an instance\
+    \ of org/apache/http/entity/ByteArrayEntity, trying to cast it to type Lorg/apache/http/HttpEntity;\
+    \ which in turns led to the \"Inaccessible class\" VerifyError message.\n\nIt\
+    \ is clear that class org/apache/http/HttpEntity was not loaded at all:\n\n  \
+    \  allclasses | grep org/apache/http/HttpEntity"
+  ground_truth_answer: There would be NoClassDefFoundError observed after applying
+    the fix because the API in HTTPCore and HTTPClient libraries are no long visible
+    to application. To resolve this error, application may need to be updated with
+    HTTPCore and HTTPClient libraries bundled.
+  category: techqa
+  source_doc_id: swg24041394
+- query_id: techqa100_0082
+  query: "TCR 2.1.1 Fixpack 2 installation failed\n\nI need to install Fixpack 2 on\
+    \ my TCR 2.1.1 environment, but the installation keeps failing with error:\n\n\
+    \     ACUOSI0050E External command action failed with return code 1.\n\nI was\
+    \ not able to understand why it is failing. Can you please help providing suggestion\
+    \ to perform a correct troubleshooting ?\n\nThanks"
+  ground_truth_answer: "If it is expected you run the Fixpack installation with a\
+    \ non-root user, double check the permission bit for the involved directory tree\
+    \ and in case temporary set them to give write authorization to the user account\
+    \ you are installing the FixPack with. \n\nThen run again the installation program."
+  category: techqa
+  source_doc_id: swg21666489
+- query_id: techqa100_0083
+  query: 'Cognos Analytics - Images not displayed in PDF/Excel, working in HTML
+
+
+    I''ve just completed an upgrade to Cognos Analytics 11.0.3. When running existing
+    reports in HTML, the images are displayed but when I try to run them in PDF/Excel
+    they are not.'
+  ground_truth_answer: "Open up IIS 7.5 \n 2. Click on the root folder of your Cognos\
+    \ installation (E.g. C1021GA) in the navigation pane on the left side \n 3. When\
+    \ the root folder is selected, double-click 'Authentication' \n 4. Ensure that\
+    \ anonymous access is enabled \n 5. Repeat steps 3 and 4 for the image folder\
+    \ and it's parent folder. \n 6. If the user is concerned about security, they\
+    \ may want to restrict the child-folders (E.g. cgi-bin) and change the authentication\
+    \ settings accordingly \n 7. Run the report in export as Excel 2007 and PDF"
+  category: techqa
+  source_doc_id: swg21656263
+- query_id: techqa100_0084
+  query: 'Cannot open module in exclusive edit - (no such file or directory)
+
+
+    Hello.
+
+
+    I have a module, that I can open normally, but when I try to open it in Exclusive
+    Edit it tells me that "no such file or directory"
+
+
+    Is this a known problem?'
+  ground_truth_answer: This issue has been identified as a product defect under APAR
+    PM50525
+  category: techqa
+  source_doc_id: swg21511831
+- query_id: techqa100_0085
+  query: 'Does IBM DataPower Gateway Appliance support the HTTP CONNECT method?
+
+
+    Does IBM DataPower Gateway Appliance support the HTTP CONNECT method for SSL proxy
+    requests?'
+  ground_truth_answer: 'SSL Proxy requests will work using the CONNECT method for
+    SSL Tunneling when using a Multi-Protocol Gateway when configuring in a User Agent''s
+    HTTP Proxy Policy.
+
+
+    The XML Firewall service is not designed to use the CONNECT method for SSL Tunneling.'
+  category: techqa
+  source_doc_id: swg21612222
+- query_id: techqa100_0086
+  query: 'Problem with Postal database in Parascript
+
+
+    Hi
+
+
+    i am working with Parascript and i have installed successfully in my local system
+    by folloing this guide [ Parascript FieldScript for Taskmaster Guide ]
+
+
+    here i can able to create vocabulary file, but storing multiple values into this
+    the values are overridden and i do not understand how to create a postal database
+    and access it
+
+
+    is that postal database is separate component ,,?? do we need to get somewhere
+    and install ,,? they just mention in Guide the use of actions only
+
+
+    and does this parascript really helps to get better recognize.'
+  ground_truth_answer: The address information in the USPS database on the data disk
+    is automatically disabled 105 days after the date of issue. IBM refreshes the
+    data disk on the 14th day of every month, or the previous business day. You must
+    ensure that you obtain the refreshed data from Passport Advantage on a regular
+    schedule so that you avoid issues that are associated with disabled address information.
+  category: techqa
+  source_doc_id: swg24031674
+- query_id: techqa100_0087
+  query: 'Why Plug-in log file reports an error message after install & configure
+    the WebSphere Plugin 8.5 version on a Apache 2.4 webserver.
+
+
+    During web server start-up, errors like the following will be logged into the
+    Plug-in log file (http_plugin.log):
+
+
+    ERROR: lib_security: loadSecurityLibrary: Failed to load gsk library from /opt/IBM/WebSphere/Plugins/gsk8/gsk8_64
+    ERROR: ws_transport: transportInitializeSecurity: Unable to load security library
+    ERROR: ws_server: serverAddTransport: Failed to initialize security ERROR: ws_server:
+    serverAddTransport: HTTPS Transport is skipped
+
+
+    Note: This is after install & configure the WebSphere Plugin 8.5 version on a
+    Apache 2.4 webserver  on a Linux platform'
+  ground_truth_answer: To resolve the problem, you must set the LD_LIBRARY_PATH environment
+    variable to point to the library directory of the GSKit that comes with the IBM
+    web server Plug-in. The precise directory location will depend of the version
+    of Plug-in, and on the bit depth being used (32-bit or 64-bit).
+  category: techqa
+  source_doc_id: swg21600618
+- query_id: techqa100_0088
+  query: 'Error TASK001X while upgrading Portal 8.0.0.1 to 8.0.0.1 CF14 during import-nodes
+    sub-task
+
+
+    While attempting to upgrade Portal to CF14 the upgrade fails during the import-nodes
+    sub-task.
+
+
+    The ConfigTrace.log shows the following...
+
+
+    import-nodes:
+
+
+    --- Exception Thrown --- C:\Portal8\PortalServer\jcr\wp.content.repository.install\config\include
+    s\jcr.install_cfg.xml:826: com.ibm.icm.jcr.task.TaskException: TASK001X: Remote
+    task execution failed with response code 404 due to exception : Not Found . Please
+    check the server log for more information.'
+  ground_truth_answer: 'Please make the following change in the WAS Admin Console...
+
+    Applications > WebSphere enterprise applications >
+
+    JavaContentRepository > Target specific application status > Check the
+
+    box for the WebSphere_Portal server > Click Enable Auto Start > Save
+
+    changes > restart Portal
+
+
+    After making this change please attempt the CF upgrade again.'
+  category: techqa
+  source_doc_id: swg21691034
+- query_id: techqa100_0089
+  query: 'Why is OCR is putting multiple lines on one line?
+
+
+    I am running an APT application, and multiple detail lines are getting put on
+    a single line within my .TXT file.  Is there something I can do about this?'
+  ground_truth_answer: "Add the following action prior to NormalizeCCO. \n\n * \n\
+    \ * \n\nThe first parameter is the percentage of a line that two words must be\
+    \ offset to be considered as separate lines. If the value is not set, the default\
+    \ is 50. In the example, if two words are vertically offset by more than 35% of\
+    \ the height of the words, then they are considered to be on separate lines. Lower\
+    \ values are more likely to split words into separate lines. Higher values are\
+    \ more likely to merge words into a single line."
+  category: techqa
+  source_doc_id: swg21701910
+- query_id: techqa100_0090
+  query: "Why does nco_confpack -export fail with the message \"Tool in menu but not\
+    \ found\"?\n\nI tried to export OMNIbus configuration using nco_confpack command\
+    \ and I get the following message:\r\nTool in menu but not found, menu: AlertsMenu,\
+    \ tool: Close\r\nI've also tried using it with -list command and I get the same\
+    \ error."
+  ground_truth_answer: Recreate the tool and associate it with the menu and try to
+    run the command again.
+  category: techqa
+  source_doc_id: swg21672071
+- query_id: techqa100_0091
+  query: 'Why does WebSphere DataPower spike with a high CPU rate when a WebSphere
+    MQ connection is unavailable?
+
+
+    I have noticed when my MQ backends go down unexpectedly it can result in a high
+    CPU rate on DataPower. And how can I resolve this?'
+  ground_truth_answer: The solution to the issue of having DataPower vulnerable to
+    the MQ Queue Manager being inaccessible is to change the Retry Attempts parameter
+    on the Configure MQ Queue Manager window from 0 to some number.
+  category: techqa
+  source_doc_id: swg21431301
+- query_id: techqa100_0092
+  query: 'You want to know how to make persistent the events that indicate when a
+    queue manager has started and stopped.
+
+
+    You want to know how to make persistent the events that indicate when a queue
+    manager has started and stopped.'
+  ground_truth_answer: 'First, a baseline scenario is described in which when using
+    the defaults, there is only 1 record in the SYSTEM.ADMIN.QMGR.EVENT queue, regardless
+    of how many times you restart the queue manager.
+
+
+
+    Second, a modification is done to the SYSTEM.ADMIN.QMGR.EVENT queue to indicate
+    that the default persistence is enabled, and thus, subsequent events from the
+    stop/start of the queue manager will be kept in the queue.
+
+    alter ql(SYSTEM.ADMIN.QMGR.EVENT) defpsist(YES)'
+  category: techqa
+  source_doc_id: swg27050154
+- query_id: techqa100_0093
+  query: 'IBM Support Assistant data collector for BPM
+
+
+    What can I use to obtain some standard information in order to debug my IBM Business
+    Process Manager environment?'
+  ground_truth_answer: The new data collector in IBM Business Process Manager V8.5
+    is designed for ease of use to gather some of the standard information that is
+    needed to debug IBM Business Process Manager issues.
+  category: techqa
+  source_doc_id: swg21641516
+- query_id: techqa100_0094
+  query: 'Java.io.NotSerializableException in WAS
+
+
+    We are experiencing the Java.io.NotSerializableException exception. I see this
+    error: WTRN0047E:java.io.NotSerializableException. Anyone experienced this before?'
+  ground_truth_answer: 'With persistent sessions enabled, any object that is put into
+    the HTTPSession must implement the serializable interface in order for session
+    manager to store the session data outside of JVM.
+
+
+    When PMI is enabled, there is a counter for session data size. In order to evaluate
+    this counter, the session data must be serialized into a byte array stream. Any
+    object that is put into the HTTPSession must implement the serializable interface
+    in order for session manager to convert the session data objects into byte array
+    stream.'
+  category: techqa
+  source_doc_id: swg21066791
+- query_id: techqa100_0095
+  query: 'Where I can get ITNM 4.2.0.1 GA version download details with Part number?.
+
+
+    How to download and install IBM Tivoli Network Manager IP Edition Version 4.2
+    Fix Pack 1 (GA) using the Passport Advantage Web site?.'
+  ground_truth_answer: "Download all of the parts that you need, both required and\
+    \ optional. The parts are listed in the sections below.\n 2. Unpack each of the\
+    \ parts into a single temporary directory on your system.\n 3. Follow the instructions\
+    \ in the Installing [https://www.ibm.com/support/knowledgecenter/SSSHRK_4.2.0/install/task/ins_installing.html]\
+    \ section of the IBM Knowledge Center to install the product."
+  category: techqa
+  source_doc_id: swg24042656
+- query_id: techqa100_0096
+  query: 'where is the websphere application server 9.0.0.4 fix for developers
+
+
+    I am using the was 9.0.0.0 in rad/rsa 9.6.1 for Windows. I cannot upgrade to the
+    9.0.0.4 fixpack, because there is no developer edition. On the downloadpage there
+    are Base, Network Deployment, DMZ Secure Proxy Server and IBM Web Enablement for
+    IBM i, but no Developers! See link text For was 8.5.5.10 there exists a developers
+    edition. Where can I download the Websphere Application Server fix pack 9.0.0.4
+    Developers?'
+  ground_truth_answer: WAS recently renamed WAS for Developers (WAS4D) to WAS ILAN
+    (see here [https://developer.ibm.com/wasdev/downloads/#asset/WAS_traditional_for_Developers]).
+    In response to this change, RAD 9.6 now packages WAS ILAN available in the RAD_WS_9.6_WASTE_9.0.zip
+    file. It has the same capabilities and updates that RAD users expect.
+  category: techqa
+  source_doc_id: swg22005352
+- query_id: techqa100_0097
+  query: 'Help with Security Bulletin: IIB is affected by Web UI security vulnerability
+    (CVE-2017-1694)
+
+
+    I need to understand details regarding Security Bulletin: IBM Integration Bus
+    is affected by Web UI security vulnerability (CVE-2017-1694). Where can I find
+    this information?'
+  ground_truth_answer: 'CVEID: CVE-2017-1694 [http://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2017-1694]
+
+    DESCRIPTION: IBM Integration Bus transmits user credentials in plain in clear
+    text which can be read by an attacker using man in the middle techniques.
+
+    CVSS Base Score: 5.9
+
+    CVSS Temporal Score: See https://exchange.xforce.ibmcloud.com/vulnerabilities/134165
+    [https://exchange.xforce.ibmcloud.com/vulnerabilities/134165] for the current
+    score
+
+    CVSS Environmental Score*: Undefined
+
+    CVSS Vector: (CVSS:3.0/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:N/A:N)'
+  category: techqa
+  source_doc_id: swg22011695
+- query_id: techqa100_0098
+  query: 'startNode failed with ADML3000E after a deployment failure
+
+
+    Client had a deployment failure due to "Too many open files" error.
+
+
+    Afterwards, the startNode failed with ADML3000E:
+
+
+    What could cause the "Too many open files error?'
+  ground_truth_answer: When the "Too Many Open Files" error message is written to
+    the logs, it indicates that all available file handles for the process have been
+    used (this includes sockets as well). In a majority of cases, this is the result
+    of file handles being leaked by some part of the application.
+  category: techqa
+  source_doc_id: swg21067352
+- query_id: techqa100_0099
+  query: 'Would like to know if WebSphere Extreme Scale  is leap year and leap second
+    compliant. Is there any documentation that talks about this?
+
+
+    Would like to know if WebSphere Extreme Scale is leap year  compliant. Is there
+    any documentation that talks about this?'
+  ground_truth_answer: WebSphere Application Server and the SDK are leap year compliant.
+  category: techqa
+  source_doc_id: swg21578744
+- query_id: techqa100_0100
+  query: 'Why are some Datatypes corrupt after Impact cluster failover/failback ?
+
+
+    Running Impact 7.1.0.11. The symptom is whenever Impact does a failover, a couple
+    DataTypes
+
+    turn out empty.
+
+
+    I''ve checked the type files before and after Impact failover and the difference
+    happens in the property
+
+
+    *.SQL.USERPARAMETERS
+
+
+    This property no longer exists for the corrupted datatypes".'
+  ground_truth_answer: "\"a new property is added to increase the file size limit:\n\
+    \n\n\n * \n\n\nAdd the property to $NCHOME/impact/etc/<SERVERNAME>_server.props\
+    \ file \nwhere size limit can be 8192, 16384, 32768, etc.. \" \n\nThe property\
+    \ would have to be added to all ImpactServers in the Cluster and would require\
+    \ a restart to enable - ensuring that the ImpactServer started as Primary had\
+    \ the correct, uncorrupted .type file to be replicated across the Cluster. Also\
+    \ ensure that there are no trailing white-space characters on the property as\
+    \ these invalidate properties in lower versions of Impact. \n\nThe APAR is not\
+    \ an issue in Impact 6 and 7, but one would still have to include this property\
+    \ with an appropriate value to handle a large character length for the USERPARAMETERS\
+    \ parameter. \n\nThe character length includes the whole USERPARAMETERS property\
+    \ name as well as the definition."
+  category: techqa
+  source_doc_id: swg21598417

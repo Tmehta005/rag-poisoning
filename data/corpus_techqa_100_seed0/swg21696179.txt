@@ -1,0 +1,34 @@
+TIPL2INST; DASHL2INST; CRIMA1217E; prereq_checker.bat; prereq_checker.bat
+Technote (troubleshooting)
+Problem(Abstract)
+Installation of Dashboard Application Service Hub (DASH) and Jazz for Service Management (JazzSM) components is failing even though the installation prerequisite scan apparently passed.
+Cause
+Upon further investigation, it was discovered the customer had only used the product code for DASH during prerequisite scan.
+Diagnosing the problem
+During installation the following error is seen in the GUI installation window and logs:
+CRIMA1217E: A problem occurred during the execution of the
+/opt/IBM/JazzSM/install/tip/tipWrapperInstall.xml file.
+Explanation: A package has an issue that cannot be resolved by
+Installation Manager.
+User Action: Identify the package that has the issue by looking at
+the installation history. In Installation Manager, click File >
+Installation History. In console mode, enter S: View Installation
+History. Contact IBM customer support.
+The following error occurred while executing this line:
+/opt/IBM/JazzSM/install/tip/tipWrapperInstall.xml:214: The following
+error occurred while executing this line:
+/opt/IBM/JazzSM/install/tip/tipWrapperInstall.xml:245: The following
+error occurred while executing this line:
+/opt/IBM/JazzSM/install/tip/tipWrapperInstall.xml:256: The following
+error occurred while executing this line:
+/opt/IBM/JazzSM/install/tip/dashFixpack.xml:800: The following error
+occurred while executing this line:
+/opt/IBM/JazzSM/install/tip/dashFixpack.xml:1190: CTGWA0129E Fail to
+deploy a war module to isc.ear.
+The above error typically means there is not enough room on the system for software to deploy and the installation to complete successfully.
+Resolving the problem
+In order to accurately determine if the installation prerequisites have been met, the user must pass both product codes to the prerequisite scanner. In this case, the user must pass the codes for DASH and Jazz simultaneously to the prerequisite scanner script.
+The following table contains the product codes for the various integration services:
+In this particular case, in order to properly run the prerequisite scanner, the codes for DASH and JazzSM should be passed like this:
+./prereq_checker.[sh|bat] "DSH, ODP" detail
+The above will provide a detailed listing of the prerequisites for both products along with which items have passed and which items have failed and need to be addressed before the installation will succeed.

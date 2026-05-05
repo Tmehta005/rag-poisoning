@@ -1,0 +1,65 @@
+Security Bulletin
+Summary
+IBM API Connect has addressed the following vulnerability.
+Node.js is vulnerable to a denial of service, caused by an uncaught exception flaw in the zlib module. By making 8 an invalid value for the windowBits parameter, a remote attacker could exploit this vulnerability to cause the application to crash.
+Vulnerability Details
+CVEID:
+CVE-2017-14919
+DESCRIPTION:
+Node.js is vulnerable to a denial of service, caused by an uncaught exception flaw in the zlib module. By making 8 an invalid value for the windowBits parameter, a remote attacker could exploit this vulnerability to cause the application to crash.
+CVSS Base Score: 7.5
+CVSS Temporal Score: See
+https://exchange.xforce.ibmcloud.com/vulnerabilities/134286
+for the current score
+CVSS Environmental Score*: Undefined
+CVSS Vector: (CVSS:3.0/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H)
+Affected Products and Versions
+Affected API Connect
+Affected Versions
+IBM API Connect
+5.0.0.0-5.0.6.4
+IBM API Connect
+5.0.7.0-5.0.7.2
+IBM API Connect
+5.0.8.0-5.0.8.1
+Remediation/Fixes
+Affected Product
+Addressed in VRMF
+APAR
+Remediation/First Fix
+IBM API Connect
+V5.0.0.0 - 5.0.6.4
+5.0.6.5
+LI79994
+Addressed in IBM API Connect V5.0.6.5.
+Follow this link and find the "APIConnect-Portal" package.
+https://www-945.ibm.com/support/fixcentral/swg/selectFixes?parent=ibm%7EWebSphere&product=ibm/WebSphere/IBM+API+Connect&release=5.0.6.4&platform=All&function=all
+IBM API Connect
+V5.0.7.0 - 5.0.7.2
+5.0.8.2
+LI79994
+Addressed in IBM API Connect V5.0.8.2.
+Follow this link and find the "APIConnect_Management" and "APIConnect-Portal" packages.
+https://www-945.ibm.com/support/fixcentral/swg/selectFixes?parent=ibm%7EWebSphere&product=ibm/WebSphere/IBM+API+Connect&release=5.0.8.1&platform=All&function=all
+IBM API Connect
+V5.0.8.0 - 5.0.8.1
+5.0.8.2
+LI79994
+Addressed in IBM API Connect V5.0.8.2.
+Follow this link and find the "APIConnect_Management" and "APIConnect-Portal" packages.
+https://www-945.ibm.com/support/fixcentral/swg/selectFixes?parent=ibm%7EWebSphere&product=ibm/WebSphere/IBM+API+Connect&release=5.0.8.1&platform=All&function=all
+Get Notified about Future Security Bulletins
+Subscribe to
+My Notifications
+to be notified of important product support alerts like this.
+References
+Complete CVSS v3 Guide
+On-line Calculator v3
+Related information
+IBM Secure Engineering Web Portal
+IBM Product Security Incident Response Blog
+Change History
+08 February 2018: original document published
+*The CVSS Environment Score is customer environment specific and will ultimately impact the Overall CVSS Score. Customers can evaluate the impact of this vulnerability in their environments by accessing the links in the Reference section of this Security Bulletin.
+Disclaimer
+According to the Forum of Incident Response and Security Teams (FIRST), the Common Vulnerability Scoring System (CVSS) is an "industry open standard designed to convey vulnerability severity and help to determine urgency and priority of response." IBM PROVIDES THE CVSS SCORES "AS IS" WITHOUT WARRANTY OF ANY KIND, INCLUDING THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE. CUSTOMERS ARE RESPONSIBLE FOR ASSESSING THE IMPACT OF ANY ACTUAL OR POTENTIAL SECURITY VULNERABILITY.
