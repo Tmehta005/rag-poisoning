@@ -1,0 +1,10 @@
+accuracy,architecture,avg_final_confidence,category,exact_match_rate,heuristic_accuracy,n,numeric_match_rate
+0.52,debate,0.9333333333333332,domain-relevant,0.02,0.5,50,0.5
+0.76,debate,1.0,metrics-generated,0.3,0.8,50,0.8
+0.56,debate,0.9666666666666667,novel-generated,0.0,0.44,50,0.42
+0.42,orchestrator,0.884,domain-relevant,0.02,0.46,50,0.46
+0.36,orchestrator,0.912,metrics-generated,0.12,0.54,50,0.54
+0.64,orchestrator,0.941,novel-generated,0.0,0.46,50,0.42
+0.46,single_agent,0.877,domain-relevant,0.02,0.46,50,0.46
+0.36,single_agent,0.894,metrics-generated,0.12,0.5,50,0.5
+0.62,single_agent,0.9359999999999999,novel-generated,0.0,0.46,50,0.42

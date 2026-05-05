@@ -1,0 +1,184 @@
+{
+  "created_at": "2026-05-04T20:54:16.027893+00:00",
+  "query_file": "data/queries/financebench_queries.yaml",
+  "corpus_config": "configs/corpus_financebench.yaml",
+  "data_dir": "data/corpus_financebench",
+  "persist_dir": "data/index_financebench",
+  "model": "gpt-4o-mini",
+  "debate_model": "gpt-4o-mini",
+  "grader_model": "gpt-4o-mini",
+  "architectures": [
+    "single_agent",
+    "orchestrator",
+    "debate"
+  ],
+  "max_workers": 4,
+  "num_subagents": 3,
+  "top_k": 5,
+  "debate_top_k": 5,
+  "debate_max_rounds": 4,
+  "debate_stable_for": 2,
+  "overall": {
+    "group": "ALL",
+    "n": 450,
+    "accuracy": 0.5222222222222223,
+    "heuristic_accuracy": 0.5133333333333333,
+    "exact_match_rate": 0.06666666666666667,
+    "numeric_match_rate": 0.5022222222222222,
+    "avg_final_confidence": 0.9271111111111111
+  },
+  "by_architecture": [
+    {
+      "group": "debate",
+      "n": 150,
+      "accuracy": 0.6133333333333333,
+      "heuristic_accuracy": 0.58,
+      "exact_match_rate": 0.10666666666666667,
+      "numeric_match_rate": 0.5733333333333334,
+      "avg_final_confidence": 0.9666666666666667
+    },
+    {
+      "group": "orchestrator",
+      "n": 150,
+      "accuracy": 0.47333333333333333,
+      "heuristic_accuracy": 0.4866666666666667,
+      "exact_match_rate": 0.04666666666666667,
+      "numeric_match_rate": 0.47333333333333333,
+      "avg_final_confidence": 0.9123333333333333
+    },
+    {
+      "group": "single_agent",
+      "n": 150,
+      "accuracy": 0.48,
+      "heuristic_accuracy": 0.47333333333333333,
+      "exact_match_rate": 0.04666666666666667,
+      "numeric_match_rate": 0.46,
+      "avg_final_confidence": 0.9023333333333333
+    }
+  ],
+  "by_category": [
+    {
+      "group": "domain-relevant",
+      "n": 150,
+      "accuracy": 0.4666666666666667,
+      "heuristic_accuracy": 0.47333333333333333,
+      "exact_match_rate": 0.02,
+      "numeric_match_rate": 0.47333333333333333,
+      "avg_final_confidence": 0.8981111111111111
+    },
+    {
+      "group": "metrics-generated",
+      "n": 150,
+      "accuracy": 0.49333333333333335,
+      "heuristic_accuracy": 0.6133333333333333,
+      "exact_match_rate": 0.18,
+      "numeric_match_rate": 0.6133333333333333,
+      "avg_final_confidence": 0.9353333333333335
+    },
+    {
+      "group": "novel-generated",
+      "n": 150,
+      "accuracy": 0.6066666666666667,
+      "heuristic_accuracy": 0.4533333333333333,
+      "exact_match_rate": 0.0,
+      "numeric_match_rate": 0.42,
+      "avg_final_confidence": 0.9478888888888889
+    }
+  ],
+  "by_architecture_category": [
+    {
+      "n": 50,
+      "accuracy": 0.52,
+      "heuristic_accuracy": 0.5,
+      "exact_match_rate": 0.02,
+      "numeric_match_rate": 0.5,
+      "avg_final_confidence": 0.9333333333333332,
+      "architecture": "debate",
+      "category": "domain-relevant"
+    },
+    {
+      "n": 50,
+      "accuracy": 0.76,
+      "heuristic_accuracy": 0.8,
+      "exact_match_rate": 0.3,
+      "numeric_match_rate": 0.8,
+      "avg_final_confidence": 1.0,
+      "architecture": "debate",
+      "category": "metrics-generated"
+    },
+    {
+      "n": 50,
+      "accuracy": 0.56,
+      "heuristic_accuracy": 0.44,
+      "exact_match_rate": 0.0,
+      "numeric_match_rate": 0.42,
+      "avg_final_confidence": 0.9666666666666667,
+      "architecture": "debate",
+      "category": "novel-generated"
+    },
+    {
+      "n": 50,
+      "accuracy": 0.42,
+      "heuristic_accuracy": 0.46,
+      "exact_match_rate": 0.02,
+      "numeric_match_rate": 0.46,
+      "avg_final_confidence": 0.884,
+      "architecture": "orchestrator",
+      "category": "domain-relevant"
+    },
+    {
+      "n": 50,
+      "accuracy": 0.36,
+      "heuristic_accuracy": 0.54,
+      "exact_match_rate": 0.12,
+      "numeric_match_rate": 0.54,
+      "avg_final_confidence": 0.912,
+      "architecture": "orchestrator",
+      "category": "metrics-generated"
+    },
+    {
+      "n": 50,
+      "accuracy": 0.64,
+      "heuristic_accuracy": 0.46,
+      "exact_match_rate": 0.0,
+      "numeric_match_rate": 0.42,
+      "avg_final_confidence": 0.941,
+      "architecture": "orchestrator",
+      "category": "novel-generated"
+    },
+    {
+      "n": 50,
+      "accuracy": 0.46,
+      "heuristic_accuracy": 0.46,
+      "exact_match_rate": 0.02,
+      "numeric_match_rate": 0.46,
+      "avg_final_confidence": 0.877,
+      "architecture": "single_agent",
+      "category": "domain-relevant"
+    },
+    {
+      "n": 50,
+      "accuracy": 0.36,
+      "heuristic_accuracy": 0.5,
+      "exact_match_rate": 0.12,
+      "numeric_match_rate": 0.5,
+      "avg_final_confidence": 0.894,
+      "architecture": "single_agent",
+      "category": "metrics-generated"
+    },
+    {
+      "n": 50,
+      "accuracy": 0.62,
+      "heuristic_accuracy": 0.46,
+      "exact_match_rate": 0.0,
+      "numeric_match_rate": 0.42,
+      "avg_final_confidence": 0.9359999999999999,
+      "architecture": "single_agent",
+      "category": "novel-generated"
+    }
+  ],
+  "notes": [
+    "accuracy uses llm_correct when --grade-with-llm is enabled; otherwise it uses heuristic_correct",
+    "heuristic_correct is exact_match OR ground-truth substring OR numeric_match"
+  ]
+}
